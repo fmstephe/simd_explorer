@@ -10,11 +10,15 @@ func Run() {
 
 	cBroadcaster := newChangeBroadcaster()
 
+	input64 := NewRegisterInputs(app, 64, 256, cBroadcaster)
+	cBroadcaster.addReceiver(input64)
 	output64 := NewRegisterOutputs(app, 64, 256)
 	cBroadcaster.addReceiver(output64)
 
-	input64 := NewRegisterInputs(app, 64, 256, cBroadcaster)
-	cBroadcaster.addReceiver(input64)
+	input32 := NewRegisterInputs(app, 32, 256, cBroadcaster)
+	cBroadcaster.addReceiver(input32)
+	output32 := NewRegisterOutputs(app, 32, 256)
+	cBroadcaster.addReceiver(output32)
 
 	grid := tview.NewGrid()
 	grid.SetRows(1, 1)
@@ -22,6 +26,8 @@ func Run() {
 	grid.SetBorders(true)
 	grid.AddItem(input64.GetBox(), 0, 0, 1, 1, 0, 0, true)
 	grid.AddItem(output64.GetBox(), 0, 1, 1, 1, 0, 0, false)
+	grid.AddItem(input32.GetBox(), 1, 0, 1, 1, 0, 0, false)
+	grid.AddItem(output32.GetBox(), 1, 1, 1, 1, 0, 0, false)
 
 	// Setup the application with the components defined above
 	app.SetRoot(grid, true)
