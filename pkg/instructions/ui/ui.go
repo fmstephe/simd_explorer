@@ -8,48 +8,35 @@ import (
 func Run() {
 	app := tview.NewApplication()
 
-	/*
-		// Create text display
-		text := tview.NewTextView().
-			SetChangedFunc(func() { app.Draw() })
-
-		// Create number input
-		inputField := tview.NewInputField()
-		inputField.SetLabel("Enter a number: ").
-			SetFieldWidth(10).
-			SetAcceptanceFunc(tview.InputFieldInteger).
-			SetDoneFunc(func(key tcell.Key) { text.SetText(inputField.GetText()) })
-
-		// Create flex to hold the input and text
-		flex := tview.NewFlex().
-			AddItem(inputField, 0, 1, true).
-			AddItem(text, 0, 1, false)
-	*/
-
 	cBroadcaster := newChangeBroadcaster()
 
-	output := NewRegisterOutputs(app, 64, 256)
-	cBroadcaster.addReceiver(output)
+	output64 := NewRegisterOutputs(app, 64, 256)
+	cBroadcaster.addReceiver(output64)
 
-	input := NewRegisterInputs(app, 64, 256, cBroadcaster)
-	cBroadcaster.addReceiver(input)
+	input64 := NewRegisterInputs(app, 64, 256, cBroadcaster)
+	cBroadcaster.addReceiver(input64)
 
-	// Create flex to hold the input and text
-	flex := tview.NewFlex().
-		AddItem(input.GetBox(), 0, 1, true).
-		AddItem(output.GetBox(), 0, 1, false)
+	grid := tview.NewGrid()
+	grid.SetRows(1, 1)
+	grid.SetColumns(0, 0)
+	grid.SetBorders(true)
+	grid.AddItem(input64.GetBox(), 0, 0, 1, 1, 0, 0, true)
+	grid.AddItem(output64.GetBox(), 0, 1, 1, 1, 0, 0, false)
 
-	flex.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+	// Setup the application with the components defined above
+	app.SetRoot(grid, true)
+	app.SetFocus(grid)
+	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyESC:
 			app.Stop()
 		}
+		switch event.Rune() {
+		case 'q':
+			app.Stop()
+		}
 		return event
 	})
-
-	// Setup the application with the components defined above
-	app.SetRoot(flex, true).
-		SetFocus(flex)
 
 	if err := app.Run(); err != nil {
 		panic(err)

@@ -39,12 +39,14 @@ func NewRegisterOutputs(app *tview.Application, bitsize, simdsize int) *Register
 	for i := range inputsCount {
 		output := tview.NewTextView()
 		output.SetSize(1, textWidth)
-		output.SetText("1234")
 		output.SetBorderPadding(0, 0, 0, 0)
 
 		rOutputs.outputs[i] = output
 		rOutputs.box.AddItem(output, 0, 1, false)
 	}
+
+	// Initialise outputs to all zeros
+	rOutputs.dstDataChanged(make([]byte, simdsize/8))
 
 	return rOutputs
 }
