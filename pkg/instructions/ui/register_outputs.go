@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/google/uuid"
 	"github.com/rivo/tview"
 )
 
 type RegisterOutputs struct {
+	id  uuid.UUID
 	app *tview.Application
 
 	bitsize      int
@@ -25,6 +27,7 @@ func NewRegisterOutputs(app *tview.Application, bitsize, simdsize int) *Register
 	inputsCount := inputsForBitsize(bitsize, simdsize)
 
 	rOutputs := &RegisterOutputs{
+		id:           uuid.New(),
 		app:          app,
 		bitsize:      bitsize,
 		simdsize:     simdsize,
@@ -46,11 +49,15 @@ func NewRegisterOutputs(app *tview.Application, bitsize, simdsize int) *Register
 	return rOutputs
 }
 
+func (out *RegisterOutputs) receiverId() uuid.UUID {
+	return out.id
+}
+
 func (out *RegisterOutputs) GetBox() *tview.Flex {
 	return out.box
 }
 
-func (out *RegisterOutputs) ProcessDataChanged(bytes []byte) {
+func (out *RegisterOutputs) dstDataChanged(bytes []byte) {
 	endian := binary.LittleEndian
 
 	if (len(bytes) * 8) != out.simdsize {

@@ -26,14 +26,13 @@ func Run() {
 			AddItem(text, 0, 1, false)
 	*/
 
+	cBroadcaster := newChangeBroadcaster()
+
 	output := NewRegisterOutputs(app, 64, 256)
+	cBroadcaster.addReceiver(output)
 
-	// Function which propogates data changes from inputs to the outputs
-	dataChanged := func(bytes []byte) {
-		output.ProcessDataChanged(bytes)
-	}
-
-	input := NewRegisterInputs(app, 64, 256, dataChanged)
+	input := NewRegisterInputs(app, 64, 256, cBroadcaster)
+	cBroadcaster.addReceiver(input)
 
 	// Create flex to hold the input and text
 	flex := tview.NewFlex().

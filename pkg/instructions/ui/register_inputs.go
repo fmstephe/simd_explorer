@@ -6,10 +6,13 @@ import (
 	"strconv"
 
 	"github.com/gdamore/tcell/v2"
+	"github.com/google/uuid"
 	"github.com/rivo/tview"
 )
 
 type RegisterInputs struct {
+	id uuid.UUID
+
 	app *tview.Application
 
 	bitsize     int
@@ -22,22 +25,23 @@ type RegisterInputs struct {
 	box *tview.Flex
 
 	// Callback when the data in this set of inputs is changed
-	dataChanged func([]byte)
+	cBroadcaster *changeBroadcaster
 }
 
-func NewRegisterInputs(app *tview.Application, bitsize, simdsize int, dataChanged func([]byte)) *RegisterInputs {
+func NewRegisterInputs(app *tview.Application, bitsize, simdsize int, cBroadcaster *changeBroadcaster) *RegisterInputs {
 	textWidth := textWidthForBitsize(bitsize)
 	inputsCount := inputsForBitsize(bitsize, simdsize)
 
 	rInputs := &RegisterInputs{
-		app:         app,
-		bitsize:     bitsize,
-		simdsize:    simdsize,
-		inputsCount: inputsCount,
-		focus:       0,
-		allInputs:   make([]*tview.InputField, inputsCount),
-		box:         tview.NewFlex(),
-		dataChanged: dataChanged,
+		id:           uuid.New(),
+		app:          app,
+		bitsize:      bitsize,
+		simdsize:     simdsize,
+		inputsCount:  inputsCount,
+		focus:        0,
+		allInputs:    make([]*tview.InputField, inputsCount),
+		box:          tview.NewFlex(),
+		cBroadcaster: cBroadcaster,
 	}
 
 	for i := range inputsCount {
@@ -47,7 +51,7 @@ func NewRegisterInputs(app *tview.Application, bitsize, simdsize int, dataChange
 		input.SetAcceptanceFunc(tview.InputFieldInteger)
 		input.SetChangedFunc(func(text string) {
 			// When _any_ piece of data changes we reprocess the data from all inputs
-			rInputs.sourceDataChanged()
+			rInputs.srcDataChanged()
 		})
 
 		rInputs.allInputs[i] = input
@@ -57,6 +61,10 @@ func NewRegisterInputs(app *tview.Application, bitsize, simdsize int, dataChange
 	rInputs.InitCapture()
 
 	return rInputs
+}
+
+func (in *RegisterInputs) receiverId() uuid.UUID {
+	return in.id
 }
 
 func (in *RegisterInputs) GetBox() *tview.Flex {
@@ -85,7 +93,7 @@ func (in *RegisterInputs) cycleFocus(move int) {
 	in.app.SetFocus(in.allInputs[idx])
 }
 
-func (in *RegisterInputs) sourceDataChanged() {
+func (in *RegisterInputs) srcDataChanged() {
 	endian := binary.LittleEndian
 	bytes := make([]byte, 0, in.simdsize)
 
@@ -112,10 +120,10 @@ func (in *RegisterInputs) sourceDataChanged() {
 		}
 	}
 
-	in.dataChanged(bytes)
+	in.cBroadcaster.broadcastChange(bytes, in.id)
 }
 
-func (in *RegisterInputs) destinationDataChange(bytes []byte) {
+func (in *RegisterInputs) dstDataChanged(bytes []byte) {
 	endian := binary.LittleEndian
 
 	if (len(bytes) * 8) != in.simdsize {
@@ -138,6 +146,13 @@ func (in *RegisterInputs) destinationDataChange(bytes []byte) {
 			val = endian.Uint64(bytes[idx:])
 		}
 
-		input.SetText(strconv.FormatUint(val, 10))
+		text := strconv.FormatUint(val, 10)
+		if input.GetText() != text {
+			// Only set the input text if the new value is
+			// different from the old The prevents the
+			// data-changechange->update-event->data-change loop
+			// from running indefinitely.
+			input.SetText(strconv.FormatUint(val, 10))
+		}
 	}
 }
