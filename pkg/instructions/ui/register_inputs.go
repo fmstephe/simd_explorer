@@ -48,7 +48,7 @@ func NewRegisterInputs(app *tview.Application, bitsize, simdsize int, cBroadcast
 		input := tview.NewInputField()
 		input.SetFieldWidth(textWidth)
 		input.SetBorderPadding(0, 0, 0, 0)
-		input.SetAcceptanceFunc(tview.InputFieldInteger)
+		input.SetAcceptanceFunc(InputFieldUint(bitsize))
 		input.SetChangedFunc(func(text string) {
 			// When _any_ piece of data changes we reprocess the data from all inputs
 			rInputs.srcDataChanged()
@@ -106,7 +106,7 @@ func (in *RegisterInputs) srcDataChanged() {
 		}
 		val, err := strconv.ParseUint(txt, 10, in.bitsize)
 		if err != nil {
-			panic(fmt.Errorf("Unexpected value %q found in register input, expecting decimal with bitsize %d", input.GetText(), in.bitsize))
+			panic(fmt.Errorf("Unexpected value %q found in register input, expecting decimal with bitsize %d: %s", input.GetText(), in.bitsize, err))
 		}
 		switch in.bitsize {
 		case 8:
@@ -154,5 +154,13 @@ func (in *RegisterInputs) dstDataChanged(bytes []byte) {
 			// from running indefinitely.
 			input.SetText(strconv.FormatUint(val, 10))
 		}
+	}
+}
+
+// InputFieldInteger accepts unsigned integers.
+func InputFieldUint(bitsize int) func(string, rune) bool {
+	return func(txt string, _ rune) bool {
+		_, err := strconv.ParseUint(txt, 10, bitsize)
+		return err == nil
 	}
 }
