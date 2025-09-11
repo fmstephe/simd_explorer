@@ -6,13 +6,13 @@ func textWidthForBitsize(bitsize int) int {
 	mustValidBitsize(bitsize)
 	switch bitsize {
 	case 8:
-		return 3
+		return 4
 	case 16:
-		return 5
+		return 6
 	case 32:
-		return 10
+		return 11
 	case 64:
-		return 20
+		return 21
 	}
 	panic("Unreachable")
 }
