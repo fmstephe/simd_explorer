@@ -1,9 +1,7 @@
 package ui
 
 import (
-	"encoding/binary"
 	"fmt"
-	"strconv"
 
 	"github.com/google/uuid"
 	"github.com/rivo/tview"
@@ -17,9 +15,11 @@ type RegisterOutputs struct {
 	simdsize     int
 	outputsCount int
 
-	outputs []*tview.TextView
+	allOutputs []*tview.TextView
 
 	box *tview.Flex
+
+	converter *valueConverter
 }
 
 func NewRegisterOutputs(app *tview.Application, bitsize, simdsize int) *RegisterOutputs {
@@ -32,16 +32,18 @@ func NewRegisterOutputs(app *tview.Application, bitsize, simdsize int) *Register
 		bitsize:      bitsize,
 		simdsize:     simdsize,
 		outputsCount: inputsCount,
-		outputs:      make([]*tview.TextView, inputsCount),
+		allOutputs:   make([]*tview.TextView, inputsCount),
 		box:          tview.NewFlex(),
+		converter:    newValueConverter(bitsize, 16),
 	}
 
 	for i := range inputsCount {
 		output := tview.NewTextView()
+		output.SetText("0")
 		output.SetSize(1, textWidth)
 		output.SetBorderPadding(0, 0, 0, 0)
 
-		rOutputs.outputs[i] = output
+		rOutputs.allOutputs[i] = output
 		rOutputs.box.AddItem(output, 0, 1, false)
 	}
 
@@ -60,28 +62,24 @@ func (out *RegisterOutputs) GetBox() *tview.Flex {
 }
 
 func (out *RegisterOutputs) dstDataChanged(bytes []byte) {
-	endian := binary.LittleEndian
-
 	if (len(bytes) * 8) != out.simdsize {
 		panic(fmt.Errorf("Bad data update, received %d bits, but need %d", len(bytes)*8, out.simdsize))
 	}
+	fmt.Printf("%s received data change %q\n\n", out.describe(), bytes)
 
 	bytesPer := out.bitsize / 8
 
-	for i, output := range out.outputs {
+	for i, output := range out.allOutputs {
 		idx := i * bytesPer
-		val := uint64(0)
-		switch out.bitsize {
-		case 8:
-			val = uint64(bytes[idx])
-		case 16:
-			val = uint64(endian.Uint16(bytes[idx:]))
-		case 32:
-			val = uint64(endian.Uint32(bytes[idx:]))
-		case 64:
-			val = endian.Uint64(bytes[idx:])
-		}
+		txt := out.converter.bytesToString(bytes[idx:])
 
-		output.SetText(strconv.FormatUint(val, 10))
+		if output.GetText(false) != txt {
+			fmt.Printf("%s[%d] changing text from %q to %q\n", out.describe(), i, output.GetText(false), txt)
+			output.SetText(txt)
+		}
 	}
+}
+
+func (out *RegisterOutputs) describe() string {
+	return fmt.Sprintf("%q-%d-%d-output", out.id.String()[:6], out.bitsize, out.simdsize)
 }

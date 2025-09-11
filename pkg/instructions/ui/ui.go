@@ -11,13 +11,15 @@ func Run() {
 	cBroadcaster := newChangeBroadcaster()
 
 	input64 := NewRegisterInputs(app, 64, 256, cBroadcaster)
-	cBroadcaster.addReceiver(input64)
 	output64 := NewRegisterOutputs(app, 64, 256)
-	cBroadcaster.addReceiver(output64)
 
 	input32 := NewRegisterInputs(app, 32, 256, cBroadcaster)
-	cBroadcaster.addReceiver(input32)
 	output32 := NewRegisterOutputs(app, 32, 256)
+
+	// Add update receivers, now that all initialisation updates have completed
+	cBroadcaster.addReceiver(input64)
+	cBroadcaster.addReceiver(output64)
+	cBroadcaster.addReceiver(input32)
 	cBroadcaster.addReceiver(output32)
 
 	grid := tview.NewGrid()
