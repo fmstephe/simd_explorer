@@ -24,20 +24,20 @@ type RegisterOutputs struct {
 
 func NewRegisterOutputs(app *tview.Application, bitsize, simdsize int) *RegisterOutputs {
 	textWidth := textWidthForBitsize(bitsize)
-	inputsCount := inputsForBitsize(bitsize, simdsize)
+	outputsCount := partsForBitsize(bitsize, simdsize)
 
 	rOutputs := &RegisterOutputs{
 		id:           uuid.New(),
 		app:          app,
 		bitsize:      bitsize,
 		simdsize:     simdsize,
-		outputsCount: inputsCount,
-		allOutputs:   make([]*tview.TextView, inputsCount),
+		outputsCount: outputsCount,
+		allOutputs:   make([]*tview.TextView, outputsCount),
 		box:          tview.NewFlex(),
 		converter:    newValueConverter(bitsize, 16),
 	}
 
-	for i := range inputsCount {
+	for i := range outputsCount {
 		output := tview.NewTextView()
 		output.SetText("0")
 		output.SetSize(1, textWidth)

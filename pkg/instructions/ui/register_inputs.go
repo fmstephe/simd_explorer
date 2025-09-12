@@ -31,7 +31,7 @@ type RegisterInputs struct {
 
 func NewRegisterInputs(app *tview.Application, bitsize, simdsize int, cBroadcaster *changeBroadcaster) *RegisterInputs {
 	textWidth := textWidthForBitsize(bitsize)
-	inputsCount := inputsForBitsize(bitsize, simdsize)
+	inputsCount := partsForBitsize(bitsize, simdsize)
 
 	rInputs := &RegisterInputs{
 		id:           uuid.New(),

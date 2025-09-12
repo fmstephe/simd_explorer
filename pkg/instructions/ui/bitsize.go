@@ -17,7 +17,7 @@ func textWidthForBitsize(bitsize int) int {
 	panic("Unreachable")
 }
 
-func inputsForBitsize(bitsize, simdsize int) int {
+func partsForBitsize(bitsize, simdsize int) int {
 	mustValidBitsize(bitsize)
 	mustValidSimdsize(simdsize)
 	return simdsize / bitsize
