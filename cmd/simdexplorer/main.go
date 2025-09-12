@@ -1,6 +1,6 @@
 package main
 
-import "github.com/fmstephe/simd_explorer/pkg/instructions/ui"
+import "github.com/fmstephe/simd_explorer/pkg/ui"
 
 func main() {
 	ui.Run()
