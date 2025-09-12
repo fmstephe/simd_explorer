@@ -8,36 +8,38 @@ import (
 )
 
 type RegisterOutputs struct {
-	id  uuid.UUID
-	app *tview.Application
+	id uuid.UUID
 
-	bitsize      int
-	simdsize     int
-	outputsCount int
-
+	app        *tview.Application
 	allOutputs []*tview.TextView
+	box        *tview.Flex
 
-	box *tview.Flex
+	bitsize  int
+	simdsize int
+	base     int
 
 	converter *valueConverter
 }
 
-func NewRegisterOutputs(app *tview.Application, bitsize, simdsize int) *RegisterOutputs {
+func NewRegisterOutputs(app *tview.Application, bitsize, simdsize, base int) *RegisterOutputs {
 	textWidth := textWidthForBitsize(bitsize)
 	outputsCount := partsForBitsize(bitsize, simdsize)
 
 	rOutputs := &RegisterOutputs{
-		id:           uuid.New(),
-		app:          app,
-		bitsize:      bitsize,
-		simdsize:     simdsize,
-		outputsCount: outputsCount,
-		allOutputs:   make([]*tview.TextView, outputsCount),
-		box:          tview.NewFlex(),
-		converter:    newValueConverter(bitsize, 16),
+		id: uuid.New(),
+
+		app:        app,
+		allOutputs: make([]*tview.TextView, outputsCount),
+		box:        tview.NewFlex(),
+
+		bitsize:  bitsize,
+		simdsize: simdsize,
+		base:     base,
+
+		converter: newValueConverter(bitsize, 16),
 	}
 
-	for i := range outputsCount {
+	for i := range rOutputs.allOutputs {
 		output := tview.NewTextView()
 		output.SetText("0")
 		output.SetSize(1, textWidth)
@@ -65,7 +67,7 @@ func (out *RegisterOutputs) dstDataChanged(bytes []byte) {
 	if (len(bytes) * 8) != out.simdsize {
 		panic(fmt.Errorf("Bad data update, received %d bits, but need %d", len(bytes)*8, out.simdsize))
 	}
-	fmt.Printf("%s received data change %q\n\n", out.describe(), bytes)
+	fmt.Printf("%s received data change %0.8b\n\n", out.describe(), bytes)
 
 	bytesPer := out.bitsize / 8
 

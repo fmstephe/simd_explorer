@@ -12,38 +12,40 @@ import (
 type RegisterInputs struct {
 	id uuid.UUID
 
-	app *tview.Application
-
-	bitsize     int
-	simdsize    int
-	inputsCount int
-
-	focus     int
+	app       *tview.Application
 	allInputs []*tview.InputField
+	box       *tview.Flex
 
-	box *tview.Flex
+	focus int
+
+	bitsize  int
+	simdsize int
+	base     int
 
 	// Callback when the data in this set of inputs is changed
 	cBroadcaster *changeBroadcaster
-
-	converter *valueConverter
+	converter    *valueConverter
 }
 
-func NewRegisterInputs(app *tview.Application, bitsize, simdsize int, cBroadcaster *changeBroadcaster) *RegisterInputs {
+func NewRegisterInputs(app *tview.Application, bitsize, simdsize, base int, cBroadcaster *changeBroadcaster) *RegisterInputs {
 	textWidth := textWidthForBitsize(bitsize)
 	inputsCount := partsForBitsize(bitsize, simdsize)
 
 	rInputs := &RegisterInputs{
-		id:           uuid.New(),
-		app:          app,
-		bitsize:      bitsize,
-		simdsize:     simdsize,
-		inputsCount:  inputsCount,
-		focus:        0,
-		allInputs:    make([]*tview.InputField, inputsCount),
-		box:          tview.NewFlex(),
+		id: uuid.New(),
+
+		app:       app,
+		allInputs: make([]*tview.InputField, inputsCount),
+		box:       tview.NewFlex(),
+
+		focus: 0,
+
+		bitsize:  bitsize,
+		simdsize: simdsize,
+		base:     base,
+
 		cBroadcaster: cBroadcaster,
-		converter:    newValueConverter(bitsize, 16),
+		converter:    newValueConverter(bitsize, base),
 	}
 
 	for i := range inputsCount {
@@ -97,9 +99,9 @@ func (in *RegisterInputs) InitFocusCycling() {
 
 func (in *RegisterInputs) cycleFocus(move int) {
 	in.focus += move
-	idx := in.focus % in.inputsCount
+	idx := in.focus % len(in.allInputs)
 	if idx < 0 {
-		idx = in.inputsCount + idx
+		idx = len(in.allInputs) + idx
 	}
 	in.app.SetFocus(in.allInputs[idx])
 }
@@ -112,7 +114,7 @@ func (in *RegisterInputs) srcDataChanged() {
 		bytes = append(bytes, in.converter.stringToBytes(txt)...)
 	}
 
-	fmt.Printf("%s broadcasting data change %q\n\n", in.describe(), bytes)
+	fmt.Printf("%s broadcasting data change %0.8b\n\n", in.describe(), bytes)
 
 	in.cBroadcaster.broadcastChange(bytes, in.id)
 }
@@ -121,20 +123,21 @@ func (in *RegisterInputs) dstDataChanged(bytes []byte) {
 	if (len(bytes) * 8) != in.simdsize {
 		panic(fmt.Errorf("Bad data update, received %d bits, but need %d", len(bytes)*8, in.simdsize))
 	}
-	fmt.Printf("%s received data change %q\n\n", in.describe(), bytes)
+	fmt.Printf("%s received data change %0.8b\n\n", in.describe(), bytes)
 
 	bytesPer := in.bitsize / 8
 
 	for i, input := range in.allInputs {
 		idx := i * bytesPer
-		txt := in.converter.bytesToString(bytes[idx:])
+		chunk := bytes[idx : idx+bytesPer]
+		txt := in.converter.bytesToString(chunk)
 		if input.GetText() != txt {
 			// Only set the input text if the new value is
 			// different from the old The prevents the
 			// data-changechange->update-event->data-change loop
 			// from running indefinitely.
-			fmt.Printf("%s[%d] changing text from %q to %q\n", in.describe(), i, input.GetText(), txt)
-			input.SetText(txt)
+			fmt.Printf("%s[%d] changing text from %q to %q using %0.8b\n", in.describe(), i, input.GetText(), txt, chunk)
+			input.SetText(fmt.Sprintf("%s", txt))
 		}
 	}
 }
