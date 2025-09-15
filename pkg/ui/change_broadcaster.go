@@ -4,28 +4,22 @@ import (
 	"fmt"
 )
 
-type dataReceiver interface {
-	dataParts() int
-	setPart(i int, chunk []byte)
-	describe() string
-}
-
 type changeBroadcaster struct {
 	simdsize  int
 	active    bool
-	receivers []dataReceiver
+	receivers []*RegisterParts
 }
 
 func newChangeBroadcaster(simdsize int) *changeBroadcaster {
 	return &changeBroadcaster{
 		simdsize:  simdsize,
 		active:    true,
-		receivers: []dataReceiver{},
+		receivers: []*RegisterParts{},
 	}
 }
 
-func (b *changeBroadcaster) addReceiver(l dataReceiver) {
-	b.receivers = append(b.receivers, l)
+func (b *changeBroadcaster) addReceiver(r *RegisterParts) {
+	b.receivers = append(b.receivers, r)
 }
 
 func (b *changeBroadcaster) broadcastZeros() {
@@ -43,7 +37,7 @@ func (b *changeBroadcaster) broadcastChange(bytes []byte) {
 	}
 }
 
-func (b *changeBroadcaster) writeDataChange(bytes []byte, r dataReceiver) {
+func (b *changeBroadcaster) writeDataChange(bytes []byte, r *RegisterParts) {
 	if (len(bytes) * 8) != b.simdsize {
 		panic(fmt.Errorf("Bad data update, received %d bits, but need %d", len(bytes)*8, b.simdsize))
 	}

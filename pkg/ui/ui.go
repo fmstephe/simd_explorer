@@ -11,16 +11,16 @@ func Run() {
 	cBroadcaster := newChangeBroadcaster(256)
 
 	input64 := NewRegisterInputs(app, 64, 256, 16, cBroadcaster)
-	output64 := NewRegisterOutputs(app, 64, 256, 16)
+	output64 := NewRegisterOutputs(app, 64, 256, 16, cBroadcaster)
 
 	input32 := NewRegisterInputs(app, 32, 256, 16, cBroadcaster)
-	output32 := NewRegisterOutputs(app, 32, 256, 16)
+	output32 := NewRegisterOutputs(app, 32, 256, 16, cBroadcaster)
 
 	input16 := NewRegisterInputs(app, 16, 256, 16, cBroadcaster)
-	output16 := NewRegisterOutputs(app, 16, 256, 16)
+	output16 := NewRegisterOutputs(app, 16, 256, 16, cBroadcaster)
 
 	input8 := NewRegisterInputs(app, 8, 256, 16, cBroadcaster)
-	output8 := NewRegisterOutputs(app, 8, 256, 16)
+	output8 := NewRegisterOutputs(app, 8, 256, 16, cBroadcaster)
 
 	// Add update receivers, now that all initialisation updates have completed
 	cBroadcaster.addReceiver(input64)
@@ -38,21 +38,19 @@ func Run() {
 	cBroadcaster.broadcastZeros()
 
 	grid := tview.NewGrid()
-	grid.SetRows(1, 1, 1, 1)
-	grid.SetColumns(0, 0)
 	grid.SetBorders(true)
 
-	grid.AddItem(input64.GetBox(), 0, 0, 1, 1, 0, 0, true)
-	grid.AddItem(output64.GetBox(), 0, 1, 1, 1, 0, 0, false)
+	grid.AddItem(input64.getBox(), 0, 0, 1, 1, 0, 0, true)
+	grid.AddItem(output64.getBox(), 0, 1, 1, 1, 0, 0, false)
 
-	grid.AddItem(input32.GetBox(), 1, 0, 1, 1, 0, 0, false)
-	grid.AddItem(output32.GetBox(), 1, 1, 1, 1, 0, 0, false)
+	grid.AddItem(input32.getBox(), 1, 0, 1, 1, 0, 0, false)
+	grid.AddItem(output32.getBox(), 1, 1, 1, 1, 0, 0, false)
 
-	grid.AddItem(input16.GetBox(), 2, 0, 1, 1, 0, 0, false)
-	grid.AddItem(output16.GetBox(), 2, 1, 1, 1, 0, 0, false)
+	grid.AddItem(input16.getBox(), 2, 0, 1, 1, 0, 0, false)
+	grid.AddItem(output16.getBox(), 2, 1, 1, 1, 0, 0, false)
 
-	grid.AddItem(input8.GetBox(), 3, 0, 1, 1, 0, 0, false)
-	grid.AddItem(output8.GetBox(), 3, 1, 1, 1, 0, 0, false)
+	grid.AddItem(input8.getBox(), 3, 0, 1, 1, 0, 0, false)
+	grid.AddItem(output8.getBox(), 3, 1, 1, 1, 0, 0, false)
 
 	// Setup the application with the components defined above
 	app.SetRoot(grid, true)
