@@ -57,7 +57,7 @@ func NewRegisterInputs(app *tview.Application, bitsize, simdsize, base int, cBro
 		rInputs.box.AddItem(input, 0, 1, true)
 	}
 
-	rInputs.InitFocusCycling()
+	rInputs.initFocusCycling()
 
 	// We delay setting the changed-func to reduce initialisation noise in
 	// the logs
@@ -76,12 +76,11 @@ func (in *RegisterInputs) receiverId() uuid.UUID {
 	return in.id
 }
 
-func (in *RegisterInputs) GetBox() *tview.Flex {
+func (in *RegisterInputs) getBox() *tview.Flex {
 	return in.box
 }
 
-// TODO unexport this
-func (in *RegisterInputs) InitFocusCycling() {
+func (in *RegisterInputs) initFocusCycling() {
 	in.box.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyTab:

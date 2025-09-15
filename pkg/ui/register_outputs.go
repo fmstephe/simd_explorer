@@ -56,7 +56,7 @@ func (out *RegisterOutputs) receiverId() uuid.UUID {
 	return out.id
 }
 
-func (out *RegisterOutputs) GetBox() *tview.Flex {
+func (out *RegisterOutputs) getBox() *tview.Flex {
 	return out.box
 }
 
