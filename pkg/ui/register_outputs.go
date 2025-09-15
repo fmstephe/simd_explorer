@@ -49,9 +49,6 @@ func NewRegisterOutputs(app *tview.Application, bitsize, simdsize, base int) *Re
 		rOutputs.box.AddItem(output, 0, 1, false)
 	}
 
-	// Initialise outputs to all zeros
-	rOutputs.dstDataChanged(make([]byte, simdsize/8))
-
 	return rOutputs
 }
 
@@ -63,22 +60,18 @@ func (out *RegisterOutputs) GetBox() *tview.Flex {
 	return out.box
 }
 
-func (out *RegisterOutputs) dstDataChanged(bytes []byte) {
-	if (len(bytes) * 8) != out.simdsize {
-		panic(fmt.Errorf("Bad data update, received %d bits, but need %d", len(bytes)*8, out.simdsize))
-	}
-	fmt.Printf("%s received data change %0.8b\n\n", out.describe(), bytes)
+func (out *RegisterOutputs) dataParts() int {
+	return len(out.allOutputs)
+}
 
-	bytesPer := out.bitsize / 8
-
-	for i, output := range out.allOutputs {
-		idx := i * bytesPer
-		txt := out.converter.bytesToString(bytes[idx:])
-
-		if output.GetText(false) != txt {
-			fmt.Printf("%s[%d] changing text from %q to %q\n", out.describe(), i, output.GetText(false), txt)
-			output.SetText(txt)
-		}
+func (out *RegisterOutputs) setPart(i int, chunk []byte) {
+	txt := out.converter.bytesToString(chunk)
+	output := out.allOutputs[i]
+	if output.GetText(false) != txt {
+		// Only set the output text if the new value is
+		// different from the old, this reduces noise in the logs
+		fmt.Printf("%s[%d] changing text from %q to %q using %0.8b\n", out.describe(), i, output.GetText(false), txt, chunk)
+		out.allOutputs[i].SetText(txt)
 	}
 }
 

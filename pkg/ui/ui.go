@@ -8,7 +8,7 @@ import (
 func Run() {
 	app := tview.NewApplication()
 
-	cBroadcaster := newChangeBroadcaster()
+	cBroadcaster := newChangeBroadcaster(256)
 
 	input64 := NewRegisterInputs(app, 64, 256, 16, cBroadcaster)
 	output64 := NewRegisterOutputs(app, 64, 256, 16)
@@ -34,6 +34,8 @@ func Run() {
 
 	cBroadcaster.addReceiver(input8)
 	cBroadcaster.addReceiver(output8)
+
+	cBroadcaster.broadcastZeros()
 
 	grid := tview.NewGrid()
 	grid.SetRows(1, 1, 1, 1)
