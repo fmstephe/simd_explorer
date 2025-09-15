@@ -70,7 +70,7 @@ func (c *valueConverter) stringToUint64(txt string) uint64 {
 	txt = strings.TrimSpace(txt)
 	if txt == "" {
 		// If the value of the field is empty default it to 0
-		txt = c.uint64ToString(0)
+		return 0
 	}
 	val, err := strconv.ParseUint(txt, c.base, c.bitsize)
 	if err != nil {
