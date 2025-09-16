@@ -1,8 +1,9 @@
-package ui
+package register
 
 import (
 	"encoding/binary"
 	"fmt"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -19,7 +20,7 @@ func newValueConverter(bitsize, base int) *valueConverter {
 	return &valueConverter{
 		bitsize:   bitsize,
 		base:      base,
-		textWidth: textWidthForBitsize(bitsize),
+		textWidth: calculateTextWidth(bitsize, base),
 		// You _can_ change the endian-ness of the value serialisation,
 		// but be aware that all popular CPUs are little-endian. Using
 		// big-endian here will almost certainly produce confusing
@@ -86,9 +87,9 @@ func (c *valueConverter) uint64ToString(val uint64) string {
 
 func (c *valueConverter) leftPad(txt string) string {
 	if len(txt) > c.textWidth {
-		panic(fmt.Errorf("Attempted to process string too long (%d) for bitsize (%d) string must be %d or shorter", len(txt), c.bitsize, c.textWidth))
+		panic(fmt.Errorf("Attempted to process string too long (%d) for bitsize (%d) and base (%d) string must be %d or shorter", len(txt), c.bitsize, c.base, c.textWidth))
 	}
-	return strings.Repeat(" ", (c.textWidth-1)-len(txt)) + txt
+	return strings.Repeat("0", (c.textWidth-1)-len(txt)) + txt
 }
 
 // InputFieldInteger accepts unsigned integers.
@@ -99,5 +100,25 @@ func (c *valueConverter) inputAcceptor() func(string, rune) bool {
 		txt = strings.TrimSpace(txt)
 		_, err := strconv.ParseUint(txt, base, bitsize)
 		return err == nil
+	}
+}
+
+func (c *valueConverter) getTextWidth() int {
+	return c.textWidth
+}
+
+func calculateTextWidth(bitsize, base int) int {
+	mustValidBitsize(bitsize)
+	switch bitsize {
+	case 8:
+		return len(strconv.FormatUint(math.MaxUint8, base)) + 1
+	case 16:
+		return len(strconv.FormatUint(math.MaxUint16, base)) + 1
+	case 32:
+		return len(strconv.FormatUint(math.MaxUint32, base)) + 1
+	case 64:
+		return len(strconv.FormatUint(math.MaxUint64, base)) + 1
+	default:
+		panic("unreachable")
 	}
 }

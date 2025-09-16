@@ -1,4 +1,4 @@
-package ui
+package register
 
 import "github.com/rivo/tview"
 

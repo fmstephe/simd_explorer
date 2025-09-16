@@ -1,4 +1,4 @@
-package ui
+package register
 
 import (
 	"fmt"
@@ -37,7 +37,7 @@ func NewRegisterOutputs(app *tview.Application, bitsize, simdsize, base int, cBr
 }
 
 func NewRegisterParts(app *tview.Application, bitsize, simdsize, base int, partsBuilder uiPartBuilder, cBroadcaster *changeBroadcaster) *RegisterParts {
-	textWidth := textWidthForBitsize(bitsize)
+	converter := newValueConverter(bitsize, base)
 	partsCount := partsForBitsize(bitsize, simdsize)
 
 	grid := tview.NewGrid()
@@ -60,14 +60,16 @@ func NewRegisterParts(app *tview.Application, bitsize, simdsize, base int, parts
 		base:     base,
 
 		cBroadcaster: cBroadcaster,
-		converter:    newValueConverter(bitsize, base),
+		converter:    converter,
 	}
 
+	// TODO we are going to have to build more consideration into this for 512 bit registers
+	// on my monitor right now I can't display the 64 bit parts of the 512 bit register on a single line.
 	for i := range partsCount {
 		part := partsBuilder.build()
 		part.setTitle(fmt.Sprintf("%d:%d", i*bitsize, (i+1)*bitsize))
 		part.setBorder(true)
-		part.setFieldWidth(textWidth)
+		part.setFieldWidth(converter.getTextWidth())
 		part.setAcceptanceFunc(rParts.converter.inputAcceptor())
 
 		rParts.allParts[i] = part
@@ -96,7 +98,7 @@ func (in *RegisterParts) receiverId() uuid.UUID {
 	return in.id
 }
 
-func (in *RegisterParts) getBox() *tview.Grid {
+func (in *RegisterParts) GetBox() *tview.Grid {
 	return in.box
 }
 
@@ -152,4 +154,8 @@ func (in *RegisterParts) setPart(i int, chunk []byte) {
 
 func (in *RegisterParts) describe() string {
 	return fmt.Sprintf("%q-%d-%d--%s", in.id.String()[:6], in.bitsize, in.simdsize, in.kind)
+}
+
+func calcPartsPerLine() int {
+	//
 }
