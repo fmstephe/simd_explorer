@@ -43,7 +43,8 @@ func NewRegisterParts(app *tview.Application, bitsize, simdsize, base int, parts
 	grid := tview.NewGrid()
 	// We always have a maximum of 8 columns per row
 	grid.SetRows(3, 3, 3, 3, 3, 3, 3, 3)
-	grid.SetBorder(false)
+	grid.SetBorder(true)
+	grid.SetTitle(fmt.Sprintf("%d Bit %s", bitsize, partsBuilder.kind()))
 
 	rParts := &RegisterParts{
 		id:   uuid.New(),

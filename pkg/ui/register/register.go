@@ -1,6 +1,10 @@
 package register
 
-import "github.com/rivo/tview"
+import (
+	"fmt"
+
+	"github.com/rivo/tview"
+)
 
 type UIRegisterSet struct {
 	Base2  *UIRegister
@@ -57,20 +61,29 @@ func NewUIRegister(app *tview.Application, simdsize, base int, cBroadcaster *cha
 	cBroadcaster.addReceiver(input8)
 	cBroadcaster.addReceiver(output8)
 
+	gridLeft := tview.NewGrid()
+	gridLeft.SetBorder(true)
+	gridLeft.SetTitle(fmt.Sprintf("Inputs Base %d", base))
+
+	gridRight := tview.NewGrid()
+	gridRight.SetBorder(true)
+	gridRight.SetTitle(fmt.Sprintf("Outputs Base %d", base))
+
+	gridLeft.AddItem(input64.GetBox(), 0, 0, 1, 1, 0, 0, true)
+	gridRight.AddItem(output64.GetBox(), 0, 0, 1, 1, 0, 0, false)
+
+	gridLeft.AddItem(input32.GetBox(), 1, 0, 1, 1, 0, 0, false)
+	gridRight.AddItem(output32.GetBox(), 1, 0, 1, 1, 0, 0, false)
+
+	gridLeft.AddItem(input16.GetBox(), 2, 0, 1, 1, 0, 0, false)
+	gridRight.AddItem(output16.GetBox(), 2, 0, 1, 1, 0, 0, false)
+
+	gridLeft.AddItem(input8.GetBox(), 3, 0, 1, 1, 0, 0, false)
+	gridRight.AddItem(output8.GetBox(), 3, 0, 1, 1, 0, 0, false)
+
 	grid := tview.NewGrid()
-	grid.SetBorders(true)
-
-	grid.AddItem(input64.GetBox(), 0, 0, 1, 1, 0, 0, true)
-	grid.AddItem(output64.GetBox(), 0, 1, 1, 1, 0, 0, false)
-
-	grid.AddItem(input32.GetBox(), 1, 0, 1, 1, 0, 0, false)
-	grid.AddItem(output32.GetBox(), 1, 1, 1, 1, 0, 0, false)
-
-	grid.AddItem(input16.GetBox(), 2, 0, 1, 1, 0, 0, false)
-	grid.AddItem(output16.GetBox(), 2, 1, 1, 1, 0, 0, false)
-
-	grid.AddItem(input8.GetBox(), 3, 0, 1, 1, 0, 0, false)
-	grid.AddItem(output8.GetBox(), 3, 1, 1, 1, 0, 0, false)
+	grid.AddItem(gridLeft, 0, 0, 1, 1, 0, 0, true)
+	grid.AddItem(gridRight, 0, 1, 1, 1, 0, 0, false)
 
 	return &UIRegister{
 		simdsize: simdsize,
