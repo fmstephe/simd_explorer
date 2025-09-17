@@ -11,7 +11,7 @@ func Run() {
 	app.EnableMouse(true)
 
 	register256 := register.NewUIRegisterSet(app, 256)
-	primitive := register256.Base10.GetPrimitive()
+	primitive := register256.Base2.GetPrimitive()
 	// Setup the application with the components defined above
 
 	app.SetRoot(primitive, true)
@@ -24,6 +24,12 @@ func Run() {
 		switch event.Rune() {
 		case 'q':
 			app.Stop()
+		case 'e':
+			app.SetRoot(register256.Base2.GetPrimitive(), true)
+		case 'r':
+			app.SetRoot(register256.Base10.GetPrimitive(), true)
+		case 't':
+			app.SetRoot(register256.Base16.GetPrimitive(), true)
 		}
 		return event
 	})
