@@ -8,6 +8,7 @@ import (
 
 func Run() {
 	app := tview.NewApplication()
+	app.EnableMouse(true)
 
 	register256 := register.NewUIRegisterSet(app, 256)
 	primitive := register256.Base10.GetPrimitive()
