@@ -63,6 +63,7 @@ func NewRegisterParts(app *tview.Application, bitsize, simdsize, base int, parts
 		converter:    converter,
 	}
 
+	partsPerLine := rParts.calcPartsPerLine()
 	// TODO we are going to have to build more consideration into this for 512 bit registers
 	// on my monitor right now I can't display the 64 bit parts of the 512 bit register on a single line.
 	for i := range partsCount {
@@ -74,8 +75,8 @@ func NewRegisterParts(app *tview.Application, bitsize, simdsize, base int, parts
 
 		rParts.allParts[i] = part
 
-		column := i % 8
-		row := i / 8
+		column := i % partsPerLine
+		row := i / partsPerLine
 		grid.AddItem(part.primitive(), row, column, 1, 1, 1, 1, true)
 	}
 
@@ -156,6 +157,23 @@ func (in *RegisterParts) describe() string {
 	return fmt.Sprintf("%q-%d-%d--%s", in.id.String()[:6], in.bitsize, in.simdsize, in.kind)
 }
 
-func calcPartsPerLine() int {
-	//
+func (in *RegisterParts) calcPartsPerLine() int {
+	screen, err := tcell.NewScreen()
+	if err != nil {
+		panic(err)
+	}
+	if err := screen.Init(); err != nil {
+		panic(err)
+	}
+	defer screen.Fini()
+	width, _ := screen.Size()
+	// We subtract 4 here to heuristically account for the input/output borders
+	half := (width - 4) / 2
+	// NB: The +2 heuristally allows for a border
+	partWidth := in.converter.getTextWidth() + 2
+	// For parts which are smaller than 10, we force the size to 10 to
+	// allow the title to display correctly
+	partWidth = max(partWidth, 10)
+	perLine := half / partWidth
+	return perLine
 }
