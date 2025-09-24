@@ -7,7 +7,7 @@ import (
 
 //go:generate go run asm.go -out ../asm.s -stubs ../stub.go -pkg vpbroadcastb
 func main() {
-	TEXT("vpbroadcastb", NOSPLIT, "func(b byte, ret *[256]byte)")
+	TEXT("vpbroadcastb", NOSPLIT, "func(b byte, ret *[32]byte)")
 	// generate!
 
 	Comment("load params")

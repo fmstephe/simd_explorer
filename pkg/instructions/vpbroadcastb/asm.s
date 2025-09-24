@@ -2,7 +2,7 @@
 
 #include "textflag.h"
 
-// func vpbroadcastb(b byte, ret *[256]byte)
+// func vpbroadcastb(b byte, ret *[32]byte)
 // Requires: AVX, AVX2, SSE2
 TEXT ·vpbroadcastb(SB), NOSPLIT, $0-16
 	// load params

@@ -30,7 +30,7 @@ func (v *VPBROADCASTB) Assembly() string {
 }
 
 func (v *VPBROADCASTB) Run(input []byte) (output []byte) {
-	ret := [256]byte{}
+	ret := [32]byte{}
 	vpbroadcastb(input[0], &ret)
 	return ret[:]
 }
