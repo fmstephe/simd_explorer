@@ -1,43 +1,23 @@
 package ui
 
 import (
+	"github.com/fmstephe/simd_explorer/pkg/instructions"
+	"github.com/fmstephe/simd_explorer/pkg/instructions/vpbroadcastb"
 	"github.com/fmstephe/simd_explorer/pkg/ui/commands"
-	"github.com/fmstephe/simd_explorer/pkg/ui/register"
-	"github.com/gdamore/tcell/v2"
-	"github.com/rivo/tview"
+	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 )
 
 func Run() {
-	app := tview.NewApplication()
-	app.EnableMouse(true)
+	app := stackapp.NewStackApp()
 
-	register256 := register.NewUIRegisterSet(app, 256)
-	primitive := register256.Base2.GetPrimitive()
+	/*
+		register256 := register.NewUIRegisterSet(app, 256)
+		primitive := register256.Base2.GetPrimitive()
+	*/
 	// Setup the application with the components defined above
-	commandSearch := commands.NewCommandSearch([]string{"one", "two", "three", "four", "five", "six", "seven", "eight", "nine", "ten"}, app)
-	primitive = commandSearch.GetBox()
+	commandSearch := commands.NewCommandSearch([]instructions.Instruction{&vpbroadcastb.VPBROADCASTB{}}, app)
 
-	app.SetRoot(primitive, true)
-	app.SetFocus(primitive)
-	app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		switch event.Key() {
-		case tcell.KeyESC:
-			app.Stop()
-		}
-		switch event.Rune() {
-		case 'q':
-			app.Stop()
-			/*
-				case 'e':
-					app.SetRoot(register256.Base2.GetPrimitive(), true)
-				case 'r':
-					app.SetRoot(register256.Base10.GetPrimitive(), true)
-				case 't':
-					app.SetRoot(register256.Base16.GetPrimitive(), true)
-			*/
-		}
-		return event
-	})
+	app.Push(commandSearch.GetBox())
 
 	if err := app.Run(); err != nil {
 		panic(err)

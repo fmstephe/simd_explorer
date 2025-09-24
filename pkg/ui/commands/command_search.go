@@ -1,25 +1,27 @@
 package commands
 
 import (
+	"github.com/fmstephe/simd_explorer/pkg/instructions"
+	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/gdamore/tcell/v2"
 	"github.com/lithammer/fuzzysearch/fuzzy"
 	"github.com/rivo/tview"
 )
 
 type CommandSearch struct {
-	list     *tview.List
-	input    *tview.InputField
-	grid     *tview.Grid
-	commands []string
+	list  *tview.List
+	input *tview.InputField
+	grid  *tview.Grid
 }
 
-func NewCommandSearch(commands []string, app *tview.Application) *CommandSearch {
+func NewCommandSearch(insts []instructions.Instruction, app *stackapp.StackApp) *CommandSearch {
+	instMap, instNames := buildInstructionMap(insts)
 	list := tview.NewList()
 	list.SetBorder(true)
 	list.SetTitle("Choose An Instruction")
-	list.ShowSecondaryText(false)
-	for _, cmd := range commands {
-		list.AddItem(cmd, "", 0, func() {})
+	list.ShowSecondaryText(true)
+	for name, inst := range instMap {
+		list.AddItem(name, inst.Description(), 0, func() {})
 	}
 
 	input := tview.NewInputField()
@@ -36,10 +38,11 @@ func NewCommandSearch(commands []string, app *tview.Application) *CommandSearch 
 	input.SetChangedFunc(func(txt string) {
 		// When the input-field is updated, update the list with
 		// filtered instructions
-		found := fuzzy.Find(txt, commands)
+		found := fuzzy.Find(txt, instNames)
 		list.Clear()
 		for _, cmd := range found {
-			list.AddItem(cmd, "", 0, func() {})
+			inst := instMap[cmd]
+			list.AddItem(cmd, inst.Description(), 0, func() {})
 		}
 	})
 
@@ -69,10 +72,9 @@ func NewCommandSearch(commands []string, app *tview.Application) *CommandSearch 
 	grid.AddItem(list, 0, 0, 1, 1, 0, 0, false)
 	grid.AddItem(input, 1, 0, 1, 1, 0, 0, true)
 	return &CommandSearch{
-		list:     list,
-		input:    input,
-		grid:     grid,
-		commands: commands,
+		list:  list,
+		input: input,
+		grid:  grid,
 	}
 }
 
@@ -85,4 +87,15 @@ func deleteFrom(txt string) string {
 		return ""
 	}
 	return txt[:len(txt)-1]
+}
+
+func buildInstructionMap(insts []instructions.Instruction) (map[string]instructions.Instruction, []string) {
+	instMap := map[string]instructions.Instruction{}
+	names := []string{}
+	for _, inst := range insts {
+		instMap[inst.Name()] = inst
+		names = append(names, inst.Name())
+	}
+
+	return instMap, names
 }
