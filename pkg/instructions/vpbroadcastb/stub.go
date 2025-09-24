@@ -2,4 +2,4 @@
 
 package vpbroadcastb
 
-func vpbroadcastb(b byte, ret *[8]uint64)
+func vpbroadcastb(b byte, ret *[256]byte)
