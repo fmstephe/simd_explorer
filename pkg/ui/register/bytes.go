@@ -16,7 +16,7 @@ type valueConverter struct {
 }
 
 func newValueConverter(bitsize, base int) *valueConverter {
-	mustValidBitsize(bitsize)
+	mustValidPartSize(bitsize)
 	return &valueConverter{
 		bitsize:   bitsize,
 		base:      base,
@@ -108,7 +108,7 @@ func (c *valueConverter) getTextWidth() int {
 }
 
 func calculateTextWidth(bitsize, base int) int {
-	mustValidBitsize(bitsize)
+	mustValidPartSize(bitsize)
 	switch bitsize {
 	case 8:
 		return len(strconv.FormatUint(math.MaxUint8, base)) + 1

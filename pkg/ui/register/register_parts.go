@@ -3,6 +3,7 @@ package register
 import (
 	"fmt"
 
+	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/gdamore/tcell/v2"
 	"github.com/google/uuid"
 	"github.com/rivo/tview"
@@ -13,38 +14,38 @@ type RegisterParts struct {
 	// Indicates if this is input or output for logging
 	kind string
 
-	app      *tview.Application
+	app      *stackapp.StackApp
 	allParts []uiPart
 	box      *tview.Grid
 
 	focus int
 
-	bitsize  int
-	simdsize int
-	base     int
+	partSize  int
+	totalSize int
+	base      int
 
 	// Callback when the data in this set of parts is changed
 	cBroadcaster *changeBroadcaster
 	converter    *valueConverter
 }
 
-func NewRegisterInputs(app *tview.Application, bitsize, simdsize, base int, cBroadcaster *changeBroadcaster) *RegisterParts {
-	return NewRegisterParts(app, bitsize, simdsize, base, &inputPartBuilder{}, cBroadcaster)
+func NewRegisterInputs(app *stackapp.StackApp, partSize, totalSize, base int, cBroadcaster *changeBroadcaster) *RegisterParts {
+	return NewRegisterParts(app, partSize, totalSize, base, &inputPartBuilder{}, cBroadcaster)
 }
 
-func NewRegisterOutputs(app *tview.Application, bitsize, simdsize, base int, cBroadcaster *changeBroadcaster) *RegisterParts {
-	return NewRegisterParts(app, bitsize, simdsize, base, &textViewPartBuilder{}, cBroadcaster)
+func NewRegisterOutputs(app *stackapp.StackApp, partSize, totalSize, base int, cBroadcaster *changeBroadcaster) *RegisterParts {
+	return NewRegisterParts(app, partSize, totalSize, base, &textViewPartBuilder{}, cBroadcaster)
 }
 
-func NewRegisterParts(app *tview.Application, bitsize, simdsize, base int, partsBuilder uiPartBuilder, cBroadcaster *changeBroadcaster) *RegisterParts {
-	converter := newValueConverter(bitsize, base)
-	partsCount := partsForBitsize(bitsize, simdsize)
+func NewRegisterParts(app *stackapp.StackApp, partSize, totalSize, base int, partsBuilder uiPartBuilder, cBroadcaster *changeBroadcaster) *RegisterParts {
+	converter := newValueConverter(partSize, base)
+	partsCount := partsForPartSize(partSize, totalSize)
 
 	grid := tview.NewGrid()
 	// We always have a maximum of 8 columns per row
 	grid.SetRows(3, 3, 3, 3, 3, 3, 3, 3)
 	grid.SetBorder(true)
-	grid.SetTitle(fmt.Sprintf("%d Bit %s", bitsize, partsBuilder.kind()))
+	grid.SetTitle(fmt.Sprintf("%d Bit %s", partSize, partsBuilder.kind()))
 
 	rParts := &RegisterParts{
 		id:   uuid.New(),
@@ -56,9 +57,9 @@ func NewRegisterParts(app *tview.Application, bitsize, simdsize, base int, parts
 
 		focus: 0,
 
-		bitsize:  bitsize,
-		simdsize: simdsize,
-		base:     base,
+		partSize:  partSize,
+		totalSize: totalSize,
+		base:      base,
 
 		cBroadcaster: cBroadcaster,
 		converter:    converter,
@@ -69,7 +70,7 @@ func NewRegisterParts(app *tview.Application, bitsize, simdsize, base int, parts
 	// on my monitor right now I can't display the 64 bit parts of the 512 bit register on a single line.
 	for i := range partsCount {
 		part := partsBuilder.build()
-		part.setTitle(fmt.Sprintf("%d:%d", i*bitsize, (i+1)*bitsize))
+		part.setTitle(fmt.Sprintf("%d:%d", i*partSize, (i+1)*partSize))
 		part.setBorder(true)
 		part.setFieldWidth(converter.getTextWidth())
 		part.setAcceptanceFunc(rParts.converter.inputAcceptor())
@@ -127,7 +128,7 @@ func (in *RegisterParts) cycleFocus(move int) {
 }
 
 func (in *RegisterParts) srcDataChanged() {
-	bytes := make([]byte, 0, in.simdsize)
+	bytes := make([]byte, 0, in.totalSize)
 
 	for _, part := range in.allParts {
 		txt := part.getText()
@@ -139,23 +140,33 @@ func (in *RegisterParts) srcDataChanged() {
 	in.cBroadcaster.broadcastChange(bytes)
 }
 
-func (in *RegisterParts) dataParts() int {
-	return len(in.allParts)
-}
+func (in *RegisterParts) setData(bytes []byte) {
+	if (len(bytes) * 8) != in.totalSize {
+		panic(fmt.Errorf("Bad data update, received %d bits, but need %d", len(bytes)*8, in.totalSize))
+	}
+	partsCount := len(in.allParts)
+	fmt.Printf("%s received data change %0.8b\n\n", in.describe(), bytes)
 
-func (in *RegisterParts) setPart(i int, chunk []byte) {
-	txt := in.converter.bytesToString(chunk)
-	part := in.allParts[i]
-	if part.getText() != txt {
-		// Only set the output text if the new value is
-		// different from the old, this reduces noise in the logs
-		fmt.Printf("%s[%d] changing text from %q to %q using %0.8b\n", in.describe(), i, part.getText(), txt, chunk)
-		in.allParts[i].setText(txt)
+	if len(bytes)%partsCount != 0 {
+		panic(fmt.Errorf("%s update with %d bytes, not cleanly divisible by %d parts", in.describe(), len(bytes), partsCount))
+	}
+
+	bytesPer := len(bytes) / partsCount
+	for i, part := range in.allParts {
+		idx := i * bytesPer
+		chunk := bytes[idx : idx+bytesPer]
+		txt := in.converter.bytesToString(chunk)
+		if part.getText() != txt {
+			// Only set the output text if the new value is
+			// different from the old, this reduces noise in the logs
+			fmt.Printf("%s[%d] changing text from %q to %q using %0.8b\n", in.describe(), i, part.getText(), txt, chunk)
+			part.setText(txt)
+		}
 	}
 }
 
 func (in *RegisterParts) describe() string {
-	return fmt.Sprintf("%q-%d-%d--%s", in.id.String()[:6], in.bitsize, in.simdsize, in.kind)
+	return fmt.Sprintf("%q-%d-%d--%s", in.id.String()[:6], in.partSize, in.totalSize, in.kind)
 }
 
 func (in *RegisterParts) calcPartsPerLine() int {

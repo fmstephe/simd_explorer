@@ -2,9 +2,9 @@ package register
 
 import "fmt"
 
-func textWidthForBitsize(bitsize int) int {
-	mustValidBitsize(bitsize)
-	switch bitsize {
+func textWidthForPartSize(partSize int) int {
+	mustValidPartSize(partSize)
+	switch partSize {
 	case 8:
 		return 4
 	case 16:
@@ -17,24 +17,32 @@ func textWidthForBitsize(bitsize int) int {
 	panic("Unreachable")
 }
 
-func partsForBitsize(bitsize, simdsize int) int {
-	mustValidBitsize(bitsize)
-	mustValidSimdsize(simdsize)
-	return simdsize / bitsize
+func partsForPartSize(partSize, totalSize int) int {
+	mustValidPartSize(partSize)
+	mustValidInputOutputSize(totalSize)
+	return totalSize / partSize
 }
 
-func mustValidBitsize(bitsize int) {
-	switch bitsize {
-	case 8, 16, 32, 64:
+func mustValidInputOutputSize(totalSize int) {
+	switch totalSize {
+	case 8, 16, 32, 64, 126, 256, 512:
 	default:
-		panic(fmt.Errorf("Unsupported bitsize value: %d", bitsize))
+		panic(fmt.Errorf("Unsupported input/output size: %d", totalSize))
 	}
 }
 
-func mustValidSimdsize(simdsize int) {
-	switch simdsize {
+func mustValidPartSize(partSize int) {
+	switch partSize {
+	case 8, 16, 32, 64:
+	default:
+		panic(fmt.Errorf("Unsupported bitsize value: %d", partSize))
+	}
+}
+
+func mustValidSimdsize(simdSize int) {
+	switch simdSize {
 	case 128, 256, 512:
 	default:
-		panic(fmt.Errorf("Unsupported simdsize value: %d", simdsize))
+		panic(fmt.Errorf("Unsupported simdSize value: %d", simdSize))
 	}
 }

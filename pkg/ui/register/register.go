@@ -3,22 +3,25 @@ package register
 import (
 	"fmt"
 
+	"github.com/fmstephe/simd_explorer/pkg/instructions"
+	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/rivo/tview"
 )
 
 type UIRegisterSet struct {
+	inst   instructions.Instruction
 	Base2  *UIRegister
 	Base10 *UIRegister
 	Base16 *UIRegister
 }
 
-func NewUIRegisterSet(app *tview.Application, simdsize int) *UIRegisterSet {
-	cBroadcaster := newChangeBroadcaster(simdsize)
+func NewUIRegisterSet(app *stackapp.StackApp, inst instructions.Instruction) *UIRegisterSet {
+	cBroadcaster := newChangeBroadcaster(inst)
 
 	rs := &UIRegisterSet{
-		Base2:  NewUIRegister(app, simdsize, 2, cBroadcaster),
-		Base10: NewUIRegister(app, simdsize, 10, cBroadcaster),
-		Base16: NewUIRegister(app, simdsize, 16, cBroadcaster),
+		Base2:  NewUIRegister(app, inst.InputSize(), inst.OutputSize(), 2, cBroadcaster),
+		Base10: NewUIRegister(app, inst.InputSize(), inst.OutputSize(), 10, cBroadcaster),
+		Base16: NewUIRegister(app, inst.InputSize(), inst.OutputSize(), 16, cBroadcaster),
 	}
 
 	// Set all parts to have 0 values
@@ -28,38 +31,22 @@ func NewUIRegisterSet(app *tview.Application, simdsize int) *UIRegisterSet {
 }
 
 type UIRegister struct {
-	simdsize int
-	base     int
-	box      tview.Primitive
+	box tview.Primitive
 }
 
-func NewUIRegister(app *tview.Application, simdsize, base int, cBroadcaster *changeBroadcaster) *UIRegister {
-	mustValidSimdsize(simdsize)
+func NewUIRegister(app *stackapp.StackApp, inputSize, outputSize, base int, cBroadcaster *changeBroadcaster) *UIRegister {
+	mustValidInputOutputSize(inputSize)
+	mustValidInputOutputSize(outputSize)
 
-	input64 := NewRegisterInputs(app, 64, simdsize, base, cBroadcaster)
-	output64 := NewRegisterOutputs(app, 64, simdsize, base, cBroadcaster)
+	inputPartSize := getPartSize(inputSize)
+	outputPartSize := getPartSize(outputSize)
 
-	input32 := NewRegisterInputs(app, 32, simdsize, base, cBroadcaster)
-	output32 := NewRegisterOutputs(app, 32, simdsize, base, cBroadcaster)
-
-	input16 := NewRegisterInputs(app, 16, simdsize, base, cBroadcaster)
-	output16 := NewRegisterOutputs(app, 16, simdsize, base, cBroadcaster)
-
-	input8 := NewRegisterInputs(app, 8, simdsize, base, cBroadcaster)
-	output8 := NewRegisterOutputs(app, 8, simdsize, base, cBroadcaster)
+	input := NewRegisterInputs(app, inputPartSize, inputSize, base, cBroadcaster)
+	output := NewRegisterOutputs(app, outputPartSize, outputSize, base, cBroadcaster)
 
 	// Add update receivers, now that all initialisation updates have completed
-	cBroadcaster.addReceiver(input64)
-	cBroadcaster.addReceiver(output64)
-
-	cBroadcaster.addReceiver(input32)
-	cBroadcaster.addReceiver(output32)
-
-	cBroadcaster.addReceiver(input16)
-	cBroadcaster.addReceiver(output16)
-
-	cBroadcaster.addReceiver(input8)
-	cBroadcaster.addReceiver(output8)
+	cBroadcaster.addInputReceiver(input)
+	cBroadcaster.addOutputReceiver(output)
 
 	gridLeft := tview.NewGrid()
 	gridLeft.SetBorder(true)
@@ -69,29 +56,33 @@ func NewUIRegister(app *tview.Application, simdsize, base int, cBroadcaster *cha
 	gridRight.SetBorder(true)
 	gridRight.SetTitle(fmt.Sprintf("Outputs Base %d", base))
 
-	gridLeft.AddItem(input64.GetBox(), 0, 0, 1, 1, 0, 0, true)
-	gridRight.AddItem(output64.GetBox(), 0, 0, 1, 1, 0, 0, false)
-
-	gridLeft.AddItem(input32.GetBox(), 1, 0, 1, 1, 0, 0, false)
-	gridRight.AddItem(output32.GetBox(), 1, 0, 1, 1, 0, 0, false)
-
-	gridLeft.AddItem(input16.GetBox(), 2, 0, 1, 1, 0, 0, false)
-	gridRight.AddItem(output16.GetBox(), 2, 0, 1, 1, 0, 0, false)
-
-	gridLeft.AddItem(input8.GetBox(), 3, 0, 1, 1, 0, 0, false)
-	gridRight.AddItem(output8.GetBox(), 3, 0, 1, 1, 0, 0, false)
+	gridLeft.AddItem(input.GetBox(), 0, 0, 1, 1, 0, 0, true)
+	gridRight.AddItem(output.GetBox(), 0, 0, 1, 1, 0, 0, false)
 
 	grid := tview.NewGrid()
 	grid.AddItem(gridLeft, 0, 0, 1, 1, 0, 0, true)
 	grid.AddItem(gridRight, 0, 1, 1, 1, 0, 0, false)
 
 	return &UIRegister{
-		simdsize: simdsize,
-		base:     base,
-		box:      grid,
+		box: grid,
 	}
 }
 
 func (r *UIRegister) GetPrimitive() tview.Primitive {
 	return r.box
+}
+
+// TODO this likely isn't the finaly approach we will take, but for now we just
+// display 64 bit parts for large input/outputs and 'fitted' size for smaller
+// input/outputs. We will probably want to make this more flexible in the
+// future, and allow for a range of different part sizes. But for now we are
+// simple and fix the part size.
+func getPartSize(totalSize int) int {
+	mustValidInputOutputSize(totalSize)
+	switch totalSize {
+	case 512, 256, 128, 64:
+		return 64
+	default:
+		return totalSize
+	}
 }
