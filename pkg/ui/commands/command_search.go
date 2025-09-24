@@ -2,6 +2,7 @@ package commands
 
 import (
 	"github.com/fmstephe/simd_explorer/pkg/instructions"
+	"github.com/fmstephe/simd_explorer/pkg/ui/register"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/gdamore/tcell/v2"
 	"github.com/lithammer/fuzzysearch/fuzzy"
@@ -21,7 +22,10 @@ func NewCommandSearch(insts []instructions.Instruction, app *stackapp.StackApp) 
 	list.SetTitle("Choose An Instruction")
 	list.ShowSecondaryText(true)
 	for name, inst := range instMap {
-		list.AddItem(name, inst.Description(), 0, func() {})
+		list.AddItem(name, inst.Description(), 0, func() {
+			rs := register.NewUIRegisterSet(app, inst)
+			app.Push(rs.Base16.GetPrimitive())
+		})
 	}
 
 	input := tview.NewInputField()
