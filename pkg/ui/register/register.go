@@ -3,19 +3,19 @@ package register
 import (
 	"fmt"
 
-	"github.com/fmstephe/simd_explorer/pkg/instructions"
+	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/rivo/tview"
 )
 
 type UIRegisterSet struct {
-	inst   instructions.Instruction
+	inst   assembly.Instruction
 	Base2  *UIRegister
 	Base10 *UIRegister
 	Base16 *UIRegister
 }
 
-func NewUIRegisterSet(app *stackapp.StackApp, inst instructions.Instruction) *UIRegisterSet {
+func NewUIRegisterSet(app *stackapp.StackApp, inst assembly.Instruction) *UIRegisterSet {
 	cBroadcaster := newChangeBroadcaster(inst)
 
 	rs := &UIRegisterSet{

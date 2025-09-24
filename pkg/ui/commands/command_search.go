@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"github.com/fmstephe/simd_explorer/pkg/instructions"
+	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/ui/register"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/gdamore/tcell/v2"
@@ -15,8 +15,8 @@ type CommandSearch struct {
 	grid  *tview.Grid
 }
 
-func NewCommandSearch(insts []instructions.Instruction, app *stackapp.StackApp) *CommandSearch {
-	instMap, instNames := buildInstructionMap(insts)
+func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackApp) *CommandSearch {
+	instMap, instNames := buildInstructionMap(instructions)
 	list := tview.NewList()
 	list.SetBorder(true)
 	list.SetTitle("Choose An Instruction")
@@ -93,13 +93,13 @@ func deleteFrom(txt string) string {
 	return txt[:len(txt)-1]
 }
 
-func buildInstructionMap(insts []instructions.Instruction) (map[string]instructions.Instruction, []string) {
-	instMap := map[string]instructions.Instruction{}
-	names := []string{}
-	for _, inst := range insts {
+func buildInstructionMap(instructions []assembly.Instruction) (instMap map[string]assembly.Instruction, instNames []string) {
+	instMap = map[string]assembly.Instruction{}
+	instNames = []string{}
+	for _, inst := range instructions {
 		instMap[inst.Name()] = inst
-		names = append(names, inst.Name())
+		instNames = append(instNames, inst.Name())
 	}
 
-	return instMap, names
+	return instMap, instNames
 }

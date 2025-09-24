@@ -1,4 +1,4 @@
-package instructions
+package assembly
 
 type Instruction interface {
 	InputSize() int

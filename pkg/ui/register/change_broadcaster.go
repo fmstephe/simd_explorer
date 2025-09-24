@@ -1,17 +1,15 @@
 package register
 
-import (
-	"github.com/fmstephe/simd_explorer/pkg/instructions"
-)
+import "github.com/fmstephe/simd_explorer/pkg/assembly"
 
 type changeBroadcaster struct {
-	inst            instructions.Instruction
+	inst            assembly.Instruction
 	active          bool
 	inputReceivers  []*RegisterParts
 	outputReceivers []*RegisterParts
 }
 
-func newChangeBroadcaster(inst instructions.Instruction) *changeBroadcaster {
+func newChangeBroadcaster(inst assembly.Instruction) *changeBroadcaster {
 	return &changeBroadcaster{
 		inst:            inst,
 		active:          true,
