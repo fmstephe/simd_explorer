@@ -31,14 +31,19 @@ func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackAp
 	input := tview.NewInputField()
 	input.SetBorder(true)
 	input.SetTitle("Instruction Filter")
+
 	input.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		// TAB or SHIFT+TAB cycles focus to the list
 		case tcell.KeyTAB, tcell.KeyBacktab:
 			app.SetFocus(list)
+		case tcell.KeyEnter:
+			listIdx := list.GetCurrentItem()
+			list.GetItemSelectedFunc(listIdx)()
 		}
 		return event
 	})
+
 	input.SetChangedFunc(func(txt string) {
 		// When the input-field is updated, update the list with
 		// filtered instructions
