@@ -1,5 +1,17 @@
 package vpbroadcastb
 
+import (
+	_ "embed"
+
+	"golang.org/x/sys/cpu"
+)
+
+//go:embed asm_256.s
+var assembly256 string
+
+//go:embed stub_256.go
+var stub256 string
+
 type Vpbroadcastb256 struct {
 }
 
@@ -20,17 +32,22 @@ func (v *Vpbroadcastb256) Description() string {
 }
 
 func (v *Vpbroadcastb256) Stub() string {
-	// Find a way to automatically include the generated assembly here
-	return "TODO"
+	return stub256
 }
 
 func (v *Vpbroadcastb256) Assembly() string {
-	// Find a way to automatically include the generated assembly here
-	return "TODO"
+	return assembly256
 }
 
 func (v *Vpbroadcastb256) Run(input []byte) (output []byte) {
 	ret := [32]byte{}
 	vpbroadcastb256(input[0], &ret)
 	return ret[:]
+}
+
+func (v *Vpbroadcastb256) Supported() bool {
+	// Requires: AVX, AVX2, SSE2
+	return cpu.X86.HasAVX &&
+		cpu.X86.HasAVX2 &&
+		cpu.X86.HasSSE2
 }

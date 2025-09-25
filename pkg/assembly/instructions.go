@@ -8,4 +8,5 @@ type Instruction interface {
 	Stub() string
 	Assembly() string
 	Run([]byte) []byte
+	Supported() bool
 }

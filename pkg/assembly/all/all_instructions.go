@@ -12,3 +12,14 @@ func Instructions() []assembly.Instruction {
 		&vpbroadcastb.Vpbroadcastb512{},
 	}
 }
+
+func SupportedInstructions() []assembly.Instruction {
+	instructions := Instructions()
+	supported := make([]assembly.Instruction, 0, len(instructions))
+	for _, inst := range instructions {
+		if inst.Supported() {
+			supported = append(supported, inst)
+		}
+	}
+	return supported
+}
