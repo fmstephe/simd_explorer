@@ -2,9 +2,26 @@
 
 #include "textflag.h"
 
-// func vpbroadcastb(b byte, ret *[32]byte)
+// func vpbroadcastb128(b byte, ret *[16]byte)
 // Requires: AVX, AVX2, SSE2
-TEXT ·vpbroadcastb(SB), NOSPLIT, $0-16
+TEXT ·vpbroadcastb128(SB), NOSPLIT, $0-16
+	// load params
+	MOVBQZX b+0(FP), AX
+	MOVQ    ret+8(FP), CX
+
+	// Need to move b into an XMM register to work with VPBROADCASTB instruction
+	MOVQ AX, X0
+
+	// Broadcast b into XMM register
+	VPBROADCASTB X0, X0
+
+	// Write contents of XMM register into memory region
+	VMOVDQU X0, (CX)
+	RET
+
+// func vpbroadcastb256(b byte, ret *[32]byte)
+// Requires: AVX, AVX2, SSE2
+TEXT ·vpbroadcastb256(SB), NOSPLIT, $0-16
 	// load params
 	MOVBQZX b+0(FP), AX
 	MOVQ    ret+8(FP), CX
@@ -16,6 +33,26 @@ TEXT ·vpbroadcastb(SB), NOSPLIT, $0-16
 	VPBROADCASTB X0, Y0
 
 	// Write contents of YMM register into memory region
+	VMOVDQU Y0, (CX)
+
+	// Call VZEROUPPER to avoid performance problems after AVX work
+	VZEROUPPER
+	RET
+
+// func vpbroadcastb512(b byte, ret *[64]byte)
+// Requires: AVX, AVX2, SSE2
+TEXT ·vpbroadcastb512(SB), NOSPLIT, $0-16
+	// load params
+	MOVBQZX b+0(FP), AX
+	MOVQ    ret+8(FP), CX
+
+	// Need to move b into an XMM register to work with VPBROADCASTB instruction
+	MOVQ AX, X0
+
+	// Broadcast b into ZMM register
+	VPBROADCASTB X0, Y0
+
+	// Write contents of ZMM register into memory region
 	VMOVDQU Y0, (CX)
 
 	// Call VZEROUPPER to avoid performance problems after AVX work

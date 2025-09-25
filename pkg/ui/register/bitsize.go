@@ -25,7 +25,7 @@ func partsForPartSize(partSize, totalSize int) int {
 
 func mustValidInputOutputSize(totalSize int) {
 	switch totalSize {
-	case 8, 16, 32, 64, 126, 256, 512:
+	case 8, 16, 32, 64, 128, 256, 512:
 	default:
 		panic(fmt.Errorf("Unsupported input/output size: %d", totalSize))
 	}

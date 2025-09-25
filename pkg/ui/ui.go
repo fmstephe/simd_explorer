@@ -1,8 +1,7 @@
 package ui
 
 import (
-	"github.com/fmstephe/simd_explorer/pkg/assembly"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/all"
 	"github.com/fmstephe/simd_explorer/pkg/ui/commands"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 )
@@ -15,7 +14,7 @@ func Run() {
 		primitive := register256.Base2.GetPrimitive()
 	*/
 	// Setup the application with the components defined above
-	commandSearch := commands.NewCommandSearch([]assembly.Instruction{&vpbroadcastb.VPBROADCASTB{}}, app)
+	commandSearch := commands.NewCommandSearch(all.Instructions(), app)
 
 	app.Push(commandSearch.GetBox())
 
