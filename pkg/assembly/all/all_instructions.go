@@ -10,6 +10,9 @@ func Instructions() []assembly.Instruction {
 		&vpbroadcastb.Vpbroadcastb128{},
 		&vpbroadcastb.Vpbroadcastb256{},
 		&vpbroadcastb.Vpbroadcastb512{},
+		&vpbroadcastb.Vpbroadcastb128K{},
+		&vpbroadcastb.Vpbroadcastb256K{},
+		&vpbroadcastb.Vpbroadcastb512K{},
 	}
 }
 

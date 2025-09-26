@@ -119,7 +119,7 @@ func buildInstructionMap(instructions []assembly.Instruction) (instMap map[strin
 	for _, inst := range instructions {
 		name := inst.Name()
 		if !inst.Supported() {
-			name = name + " (Instruction Not Supported!)"
+			name = name + " (Not Supported!)"
 		}
 		instMap[name] = inst
 		instNames = append(instNames, name)

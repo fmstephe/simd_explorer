@@ -1,0 +1,56 @@
+package vpbroadcastb
+
+import (
+	_ "embed"
+
+	"github.com/fmstephe/simd_explorer/pkg/assembly/asmutil"
+	"golang.org/x/sys/cpu"
+)
+
+//go:embed asm_256_k.s
+var assembly256K string
+
+//go:embed stub_256_k.go
+var stub256K string
+
+type Vpbroadcastb256K struct {
+}
+
+func (v *Vpbroadcastb256K) InputSizes() []int {
+	return []int{8, 64}
+}
+
+func (v *Vpbroadcastb256K) OutputSize() int {
+	return 256
+}
+
+func (v *Vpbroadcastb256K) Name() string {
+	return "VPBROADCASTB YMM (256K bit) K"
+}
+
+func (v *Vpbroadcastb256K) Description() string {
+	return "TODO"
+}
+
+func (v *Vpbroadcastb256K) Stub() string {
+	return stub256K
+}
+
+func (v *Vpbroadcastb256K) Assembly() string {
+	return assembly256K
+}
+
+func (v *Vpbroadcastb256K) Run(inputs [][]byte) (output []byte) {
+	ret := [32]byte{}
+	vpbroadcastb256K(inputs[0][0], asmutil.ToUint64(inputs[1]), &ret)
+	return ret[:]
+}
+
+func (v *Vpbroadcastb256K) Supported() bool {
+	// Requires: AVX, AVX2, AVX512F, AVX512VL, SSE2
+	return cpu.X86.HasAVX &&
+		cpu.X86.HasAVX2 &&
+		cpu.X86.HasAVX512F &&
+		cpu.X86.HasAVX512VL &&
+		cpu.X86.HasSSE2
+}

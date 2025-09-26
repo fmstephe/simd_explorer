@@ -19,7 +19,7 @@ func main() {
 	MOVQ(b, regXArg)
 
 	Comment("Broadcast b into ZMM register")
-	regZ := YMM()
+	regZ := ZMM()
 	VPBROADCASTB(regXArg, regZ)
 
 	Comment("Write contents of ZMM register into memory region")

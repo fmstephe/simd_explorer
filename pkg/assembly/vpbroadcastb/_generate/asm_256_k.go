@@ -5,12 +5,13 @@ import (
 	. "github.com/mmcloughlin/avo/operand"
 )
 
-//go:generate go run asm_256.go -out ../asm_256.s -stubs ../stub_256.go -pkg vpbroadcastb
+//go:generate go run asm_256_k.go -out ../asm_256_k.s -stubs ../stub_256_k.go -pkg vpbroadcastb
 func main() {
-	TEXT("vpbroadcastb256", NOSPLIT, "func(b byte, ret *[32]byte)")
+	TEXT("vpbroadcastb256K", NOSPLIT, "func(b byte, k uint64, ret *[32]byte)")
 
 	Comment("load params")
 	b := Load(Param("b"), GP64())
+	k := Load(Param("k"), K())
 	ret := Load(Param("ret"), GP64())
 
 	Comment("Need to move b into an XMM register to work with VPBROADCASTB instruction")
@@ -19,7 +20,7 @@ func main() {
 
 	Comment("Broadcast b into YMM register")
 	regY := YMM()
-	VPBROADCASTB(regXArg, regY)
+	VPBROADCASTB(regXArg, k, regY)
 
 	Comment("Write contents of YMM register into memory region")
 	VMOVDQU(regY, Mem{Base: ret})

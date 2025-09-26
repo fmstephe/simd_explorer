@@ -3,7 +3,7 @@
 #include "textflag.h"
 
 // func vpbroadcastb512(b byte, ret *[64]byte)
-// Requires: AVX, AVX2, AVX512F, AVX512VL, SSE2
+// Requires: AVX, AVX512BW, AVX512F, SSE2
 TEXT ·vpbroadcastb512(SB), NOSPLIT, $0-16
 	// load params
 	MOVBQZX b+0(FP), AX
@@ -13,10 +13,10 @@ TEXT ·vpbroadcastb512(SB), NOSPLIT, $0-16
 	MOVQ AX, X0
 
 	// Broadcast b into ZMM register
-	VPBROADCASTB X0, Y0
+	VPBROADCASTB X0, Z0
 
 	// Write contents of ZMM register into memory region
-	VMOVDQU64 Y0, (CX)
+	VMOVDQU64 Z0, (CX)
 
 	// Call VZEROUPPER to avoid performance problems after AVX work
 	VZEROUPPER
