@@ -32,14 +32,7 @@ func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackAp
 	// Build list of instructions
 	for _, name := range instNames {
 		inst := instMap[name]
-		list.AddItem(name, inst.Description(), 0, func() {
-			fmt.Printf("Chosen %s\n", name)
-			if inst.Supported() {
-				// If the instruction is supported, display the ui for it
-				rs := register.NewUIRegisterSet(app, inst)
-				app.Push(rs.Base16.GetPrimitive())
-			}
-		})
+		list.AddItem(name, inst.Description(), 0, buildInstructionSelectedFunc(app, inst))
 	}
 
 	// When a new list item is selected, update the assembly view to
@@ -90,9 +83,9 @@ func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackAp
 		// filtered instructions
 		found := fuzzy.Find(txt, instNames)
 		list.Clear()
-		for _, cmd := range found {
-			inst := instMap[cmd]
-			list.AddItem(cmd, inst.Description(), 0, func() {})
+		for _, name := range found {
+			inst := instMap[name]
+			list.AddItem(name, inst.Description(), 0, buildInstructionSelectedFunc(app, inst))
 		}
 	})
 
@@ -133,4 +126,15 @@ func buildInstructionMap(instructions []assembly.Instruction) (instMap map[strin
 	}
 
 	return instMap, instNames
+}
+
+func buildInstructionSelectedFunc(app *stackapp.StackApp, inst assembly.Instruction) func() {
+	return func() {
+		fmt.Printf("Chosen %s\n", inst.Name())
+		if inst.Supported() {
+			// If the instruction is supported, display the ui for it
+			rs := register.NewUIRegisterSet(app, inst)
+			app.Push(rs.Base16.GetPrimitive())
+		}
+	}
 }
