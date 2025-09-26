@@ -2,10 +2,13 @@ package asmutil
 
 import (
 	"fmt"
+	"regexp"
 	"strings"
 
 	"golang.org/x/sys/cpu"
 )
+
+var requiresRegex = regexp.MustCompile("^// Requires: (.*)$")
 
 func IsSupported(assembly string) bool {
 	lines := strings.Split(assembly, "\n")
@@ -21,24 +24,20 @@ func IsSupported(assembly string) bool {
 	return true
 }
 
-// Example features line "Requires: AVX, AVX2, AVX512F, AVX512VL, SSE2"
+// Example features line "// Requires: AVX, AVX2, AVX512F, AVX512VL, SSE2"
 func getFeatures(line string) []string {
 	features := []string{}
-	if strings.Contains(line, "Requires: ") {
-		i := strings.Index(line, ": ")
-		features = append(features, strings.Split(line[i+1:], " ")...)
+	matches := requiresRegex.FindStringSubmatch(line)
+	if len(matches) > 1 {
+		allFeatures := matches[1]
+		features = append(features, strings.Split(allFeatures, ", ")...)
 	}
 
 	return features
 }
 
-func hasFeature(f string) bool {
-	f = strings.Trim(strings.TrimSpace(f), ",")
-	switch f {
-	case "":
-		// The slightly sloppy code above will generate empty strings,
-		// ignore them
-		return true
+func hasFeature(feature string) bool {
+	switch feature {
 	case "SSE2":
 		return cpu.X86.HasSSE2
 	case "AVX":
@@ -52,6 +51,6 @@ func hasFeature(f string) bool {
 	case "AVX512BW":
 		return cpu.X86.HasAVX512BW
 	default:
-		panic(fmt.Errorf("Unknown feature name %q", f))
+		panic(fmt.Errorf("Unknown feature name %q", feature))
 	}
 }
