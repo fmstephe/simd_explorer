@@ -15,8 +15,8 @@ var stub256 string
 type Vpbroadcastb256 struct {
 }
 
-func (v *Vpbroadcastb256) InputSize() int {
-	return 8
+func (v *Vpbroadcastb256) InputSizes() []int {
+	return []int{8}
 }
 
 func (v *Vpbroadcastb256) OutputSize() int {
@@ -39,9 +39,9 @@ func (v *Vpbroadcastb256) Assembly() string {
 	return assembly256
 }
 
-func (v *Vpbroadcastb256) Run(input []byte) (output []byte) {
+func (v *Vpbroadcastb256) Run(inputs [][]byte) (output []byte) {
 	ret := [32]byte{}
-	vpbroadcastb256(input[0], &ret)
+	vpbroadcastb256(inputs[0][0], &ret)
 	return ret[:]
 }
 

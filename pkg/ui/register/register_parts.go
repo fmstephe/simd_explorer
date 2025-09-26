@@ -25,19 +25,19 @@ type RegisterParts struct {
 	base      int
 
 	// Callback when the data in this set of parts is changed
-	cBroadcaster *changeBroadcaster
-	converter    *valueConverter
+	uiRegister *UIRegister
+	converter  *valueConverter
 }
 
-func NewRegisterInputs(app *stackapp.StackApp, partSize, totalSize, base int, cBroadcaster *changeBroadcaster) *RegisterParts {
-	return NewRegisterParts(app, partSize, totalSize, base, &inputPartBuilder{}, cBroadcaster)
+func NewRegisterInputs(app *stackapp.StackApp, partSize, totalSize, base int, uiRegister *UIRegister) *RegisterParts {
+	return NewRegisterParts(app, partSize, totalSize, base, &inputPartBuilder{}, uiRegister)
 }
 
-func NewRegisterOutputs(app *stackapp.StackApp, partSize, totalSize, base int, cBroadcaster *changeBroadcaster) *RegisterParts {
-	return NewRegisterParts(app, partSize, totalSize, base, &textViewPartBuilder{}, cBroadcaster)
+func NewRegisterOutputs(app *stackapp.StackApp, partSize, totalSize, base int, uiRegister *UIRegister) *RegisterParts {
+	return NewRegisterParts(app, partSize, totalSize, base, &textViewPartBuilder{}, uiRegister)
 }
 
-func NewRegisterParts(app *stackapp.StackApp, partSize, totalSize, base int, partsBuilder uiPartBuilder, cBroadcaster *changeBroadcaster) *RegisterParts {
+func NewRegisterParts(app *stackapp.StackApp, partSize, totalSize, base int, partsBuilder uiPartBuilder, uiRegister *UIRegister) *RegisterParts {
 	converter := newValueConverter(partSize, base)
 	partsCount := partsForPartSize(partSize, totalSize)
 
@@ -61,8 +61,8 @@ func NewRegisterParts(app *stackapp.StackApp, partSize, totalSize, base int, par
 		totalSize: totalSize,
 		base:      base,
 
-		cBroadcaster: cBroadcaster,
-		converter:    converter,
+		uiRegister: uiRegister,
+		converter:  converter,
 	}
 
 	partsPerLine := rParts.calcPartsPerLine()
@@ -88,9 +88,8 @@ func NewRegisterParts(app *stackapp.StackApp, partSize, totalSize, base int, par
 	// the logs
 	for _, part := range rParts.allParts {
 		part.setChangedFunc(func(txt string) {
-			// Broadcast the change to all data-changed
-			// receivers
-			rParts.srcDataChanged()
+			// Notify the uiRegister that some input data has changed
+			uiRegister.inputsChanged()
 		})
 	}
 
@@ -127,7 +126,7 @@ func (in *RegisterParts) cycleFocus(move int) {
 	in.app.SetFocus(in.allParts[idx].primitive())
 }
 
-func (in *RegisterParts) srcDataChanged() {
+func (in *RegisterParts) getData() []byte {
 	bytes := make([]byte, 0, in.totalSize)
 
 	for _, part := range in.allParts {
@@ -137,7 +136,7 @@ func (in *RegisterParts) srcDataChanged() {
 
 	fmt.Printf("%s broadcasting data change %0.8b\n\n", in.describe(), bytes)
 
-	in.cBroadcaster.broadcastChange(bytes)
+	return bytes
 }
 
 func (in *RegisterParts) setData(bytes []byte) {

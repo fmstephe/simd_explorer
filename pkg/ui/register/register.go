@@ -19,9 +19,9 @@ func NewUIRegisterSet(app *stackapp.StackApp, inst assembly.Instruction) *UIRegi
 	cBroadcaster := newChangeBroadcaster(inst)
 
 	rs := &UIRegisterSet{
-		Base2:  NewUIRegister(app, inst.InputSize(), inst.OutputSize(), 2, cBroadcaster),
-		Base10: NewUIRegister(app, inst.InputSize(), inst.OutputSize(), 10, cBroadcaster),
-		Base16: NewUIRegister(app, inst.InputSize(), inst.OutputSize(), 16, cBroadcaster),
+		Base2:  NewUIRegister(app, 2, inst.InputSizes(), inst.OutputSize(), cBroadcaster),
+		Base10: NewUIRegister(app, 10, inst.InputSizes(), inst.OutputSize(), cBroadcaster),
+		Base16: NewUIRegister(app, 16, inst.InputSizes(), inst.OutputSize(), cBroadcaster),
 	}
 
 	// Set all parts to have 0 values
@@ -31,22 +31,34 @@ func NewUIRegisterSet(app *stackapp.StackApp, inst assembly.Instruction) *UIRegi
 }
 
 type UIRegister struct {
-	box tview.Primitive
+	inputRegisters []*RegisterParts
+	outputRegister *RegisterParts
+	cBroadcaster   *changeBroadcaster
+	box            tview.Primitive
 }
 
-func NewUIRegister(app *stackapp.StackApp, inputSize, outputSize, base int, cBroadcaster *changeBroadcaster) *UIRegister {
-	mustValidInputOutputSize(inputSize)
-	mustValidInputOutputSize(outputSize)
+func NewUIRegister(app *stackapp.StackApp, base int, inputSizes []int, outputSize int, cBroadcaster *changeBroadcaster) *UIRegister {
+	// UIRegister is required for callbacks in register input components.
+	// When the input components are changed they callback into the
+	// UIRegister to indicate that a value has been changed and
+	// inputs/outputs reprocessed and broadcast.
+	//
+	// TODO this design _feels_ awkward, so we should have a think about
+	// this in the future
+	r := &UIRegister{}
 
-	inputPartSize := getPartSize(inputSize)
+	inputs := []*RegisterParts{}
+	for _, inputSize := range inputSizes {
+		mustValidInputOutputSize(inputSize)
+		inputPartSize := getPartSize(inputSize)
+		input := NewRegisterInputs(app, inputPartSize, inputSize, base, r)
+		inputs = append(inputs, input)
+	}
+
+	mustValidInputOutputSize(outputSize)
 	outputPartSize := getPartSize(outputSize)
 
-	input := NewRegisterInputs(app, inputPartSize, inputSize, base, cBroadcaster)
-	output := NewRegisterOutputs(app, outputPartSize, outputSize, base, cBroadcaster)
-
-	// Add update receivers, now that all initialisation updates have completed
-	cBroadcaster.addInputReceiver(input)
-	cBroadcaster.addOutputReceiver(output)
+	output := NewRegisterOutputs(app, outputPartSize, outputSize, base, r)
 
 	gridLeft := tview.NewGrid()
 	gridLeft.SetBorder(true)
@@ -56,20 +68,45 @@ func NewUIRegister(app *stackapp.StackApp, inputSize, outputSize, base int, cBro
 	gridRight.SetBorder(true)
 	gridRight.SetTitle(fmt.Sprintf("Outputs Base %d", base))
 
-	gridLeft.AddItem(input.GetBox(), 0, 0, 1, 1, 0, 0, true)
+	for i, input := range inputs {
+		gridLeft.AddItem(input.GetBox(), i, 0, 1, 1, 0, 0, true)
+	}
+
 	gridRight.AddItem(output.GetBox(), 0, 0, 1, 1, 0, 0, false)
 
 	grid := tview.NewGrid()
 	grid.AddItem(gridLeft, 0, 0, 1, 1, 0, 0, true)
 	grid.AddItem(gridRight, 0, 1, 1, 1, 0, 0, false)
 
-	return &UIRegister{
-		box: grid,
-	}
+	// Fill out the fields for the UIRegister
+	r.inputRegisters = inputs
+	r.outputRegister = output
+	r.cBroadcaster = cBroadcaster
+	r.box = grid
+
+	// Add this UIRegister to the change broadcaster
+	cBroadcaster.addReceiver(r)
+
+	return r
 }
 
 func (r *UIRegister) GetPrimitive() tview.Primitive {
 	return r.box
+}
+
+func (r *UIRegister) setData(inputs [][]byte, output []byte) {
+	for i, input := range r.inputRegisters {
+		input.setData(inputs[i])
+	}
+	r.outputRegister.setData(output)
+}
+
+func (r *UIRegister) inputsChanged() {
+	inputs := [][]byte{}
+	for _, input := range r.inputRegisters {
+		inputs = append(inputs, input.getData())
+	}
+	r.cBroadcaster.broadcastChange(inputs)
 }
 
 // TODO this likely isn't the finaly approach we will take, but for now we just

@@ -1,6 +1,8 @@
 package commands
 
 import (
+	"fmt"
+
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/ui/register"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
@@ -31,6 +33,7 @@ func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackAp
 	for _, name := range instNames {
 		inst := instMap[name]
 		list.AddItem(name, inst.Description(), 0, func() {
+			fmt.Printf("Chosen %s\n", name)
 			if inst.Supported() {
 				// If the instruction is supported, display the ui for it
 				rs := register.NewUIRegisterSet(app, inst)
@@ -58,6 +61,7 @@ func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackAp
 		switch event.Key() {
 		case tcell.KeyEnter:
 			listIdx := list.GetCurrentItem()
+			fmt.Printf("Enter Pressed %d\n", listIdx)
 			list.GetItemSelectedFunc(listIdx)()
 			// Short-circuit default handling of the enter key
 			return nil

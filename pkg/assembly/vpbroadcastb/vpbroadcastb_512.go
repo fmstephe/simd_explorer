@@ -15,8 +15,8 @@ var stub512 string
 type Vpbroadcastb512 struct {
 }
 
-func (v *Vpbroadcastb512) InputSize() int {
-	return 8
+func (v *Vpbroadcastb512) InputSizes() []int {
+	return []int{8}
 }
 
 func (v *Vpbroadcastb512) OutputSize() int {
@@ -39,9 +39,9 @@ func (v *Vpbroadcastb512) Assembly() string {
 	return assembly512
 }
 
-func (v *Vpbroadcastb512) Run(input []byte) (output []byte) {
+func (v *Vpbroadcastb512) Run(inputs [][]byte) (output []byte) {
 	ret := [64]byte{}
-	vpbroadcastb512(input[0], &ret)
+	vpbroadcastb512(inputs[0][0], &ret)
 	return ret[:]
 }
 

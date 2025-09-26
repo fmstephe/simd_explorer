@@ -3,35 +3,34 @@ package register
 import "github.com/fmstephe/simd_explorer/pkg/assembly"
 
 type changeBroadcaster struct {
-	inst            assembly.Instruction
-	active          bool
-	inputReceivers  []*RegisterParts
-	outputReceivers []*RegisterParts
+	inst      assembly.Instruction
+	active    bool
+	receivers []*UIRegister
 }
 
 func newChangeBroadcaster(inst assembly.Instruction) *changeBroadcaster {
 	return &changeBroadcaster{
-		inst:            inst,
-		active:          true,
-		inputReceivers:  []*RegisterParts{},
-		outputReceivers: []*RegisterParts{},
+		inst:      inst,
+		active:    true,
+		receivers: []*UIRegister{},
 	}
 }
 
-func (b *changeBroadcaster) addInputReceiver(r *RegisterParts) {
-	b.inputReceivers = append(b.inputReceivers, r)
-}
-
-func (b *changeBroadcaster) addOutputReceiver(r *RegisterParts) {
-	b.outputReceivers = append(b.outputReceivers, r)
+func (b *changeBroadcaster) addReceiver(r *UIRegister) {
+	b.receivers = append(b.receivers, r)
 }
 
 func (b *changeBroadcaster) broadcastZeros() {
 	// Resets all parts to zero
-	b.broadcastChange(make([]byte, b.inst.InputSize()/8))
+	inputSizes := b.inst.InputSizes()
+	zeroVals := make([][]byte, len(inputSizes))
+	for i, size := range inputSizes {
+		zeroVals[i] = make([]byte, size/8)
+	}
+	b.broadcastChange(zeroVals)
 }
 
-func (b *changeBroadcaster) broadcastChange(input []byte) {
+func (b *changeBroadcaster) broadcastChange(inputs [][]byte) {
 	if !b.active {
 		return
 	}
@@ -40,14 +39,10 @@ func (b *changeBroadcaster) broadcastChange(input []byte) {
 	b.deactivate()
 	defer b.activate()
 
-	output := b.inst.Run(input)
+	output := b.inst.Run(inputs)
 
-	for _, r := range b.inputReceivers {
-		r.setData(input)
-	}
-
-	for _, r := range b.outputReceivers {
-		r.setData(output)
+	for _, r := range b.receivers {
+		r.setData(inputs, output)
 	}
 }
 
