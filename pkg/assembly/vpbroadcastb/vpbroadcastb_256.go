@@ -3,7 +3,7 @@ package vpbroadcastb
 import (
 	_ "embed"
 
-	"golang.org/x/sys/cpu"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/asmutil"
 )
 
 //go:embed asm_256.s
@@ -46,8 +46,5 @@ func (v *Vpbroadcastb256) Run(inputs [][]byte) (output []byte) {
 }
 
 func (v *Vpbroadcastb256) Supported() bool {
-	// Requires: AVX, AVX2, SSE2
-	return cpu.X86.HasAVX &&
-		cpu.X86.HasAVX2 &&
-		cpu.X86.HasSSE2
+	return asmutil.IsSupported(v.Assembly())
 }
