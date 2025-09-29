@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
+	"github.com/fmstephe/simd_explorer/pkg/ui/number"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/rivo/tview"
 )
@@ -37,7 +38,7 @@ type UIRegister struct {
 	box            tview.Primitive
 }
 
-func NewUIRegister(app *stackapp.StackApp, base int, inputSizes []int, outputSize int, cBroadcaster *changeBroadcaster) *UIRegister {
+func NewUIRegister(app *stackapp.StackApp, base int, inputSizes []number.Converter, outputSize number.Converter, cBroadcaster *changeBroadcaster) *UIRegister {
 	// UIRegister is required for callbacks in register input components.
 	// When the input components are changed they callback into the
 	// UIRegister to indicate that a value has been changed and
@@ -49,16 +50,16 @@ func NewUIRegister(app *stackapp.StackApp, base int, inputSizes []int, outputSiz
 
 	inputs := []*RegisterParts{}
 	for _, inputSize := range inputSizes {
-		mustValidInputOutputSize(inputSize)
-		inputPartSize := getPartSize(inputSize)
-		input := NewRegisterInputs(app, inputPartSize, inputSize, base, r)
+		mustValidInputOutputSize(inputSize.GetBitWidth())
+		inputPartSize := getPartSize(inputSize.GetBitWidth())
+		input := NewRegisterInputs(app, inputPartSize, inputSize, r)
 		inputs = append(inputs, input)
 	}
 
-	mustValidInputOutputSize(outputSize)
-	outputPartSize := getPartSize(outputSize)
+	mustValidInputOutputSize(outputSize.GetBitWidth())
+	outputPartSize := getPartSize(outputSize.GetBitWidth())
 
-	output := NewRegisterOutputs(app, outputPartSize, outputSize, base, r)
+	output := NewRegisterOutputs(app, outputPartSize, outputSize, r)
 
 	gridLeft := tview.NewGrid()
 	gridLeft.SetBorder(true)
@@ -117,7 +118,7 @@ func (r *UIRegister) inputsChanged() {
 func getPartSize(totalSize int) int {
 	mustValidInputOutputSize(totalSize)
 	switch totalSize {
-	case 512, 256, 128, 64:
+	case 512, 256, 128:
 		return 64
 	default:
 		return totalSize

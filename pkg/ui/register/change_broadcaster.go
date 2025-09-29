@@ -24,8 +24,8 @@ func (b *changeBroadcaster) broadcastZeros() {
 	// Resets all parts to zero
 	inputSizes := b.inst.InputSizes()
 	zeroVals := make([][]byte, len(inputSizes))
-	for i, size := range inputSizes {
-		zeroVals[i] = make([]byte, size/8)
+	for i, inputSize := range inputSizes {
+		zeroVals[i] = make([]byte, inputSize.GetBitWidth()/8)
 	}
 	b.broadcastChange(zeroVals)
 }

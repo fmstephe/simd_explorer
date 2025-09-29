@@ -4,6 +4,7 @@ import (
 	_ "embed"
 
 	"github.com/fmstephe/simd_explorer/pkg/assembly/asmutil"
+	"github.com/fmstephe/simd_explorer/pkg/ui/number"
 )
 
 //go:embed asm_256_k.s
@@ -15,12 +16,12 @@ var stub256K string
 type Vpbroadcastb256K struct {
 }
 
-func (v *Vpbroadcastb256K) InputSizes() []int {
-	return []int{8, 64}
+func (v *Vpbroadcastb256K) InputSizes() []number.Converter {
+	return []number.Converter{number.NewUintConverter(8, 16)}
 }
 
-func (v *Vpbroadcastb256K) OutputSize() int {
-	return 256
+func (v *Vpbroadcastb256K) OutputSize() number.Converter {
+	return number.NewUintConverter(256, 16)
 }
 
 func (v *Vpbroadcastb256K) Name() string {
@@ -41,7 +42,7 @@ func (v *Vpbroadcastb256K) Assembly() string {
 
 func (v *Vpbroadcastb256K) Run(inputs [][]byte) (output []byte) {
 	ret := [32]byte{}
-	vpbroadcastb256K(inputs[0][0], asmutil.ToUint64(inputs[1]), &ret)
+	vpbroadcastb256K(inputs[0][0], number.ToUint64(inputs[1]), &ret)
 	return ret[:]
 }
 

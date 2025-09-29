@@ -2,21 +2,6 @@ package register
 
 import "fmt"
 
-func textWidthForPartSize(partSize int) int {
-	mustValidPartSize(partSize)
-	switch partSize {
-	case 8:
-		return 4
-	case 16:
-		return 6
-	case 32:
-		return 11
-	case 64:
-		return 21
-	}
-	panic("Unreachable")
-}
-
 func partsForPartSize(partSize, totalSize int) int {
 	mustValidPartSize(partSize)
 	mustValidInputOutputSize(totalSize)

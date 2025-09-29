@@ -4,6 +4,7 @@ import (
 	_ "embed"
 
 	"github.com/fmstephe/simd_explorer/pkg/assembly/asmutil"
+	"github.com/fmstephe/simd_explorer/pkg/ui/number"
 )
 
 //go:embed asm_512_k.s
@@ -15,12 +16,12 @@ var stub512K string
 type Vpbroadcastb512K struct {
 }
 
-func (v *Vpbroadcastb512K) InputSizes() []int {
-	return []int{8, 64}
+func (v *Vpbroadcastb512K) InputSizes() []number.Converter {
+	return []number.Converter{number.NewUintConverter(8, 16)}
 }
 
-func (v *Vpbroadcastb512K) OutputSize() int {
-	return 512
+func (v *Vpbroadcastb512K) OutputSize() number.Converter {
+	return number.NewUintConverter(512, 16)
 }
 
 func (v *Vpbroadcastb512K) Name() string {
@@ -41,7 +42,7 @@ func (v *Vpbroadcastb512K) Assembly() string {
 
 func (v *Vpbroadcastb512K) Run(inputs [][]byte) (output []byte) {
 	ret := [64]byte{}
-	vpbroadcastb512K(inputs[0][0], asmutil.ToUint64(inputs[1]), &ret)
+	vpbroadcastb512K(inputs[0][0], number.ToUint64(inputs[1]), &ret)
 	return ret[:]
 }
 
