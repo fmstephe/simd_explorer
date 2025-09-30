@@ -1,22 +1,22 @@
-package register
+package uiio
 
 import "github.com/fmstephe/simd_explorer/pkg/assembly"
 
 type changeBroadcaster struct {
 	inst      assembly.Instruction
 	active    bool
-	receivers []*UIRegister
+	receivers []*UIParameters
 }
 
 func newChangeBroadcaster(inst assembly.Instruction) *changeBroadcaster {
 	return &changeBroadcaster{
 		inst:      inst,
 		active:    true,
-		receivers: []*UIRegister{},
+		receivers: []*UIParameters{},
 	}
 }
 
-func (b *changeBroadcaster) addReceiver(r *UIRegister) {
+func (b *changeBroadcaster) addReceiver(r *UIParameters) {
 	b.receivers = append(b.receivers, r)
 }
 

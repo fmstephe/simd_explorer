@@ -1,8 +1,8 @@
-package register
+package uiio
 
 import "github.com/rivo/tview"
 
-type uiPart interface {
+type uiParameterPart interface {
 	getText() string
 	setText(string)
 	setTitle(string)
@@ -15,7 +15,7 @@ type uiPart interface {
 }
 
 type uiPartBuilder interface {
-	build() uiPart
+	build() uiParameterPart
 	kind() string
 }
 
@@ -23,7 +23,7 @@ type uiPartBuilder interface {
 type inputPartBuilder struct {
 }
 
-func (i *inputPartBuilder) build() uiPart {
+func (i *inputPartBuilder) build() uiParameterPart {
 	return newInputPart()
 }
 
@@ -78,7 +78,7 @@ func (i *inputPart) primitive() tview.Primitive {
 type textViewPartBuilder struct {
 }
 
-func (t *textViewPartBuilder) build() uiPart {
+func (t *textViewPartBuilder) build() uiParameterPart {
 	return newTextViewPart()
 }
 

@@ -1,4 +1,4 @@
-package register
+package uiio
 
 import (
 	"fmt"
@@ -10,49 +10,49 @@ import (
 	"github.com/rivo/tview"
 )
 
-type RegisterParts struct {
+type UIParameterParts struct {
 	id uuid.UUID
 	// Indicates if this is input or output for logging
 	kind string
 
 	app      *stackapp.StackApp
-	allParts []uiPart
+	allParts []uiParameterPart
 	box      *tview.Grid
 
 	focus int
 
 	// Callback when the data in this set of parts is changed
-	uiRegister *UIRegister
-	parameter  *number.Parameter
+	uiParameters *UIParameters
+	parameter    *number.Parameter
 }
 
-func NewRegisterInputs(app *stackapp.StackApp, parameter *number.Parameter, uiRegister *UIRegister) *RegisterParts {
-	return NewRegisterParts(app, parameter, &inputPartBuilder{}, uiRegister)
+func NewUIParameterInputs(app *stackapp.StackApp, parameter *number.Parameter, uiRegister *UIParameters) *UIParameterParts {
+	return NewUIParameterParts(app, parameter, &inputPartBuilder{}, uiRegister)
 }
 
-func NewRegisterOutputs(app *stackapp.StackApp, parameter *number.Parameter, uiRegister *UIRegister) *RegisterParts {
-	return NewRegisterParts(app, parameter, &textViewPartBuilder{}, uiRegister)
+func NewUIParameterOutputs(app *stackapp.StackApp, parameter *number.Parameter, uiRegister *UIParameters) *UIParameterParts {
+	return NewUIParameterParts(app, parameter, &textViewPartBuilder{}, uiRegister)
 }
 
-func NewRegisterParts(app *stackapp.StackApp, parameter *number.Parameter, partsBuilder uiPartBuilder, uiRegister *UIRegister) *RegisterParts {
+func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, partsBuilder uiPartBuilder, uiParameters *UIParameters) *UIParameterParts {
 	grid := tview.NewGrid()
 	// We always have a maximum of 8 columns per row
 	grid.SetRows(3, 3, 3, 3, 3, 3, 3, 3)
 	grid.SetBorder(true)
 	grid.SetTitle(fmt.Sprintf("%d Bit %s", parameter.PartBitWidth(), partsBuilder.kind()))
 
-	rParts := &RegisterParts{
+	rParts := &UIParameterParts{
 		id:   uuid.New(),
 		kind: partsBuilder.kind(),
 
 		app:      app,
-		allParts: make([]uiPart, parameter.Parts()),
+		allParts: make([]uiParameterPart, parameter.Parts()),
 		box:      grid,
 
 		focus: 0,
 
-		uiRegister: uiRegister,
-		parameter:  parameter,
+		uiParameters: uiParameters,
+		parameter:    parameter,
 	}
 
 	parts := parameter.Parts()
@@ -83,22 +83,22 @@ func NewRegisterParts(app *stackapp.StackApp, parameter *number.Parameter, parts
 	for _, part := range rParts.allParts {
 		part.setChangedFunc(func(txt string) {
 			// Notify the uiRegister that some input data has changed
-			uiRegister.inputsChanged()
+			uiParameters.inputsChanged()
 		})
 	}
 
 	return rParts
 }
 
-func (in *RegisterParts) receiverId() uuid.UUID {
+func (in *UIParameterParts) receiverId() uuid.UUID {
 	return in.id
 }
 
-func (in *RegisterParts) GetBox() *tview.Grid {
+func (in *UIParameterParts) GetBox() *tview.Grid {
 	return in.box
 }
 
-func (in *RegisterParts) initFocusCycling() {
+func (in *UIParameterParts) initFocusCycling() {
 	in.box.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyTab:
@@ -111,7 +111,7 @@ func (in *RegisterParts) initFocusCycling() {
 	})
 }
 
-func (in *RegisterParts) cycleFocus(move int) {
+func (in *UIParameterParts) cycleFocus(move int) {
 	in.focus += move
 	idx := in.focus % len(in.allParts)
 	if idx < 0 {
@@ -120,7 +120,7 @@ func (in *RegisterParts) cycleFocus(move int) {
 	in.app.SetFocus(in.allParts[idx].primitive())
 }
 
-func (in *RegisterParts) getData() []byte {
+func (in *UIParameterParts) getData() []byte {
 	bytes := make([]byte, 0, in.parameter.TotalBitWidth())
 
 	for _, part := range in.allParts {
@@ -133,7 +133,7 @@ func (in *RegisterParts) getData() []byte {
 	return bytes
 }
 
-func (in *RegisterParts) setData(bytes []byte) {
+func (in *UIParameterParts) setData(bytes []byte) {
 	if (len(bytes) * 8) != in.parameter.TotalBitWidth() {
 		panic(fmt.Errorf("Bad data update, received %d bits, but need %d", len(bytes)*8, in.parameter.TotalBitWidth()))
 	}
@@ -158,7 +158,7 @@ func (in *RegisterParts) setData(bytes []byte) {
 	}
 }
 
-func (in *RegisterParts) describe() string {
+func (in *UIParameterParts) describe() string {
 	return fmt.Sprintf("%q-%d-%d--%s", in.id.String()[:6], in.parameter.PartBitWidth(), in.parameter.TotalBitWidth(), in.kind)
 }
 

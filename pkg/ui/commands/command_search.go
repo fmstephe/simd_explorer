@@ -4,8 +4,8 @@ import (
 	"fmt"
 
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
-	"github.com/fmstephe/simd_explorer/pkg/ui/register"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
+	"github.com/fmstephe/simd_explorer/pkg/ui/uiio"
 	"github.com/gdamore/tcell/v2"
 	"github.com/lithammer/fuzzysearch/fuzzy"
 	"github.com/rivo/tview"
@@ -133,7 +133,7 @@ func buildInstructionSelectedFunc(app *stackapp.StackApp, inst assembly.Instruct
 		fmt.Printf("Chosen %s\n", inst.Name())
 		if inst.Supported() {
 			// If the instruction is supported, display the ui for it
-			rs := register.NewUIRegisterSet(app, inst)
+			rs := uiio.NewUIParametersSet(app, inst)
 			app.Push(rs.Base16.GetPrimitive())
 		}
 	}

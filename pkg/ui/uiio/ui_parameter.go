@@ -1,4 +1,4 @@
-package register
+package uiio
 
 import (
 	"fmt"
@@ -16,20 +16,20 @@ import (
 // system is likely useful for representing the contents of the result. We'll
 // leave the struct here for a short while, in case some new observation
 // reverses everything. But most likely it will go away in the near future
-type UIRegisterSet struct {
+type UIParametersSet struct {
 	inst   assembly.Instruction
-	Base2  *UIRegister
-	Base10 *UIRegister
-	Base16 *UIRegister
+	Base2  *UIParameters
+	Base10 *UIParameters
+	Base16 *UIParameters
 }
 
-func NewUIRegisterSet(app *stackapp.StackApp, inst assembly.Instruction) *UIRegisterSet {
+func NewUIParametersSet(app *stackapp.StackApp, inst assembly.Instruction) *UIParametersSet {
 	cBroadcaster := newChangeBroadcaster(inst)
 
-	rs := &UIRegisterSet{
-		Base2:  NewUIRegister(app, inst.Inputs(), inst.Output(), cBroadcaster),
-		Base10: NewUIRegister(app, inst.Inputs(), inst.Output(), cBroadcaster),
-		Base16: NewUIRegister(app, inst.Inputs(), inst.Output(), cBroadcaster),
+	rs := &UIParametersSet{
+		Base2:  NewUIParameters(app, inst.Inputs(), inst.Output(), cBroadcaster),
+		Base10: NewUIParameters(app, inst.Inputs(), inst.Output(), cBroadcaster),
+		Base16: NewUIParameters(app, inst.Inputs(), inst.Output(), cBroadcaster),
 	}
 
 	// Set all parts to have 0 values
@@ -38,14 +38,14 @@ func NewUIRegisterSet(app *stackapp.StackApp, inst assembly.Instruction) *UIRegi
 	return rs
 }
 
-type UIRegister struct {
-	inputRegisters []*RegisterParts
-	outputRegister *RegisterParts
-	cBroadcaster   *changeBroadcaster
-	box            tview.Primitive
+type UIParameters struct {
+	inputUIParameters []*UIParameterParts
+	outputUIParameter *UIParameterParts
+	cBroadcaster      *changeBroadcaster
+	box               tview.Primitive
 }
 
-func NewUIRegister(app *stackapp.StackApp, inputParameters []*number.Parameter, outputParameters *number.Parameter, cBroadcaster *changeBroadcaster) *UIRegister {
+func NewUIParameters(app *stackapp.StackApp, inputParameters []*number.Parameter, outputParameter *number.Parameter, cBroadcaster *changeBroadcaster) *UIParameters {
 	// UIRegister is required for callbacks in register input components.
 	// When the input components are changed they callback into the
 	// UIRegister to indicate that a value has been changed and
@@ -53,15 +53,15 @@ func NewUIRegister(app *stackapp.StackApp, inputParameters []*number.Parameter, 
 	//
 	// TODO this design _feels_ awkward, so we should have a think about
 	// this in the future
-	r := &UIRegister{}
+	r := &UIParameters{}
 
-	inputs := []*RegisterParts{}
+	inputs := []*UIParameterParts{}
 	for _, param := range inputParameters {
-		input := NewRegisterInputs(app, param, r)
+		input := NewUIParameterInputs(app, param, r)
 		inputs = append(inputs, input)
 	}
 
-	output := NewRegisterOutputs(app, outputParameters, r)
+	output := NewUIParameterOutputs(app, outputParameter, r)
 
 	gridLeft := tview.NewGrid()
 	gridLeft.SetBorder(true)
@@ -70,7 +70,7 @@ func NewUIRegister(app *stackapp.StackApp, inputParameters []*number.Parameter, 
 
 	gridRight := tview.NewGrid()
 	gridRight.SetBorder(true)
-	gridRight.SetTitle(fmt.Sprintf("Outputs Base %d", outputParameters.Base()))
+	gridRight.SetTitle(fmt.Sprintf("Outputs Base %d", outputParameter.Base()))
 
 	for i, input := range inputs {
 		gridLeft.AddItem(input.GetBox(), i, 0, 1, 1, 0, 0, true)
@@ -83,8 +83,8 @@ func NewUIRegister(app *stackapp.StackApp, inputParameters []*number.Parameter, 
 	grid.AddItem(gridRight, 0, 1, 1, 1, 0, 0, false)
 
 	// Fill out the fields for the UIRegister
-	r.inputRegisters = inputs
-	r.outputRegister = output
+	r.inputUIParameters = inputs
+	r.outputUIParameter = output
 	r.cBroadcaster = cBroadcaster
 	r.box = grid
 
@@ -94,20 +94,20 @@ func NewUIRegister(app *stackapp.StackApp, inputParameters []*number.Parameter, 
 	return r
 }
 
-func (r *UIRegister) GetPrimitive() tview.Primitive {
+func (r *UIParameters) GetPrimitive() tview.Primitive {
 	return r.box
 }
 
-func (r *UIRegister) setData(inputs [][]byte, output []byte) {
-	for i, input := range r.inputRegisters {
+func (r *UIParameters) setData(inputs [][]byte, output []byte) {
+	for i, input := range r.inputUIParameters {
 		input.setData(inputs[i])
 	}
-	r.outputRegister.setData(output)
+	r.outputUIParameter.setData(output)
 }
 
-func (r *UIRegister) inputsChanged() {
+func (r *UIParameters) inputsChanged() {
 	inputs := [][]byte{}
-	for _, input := range r.inputRegisters {
+	for _, input := range r.inputUIParameters {
 		inputs = append(inputs, input.getData())
 	}
 	r.cBroadcaster.broadcastChange(inputs)
