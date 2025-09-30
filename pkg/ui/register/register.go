@@ -9,6 +9,13 @@ import (
 	"github.com/rivo/tview"
 )
 
+// This type is now obsolete, because we don't allow changing the base system
+// for inputs/outputs as we did previously This decision was made as it became
+// clearer that many (most, all?) inputs/outputs make the most sense with a
+// specific base system If you are adding two sets of floats, no other base
+// system is likely useful for representing the contents of the result. We'll
+// leave the struct here for a short while, in case some new observation
+// reverses everything. But most likely it will go away in the near future
 type UIRegisterSet struct {
 	inst   assembly.Instruction
 	Base2  *UIRegister
@@ -20,9 +27,9 @@ func NewUIRegisterSet(app *stackapp.StackApp, inst assembly.Instruction) *UIRegi
 	cBroadcaster := newChangeBroadcaster(inst)
 
 	rs := &UIRegisterSet{
-		Base2:  NewUIRegister(app, 2, inst.InputSizes(), inst.OutputSize(), cBroadcaster),
-		Base10: NewUIRegister(app, 10, inst.InputSizes(), inst.OutputSize(), cBroadcaster),
-		Base16: NewUIRegister(app, 16, inst.InputSizes(), inst.OutputSize(), cBroadcaster),
+		Base2:  NewUIRegister(app, inst.Inputs(), inst.Output(), cBroadcaster),
+		Base10: NewUIRegister(app, inst.Inputs(), inst.Output(), cBroadcaster),
+		Base16: NewUIRegister(app, inst.Inputs(), inst.Output(), cBroadcaster),
 	}
 
 	// Set all parts to have 0 values
@@ -38,7 +45,7 @@ type UIRegister struct {
 	box            tview.Primitive
 }
 
-func NewUIRegister(app *stackapp.StackApp, base int, inputSizes []number.Converter, outputSize number.Converter, cBroadcaster *changeBroadcaster) *UIRegister {
+func NewUIRegister(app *stackapp.StackApp, inputParameters []*number.Parameter, outputParameters *number.Parameter, cBroadcaster *changeBroadcaster) *UIRegister {
 	// UIRegister is required for callbacks in register input components.
 	// When the input components are changed they callback into the
 	// UIRegister to indicate that a value has been changed and
@@ -49,25 +56,21 @@ func NewUIRegister(app *stackapp.StackApp, base int, inputSizes []number.Convert
 	r := &UIRegister{}
 
 	inputs := []*RegisterParts{}
-	for _, inputSize := range inputSizes {
-		mustValidInputOutputSize(inputSize.GetBitWidth())
-		inputPartSize := getPartSize(inputSize.GetBitWidth())
-		input := NewRegisterInputs(app, inputPartSize, inputSize, r)
+	for _, param := range inputParameters {
+		input := NewRegisterInputs(app, param, r)
 		inputs = append(inputs, input)
 	}
 
-	mustValidInputOutputSize(outputSize.GetBitWidth())
-	outputPartSize := getPartSize(outputSize.GetBitWidth())
-
-	output := NewRegisterOutputs(app, outputPartSize, outputSize, r)
+	output := NewRegisterOutputs(app, outputParameters, r)
 
 	gridLeft := tview.NewGrid()
 	gridLeft.SetBorder(true)
-	gridLeft.SetTitle(fmt.Sprintf("Inputs Base %d", base))
+	// TODO that's very fragile, need a better way to capture the base, or don't display it in this part of the UI?
+	gridLeft.SetTitle(fmt.Sprintf("Inputs Base %d", inputParameters[0].Base()))
 
 	gridRight := tview.NewGrid()
 	gridRight.SetBorder(true)
-	gridRight.SetTitle(fmt.Sprintf("Outputs Base %d", base))
+	gridRight.SetTitle(fmt.Sprintf("Outputs Base %d", outputParameters.Base()))
 
 	for i, input := range inputs {
 		gridLeft.AddItem(input.GetBox(), i, 0, 1, 1, 0, 0, true)
@@ -108,19 +111,4 @@ func (r *UIRegister) inputsChanged() {
 		inputs = append(inputs, input.getData())
 	}
 	r.cBroadcaster.broadcastChange(inputs)
-}
-
-// TODO this likely isn't the finaly approach we will take, but for now we just
-// display 64 bit parts for large input/outputs and 'fitted' size for smaller
-// input/outputs. We will probably want to make this more flexible in the
-// future, and allow for a range of different part sizes. But for now we are
-// simple and fix the part size.
-func getPartSize(totalSize int) int {
-	mustValidInputOutputSize(totalSize)
-	switch totalSize {
-	case 512, 256, 128:
-		return 64
-	default:
-		return totalSize
-	}
 }

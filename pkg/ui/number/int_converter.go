@@ -38,6 +38,10 @@ func (c *IntConverter) GetTextWidth() int {
 	}
 }
 
+func (c *IntConverter) GetBase() int {
+	return c.base
+}
+
 func (c *IntConverter) StringToBytes(txt string) []byte {
 	val := c.stringToInt64(txt)
 	switch c.bitWidth {

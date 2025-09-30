@@ -32,6 +32,10 @@ func (c *FloatConverter) GetTextWidth() int {
 	}
 }
 
+func (c *FloatConverter) GetBase() int {
+	return 10
+}
+
 func (c *FloatConverter) StringToBytes(txt string) []byte {
 	val := c.stringToFloat64(txt)
 	switch c.bitWidth {

@@ -22,10 +22,10 @@ func (b *changeBroadcaster) addReceiver(r *UIRegister) {
 
 func (b *changeBroadcaster) broadcastZeros() {
 	// Resets all parts to zero
-	inputSizes := b.inst.InputSizes()
-	zeroVals := make([][]byte, len(inputSizes))
-	for i, inputSize := range inputSizes {
-		zeroVals[i] = make([]byte, inputSize.GetBitWidth()/8)
+	params := b.inst.Inputs()
+	zeroVals := make([][]byte, len(params))
+	for i, param := range params {
+		zeroVals[i] = make([]byte, param.TotalBitWidth()/8)
 	}
 	b.broadcastChange(zeroVals)
 }

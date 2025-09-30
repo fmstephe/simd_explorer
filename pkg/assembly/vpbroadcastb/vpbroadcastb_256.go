@@ -16,12 +16,12 @@ var stub256 string
 type Vpbroadcastb256 struct {
 }
 
-func (v *Vpbroadcastb256) InputSizes() []number.Converter {
-	return []number.Converter{number.NewUintConverter(8, 16)}
+func (v *Vpbroadcastb256) Inputs() []*number.Parameter {
+	return []*number.Parameter{number.NewUintParameter(8, 8, 16)}
 }
 
-func (v *Vpbroadcastb256) OutputSize() number.Converter {
-	return number.NewUintConverter(256, 16)
+func (v *Vpbroadcastb256) Output() *number.Parameter {
+	return number.NewUintParameter(256, 64, 16)
 }
 
 func (v *Vpbroadcastb256) Name() string {

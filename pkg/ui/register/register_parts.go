@@ -21,58 +21,53 @@ type RegisterParts struct {
 
 	focus int
 
-	partSize      int
-	totalBitWidth int
-	base          int
-
 	// Callback when the data in this set of parts is changed
 	uiRegister *UIRegister
-	converter  number.Converter
+	parameter  *number.Parameter
 }
 
-func NewRegisterInputs(app *stackapp.StackApp, totalBitWidth int, converter number.Converter, uiRegister *UIRegister) *RegisterParts {
-	return NewRegisterParts(app, totalBitWidth, converter, &inputPartBuilder{}, uiRegister)
+func NewRegisterInputs(app *stackapp.StackApp, parameter *number.Parameter, uiRegister *UIRegister) *RegisterParts {
+	return NewRegisterParts(app, parameter, &inputPartBuilder{}, uiRegister)
 }
 
-func NewRegisterOutputs(app *stackapp.StackApp, totalBitWidth int, converter number.Converter, uiRegister *UIRegister) *RegisterParts {
-	return NewRegisterParts(app, totalBitWidth, converter, &textViewPartBuilder{}, uiRegister)
+func NewRegisterOutputs(app *stackapp.StackApp, parameter *number.Parameter, uiRegister *UIRegister) *RegisterParts {
+	return NewRegisterParts(app, parameter, &textViewPartBuilder{}, uiRegister)
 }
 
-func NewRegisterParts(app *stackapp.StackApp, totalBitWidth int, converter number.Converter, partsBuilder uiPartBuilder, uiRegister *UIRegister) *RegisterParts {
-	bitWidth := converter.GetBitWidth()
-	partsCount := partsForPartSize(bitWidth, totalBitWidth)
-
+func NewRegisterParts(app *stackapp.StackApp, parameter *number.Parameter, partsBuilder uiPartBuilder, uiRegister *UIRegister) *RegisterParts {
 	grid := tview.NewGrid()
 	// We always have a maximum of 8 columns per row
 	grid.SetRows(3, 3, 3, 3, 3, 3, 3, 3)
 	grid.SetBorder(true)
-	grid.SetTitle(fmt.Sprintf("%d Bit %s", bitWidth, partsBuilder.kind()))
+	grid.SetTitle(fmt.Sprintf("%d Bit %s", parameter.PartBitWidth(), partsBuilder.kind()))
 
 	rParts := &RegisterParts{
 		id:   uuid.New(),
 		kind: partsBuilder.kind(),
 
 		app:      app,
-		allParts: make([]uiPart, partsCount),
+		allParts: make([]uiPart, parameter.Parts()),
 		box:      grid,
 
 		focus: 0,
 
-		totalBitWidth: totalBitWidth,
-
 		uiRegister: uiRegister,
-		converter:  converter,
+		parameter:  parameter,
 	}
 
-	partsPerLine := rParts.calcPartsPerLine()
+	parts := parameter.Parts()
+	partBitWidth := parameter.PartBitWidth()
+	partsPerLine := calcPartsPerLine(parameter)
+	partConverter := parameter.Converter()
+
 	// TODO we are going to have to build more consideration into this for 512 bit registers
 	// on my monitor right now I can't display the 64 bit parts of the 512 bit register on a single line.
-	for i := range partsCount {
+	for i := range parts {
 		part := partsBuilder.build()
-		part.setTitle(fmt.Sprintf("%d:%d", i*bitWidth, (i+1)*bitWidth))
+		part.setTitle(fmt.Sprintf("%d:%d", i*partBitWidth, (i+1)*partBitWidth))
 		part.setBorder(true)
-		part.setFieldWidth(converter.GetTextWidth())
-		part.setAcceptanceFunc(rParts.converter.InputAcceptor())
+		part.setFieldWidth(partConverter.GetTextWidth())
+		part.setAcceptanceFunc(partConverter.InputAcceptor())
 
 		rParts.allParts[i] = part
 
@@ -126,11 +121,11 @@ func (in *RegisterParts) cycleFocus(move int) {
 }
 
 func (in *RegisterParts) getData() []byte {
-	bytes := make([]byte, 0, in.totalBitWidth)
+	bytes := make([]byte, 0, in.parameter.TotalBitWidth())
 
 	for _, part := range in.allParts {
 		txt := part.getText()
-		bytes = append(bytes, in.converter.StringToBytes(txt)...)
+		bytes = append(bytes, in.parameter.Converter().StringToBytes(txt)...)
 	}
 
 	fmt.Printf("%s broadcasting data change %0.8b\n\n", in.describe(), bytes)
@@ -139,8 +134,8 @@ func (in *RegisterParts) getData() []byte {
 }
 
 func (in *RegisterParts) setData(bytes []byte) {
-	if (len(bytes) * 8) != in.totalBitWidth {
-		panic(fmt.Errorf("Bad data update, received %d bits, but need %d", len(bytes)*8, in.totalBitWidth))
+	if (len(bytes) * 8) != in.parameter.TotalBitWidth() {
+		panic(fmt.Errorf("Bad data update, received %d bits, but need %d", len(bytes)*8, in.parameter.TotalBitWidth()))
 	}
 	partsCount := len(in.allParts)
 	fmt.Printf("%s received data change %0.8b\n\n", in.describe(), bytes)
@@ -153,7 +148,7 @@ func (in *RegisterParts) setData(bytes []byte) {
 	for i, part := range in.allParts {
 		idx := i * bytesPer
 		chunk := bytes[idx : idx+bytesPer]
-		txt := in.converter.BytesToString(chunk)
+		txt := in.parameter.Converter().BytesToString(chunk)
 		if part.getText() != txt {
 			// Only set the output text if the new value is
 			// different from the old, this reduces noise in the logs
@@ -164,10 +159,10 @@ func (in *RegisterParts) setData(bytes []byte) {
 }
 
 func (in *RegisterParts) describe() string {
-	return fmt.Sprintf("%q-%d-%d--%s", in.id.String()[:6], in.partSize, in.totalBitWidth, in.kind)
+	return fmt.Sprintf("%q-%d-%d--%s", in.id.String()[:6], in.parameter.PartBitWidth(), in.parameter.TotalBitWidth(), in.kind)
 }
 
-func (in *RegisterParts) calcPartsPerLine() int {
+func calcPartsPerLine(parameter *number.Parameter) int {
 	screen, err := tcell.NewScreen()
 	if err != nil {
 		panic(err)
@@ -180,7 +175,7 @@ func (in *RegisterParts) calcPartsPerLine() int {
 	// We subtract 4 here to heuristically account for the input/output borders
 	half := (width - 4) / 2
 	// NB: The +2 heuristally allows for a border
-	partWidth := in.converter.GetTextWidth() + 2
+	partWidth := parameter.Converter().GetTextWidth() + 2
 	// For parts which are smaller than 10, we force the size to 10 to
 	// allow the title to display correctly
 	partWidth = max(partWidth, 10)

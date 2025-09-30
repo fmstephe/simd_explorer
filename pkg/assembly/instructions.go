@@ -3,8 +3,8 @@ package assembly
 import "github.com/fmstephe/simd_explorer/pkg/ui/number"
 
 type Instruction interface {
-	InputSizes() []number.Converter
-	OutputSize() number.Converter
+	Inputs() []*number.Parameter
+	Output() *number.Parameter
 	Name() string
 	Description() string
 	Stub() string

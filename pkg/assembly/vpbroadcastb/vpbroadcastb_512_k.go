@@ -16,12 +16,15 @@ var stub512K string
 type Vpbroadcastb512K struct {
 }
 
-func (v *Vpbroadcastb512K) InputSizes() []number.Converter {
-	return []number.Converter{number.NewUintConverter(8, 16)}
+func (v *Vpbroadcastb512K) Inputs() []*number.Parameter {
+	return []*number.Parameter{
+		number.NewUintParameter(8, 8, 16),
+		number.NewUintParameter(64, 64, 16),
+	}
 }
 
-func (v *Vpbroadcastb512K) OutputSize() number.Converter {
-	return number.NewUintConverter(512, 16)
+func (v *Vpbroadcastb512K) Output() *number.Parameter {
+	return number.NewUintParameter(512, 64, 16)
 }
 
 func (v *Vpbroadcastb512K) Name() string {
