@@ -17,6 +17,15 @@ func ToFloat32(bytes []byte) float32 {
 	return math.Float32frombits(ToUint32(bytes))
 }
 
+func ToFloat32Slice(bytes []byte) []float32 {
+	ret := []float32{}
+	for i := 0; i < len(bytes); i += 4 {
+		ret = append(ret, ToFloat32(bytes[i:]))
+	}
+
+	return ret
+}
+
 func ToUint64(bytes []byte) uint64 {
 	return endian.Uint64(bytes)
 }
@@ -29,8 +38,26 @@ func ToUint32(bytes []byte) uint32 {
 	return endian.Uint32(bytes)
 }
 
+func ToUint32Slice(bytes []byte) []uint32 {
+	ret := []uint32{}
+	for i := 0; i < len(bytes); i += 4 {
+		ret = append(ret, ToUint32(bytes[i:]))
+	}
+
+	return ret
+}
+
 func ToInt32(bytes []byte) int32 {
 	return int32(ToUint32(bytes))
+}
+
+func ToInt32Slice(bytes []byte) []int32 {
+	ret := []int32{}
+	for i := 0; i < len(bytes); i += 4 {
+		ret = append(ret, ToInt32(bytes[i:]))
+	}
+
+	return ret
 }
 
 func ToUint16(bytes []byte) uint16 {
@@ -61,6 +88,14 @@ func Float32ToBytes(val float32) []byte {
 	return bytes
 }
 
+func Float32SliceToBytes(vals []float32) []byte {
+	bytes := []byte{}
+	for _, val := range vals {
+		bytes = endian.AppendUint32(bytes, math.Float32bits(val))
+	}
+	return bytes
+}
+
 func Uint64ToBytes(val uint64) []byte {
 	bytes := make([]byte, 8)
 	endian.PutUint64(bytes, uint64(val))
@@ -74,6 +109,14 @@ func Int64ToBytes(val int64) []byte {
 func Uint32ToBytes(val uint32) []byte {
 	bytes := make([]byte, 4)
 	endian.PutUint32(bytes, uint32(val))
+	return bytes
+}
+
+func Uint32SliceToBytes(vals []uint32) []byte {
+	bytes := []byte{}
+	for _, val := range vals {
+		bytes = endian.AppendUint32(bytes, val)
+	}
 	return bytes
 }
 

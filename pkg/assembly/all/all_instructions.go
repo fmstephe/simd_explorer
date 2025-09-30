@@ -2,6 +2,7 @@ package all
 
 import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
 )
 
@@ -13,6 +14,8 @@ func Instructions() []assembly.Instruction {
 		&vpbroadcastb.Vpbroadcastb128K{},
 		&vpbroadcastb.Vpbroadcastb256K{},
 		&vpbroadcastb.Vpbroadcastb512K{},
+		&vmovdqu.VMOVDQU128LoadStore{},
+		&vmovdqu.VMOVDQU256LoadStore{},
 	}
 }
 

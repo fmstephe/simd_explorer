@@ -38,7 +38,7 @@ func getFeatures(line string) []string {
 
 func hasFeature(feature string) bool {
 	switch feature {
-	case "SSE2":
+	case "SSE", "SSE2":
 		return cpu.X86.HasSSE2
 	case "AVX":
 		return cpu.X86.HasAVX
