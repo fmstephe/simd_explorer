@@ -2,6 +2,7 @@ package uiio
 
 import (
 	"fmt"
+	"log"
 
 	"github.com/fmstephe/simd_explorer/pkg/ui/number"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
@@ -128,7 +129,7 @@ func (in *UIParameterParts) getData() []byte {
 		bytes = append(bytes, in.parameter.Converter().StringToBytes(txt)...)
 	}
 
-	fmt.Printf("%s broadcasting data change %0.8b\n\n", in.describe(), bytes)
+	log.Printf("%s broadcasting data change %0.8b", in.describe(), bytes)
 
 	return bytes
 }
@@ -138,7 +139,7 @@ func (in *UIParameterParts) setData(bytes []byte) {
 		panic(fmt.Errorf("Bad data update, received %d bits, but need %d", len(bytes)*8, in.parameter.TotalBitWidth()))
 	}
 	partsCount := len(in.allParts)
-	fmt.Printf("%s received data change %0.8b\n\n", in.describe(), bytes)
+	log.Printf("%s received data change %0.8b", in.describe(), bytes)
 
 	if len(bytes)%partsCount != 0 {
 		panic(fmt.Errorf("%s update with %d bytes, not cleanly divisible by %d parts", in.describe(), len(bytes), partsCount))
@@ -152,7 +153,7 @@ func (in *UIParameterParts) setData(bytes []byte) {
 		if part.getText() != txt {
 			// Only set the output text if the new value is
 			// different from the old, this reduces noise in the logs
-			fmt.Printf("%s[%d] changing text from %q to %q using %0.8b\n", in.describe(), i, part.getText(), txt, chunk)
+			log.Printf("%s[%d] changing text from %q to %q using %0.8b", in.describe(), i, part.getText(), txt, chunk)
 			part.setText(txt)
 		}
 	}

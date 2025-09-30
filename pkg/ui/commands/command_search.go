@@ -1,7 +1,7 @@
 package commands
 
 import (
-	"fmt"
+	"log"
 
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
@@ -54,7 +54,7 @@ func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackAp
 		switch event.Key() {
 		case tcell.KeyEnter:
 			listIdx := list.GetCurrentItem()
-			fmt.Printf("Enter Pressed %d\n", listIdx)
+			log.Printf("Enter Pressed %d\n", listIdx)
 			list.GetItemSelectedFunc(listIdx)()
 			// Short-circuit default handling of the enter key
 			return nil
@@ -130,7 +130,7 @@ func buildInstructionMap(instructions []assembly.Instruction) (instMap map[strin
 
 func buildInstructionSelectedFunc(app *stackapp.StackApp, inst assembly.Instruction) func() {
 	return func() {
-		fmt.Printf("Chosen %s\n", inst.Name())
+		log.Printf("Chosen %s", inst.Name())
 		if inst.Supported() {
 			// If the instruction is supported, display the ui for it
 			rs := uiio.NewUIParametersSet(app, inst)
