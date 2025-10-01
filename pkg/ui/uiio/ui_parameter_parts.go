@@ -77,8 +77,6 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 		grid.AddItem(part.primitive(), row, column, 1, 1, 1, 1, true)
 	}
 
-	rParts.initFocusCycling()
-
 	// We delay setting the changed-func to reduce initialisation noise in
 	// the logs
 	for _, part := range rParts.allParts {
@@ -97,28 +95,6 @@ func (in *UIParameterParts) receiverId() uuid.UUID {
 
 func (in *UIParameterParts) GetBox() *tview.Grid {
 	return in.box
-}
-
-func (in *UIParameterParts) initFocusCycling() {
-	in.box.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		switch event.Key() {
-		case tcell.KeyTab:
-			in.cycleFocus(1)
-		case tcell.KeyBacktab:
-			in.cycleFocus(-1)
-		}
-
-		return event
-	})
-}
-
-func (in *UIParameterParts) cycleFocus(move int) {
-	in.focus += move
-	idx := in.focus % len(in.allParts)
-	if idx < 0 {
-		idx = len(in.allParts) + idx
-	}
-	in.app.SetFocus(in.allParts[idx].primitive())
 }
 
 func (in *UIParameterParts) getData() []byte {
@@ -157,6 +133,14 @@ func (in *UIParameterParts) setData(bytes []byte) {
 			part.setText(txt)
 		}
 	}
+}
+
+func (in *UIParameterParts) selectablePrimitives() []tview.Primitive {
+	selectables := []tview.Primitive{}
+	for _, part := range in.allParts {
+		selectables = append(selectables, part.primitive())
+	}
+	return selectables
 }
 
 func (in *UIParameterParts) describe() string {

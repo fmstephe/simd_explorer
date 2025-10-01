@@ -6,6 +6,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/ui/number"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
+	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
 )
 
@@ -42,7 +43,11 @@ type UIParameters struct {
 	inputUIParameters []*UIParameterParts
 	outputUIParameter *UIParameterParts
 	cBroadcaster      *changeBroadcaster
-	box               tview.Primitive
+	box               *tview.Grid
+
+	focus      int
+	selectable []tview.Primitive
+	app        *stackapp.StackApp
 }
 
 func NewUIParameters(app *stackapp.StackApp, inputParameters []*number.Parameter, outputParameter *number.Parameter, cBroadcaster *changeBroadcaster) *UIParameters {
@@ -53,11 +58,16 @@ func NewUIParameters(app *stackapp.StackApp, inputParameters []*number.Parameter
 	//
 	// TODO this design _feels_ awkward, so we should have a think about
 	// this in the future
-	r := &UIParameters{}
+	r := &UIParameters{
+		focus:      0,
+		selectable: []tview.Primitive{},
+		app:        app,
+	}
 
 	inputs := []*UIParameterParts{}
 	for _, param := range inputParameters {
 		input := NewUIParameterInputs(app, param, r)
+		r.selectable = append(r.selectable, input.selectablePrimitives()...)
 		inputs = append(inputs, input)
 	}
 
@@ -91,6 +101,10 @@ func NewUIParameters(app *stackapp.StackApp, inputParameters []*number.Parameter
 	// Add this UIRegister to the change broadcaster
 	cBroadcaster.addReceiver(r)
 
+	// Setup the tab focus cycling (is there a better way to approach
+	// this?)
+	r.initFocusCycling()
+
 	return r
 }
 
@@ -111,4 +125,26 @@ func (r *UIParameters) inputsChanged() {
 		inputs = append(inputs, input.getData())
 	}
 	r.cBroadcaster.broadcastChange(inputs)
+}
+
+func (r *UIParameters) initFocusCycling() {
+	r.box.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		switch event.Key() {
+		case tcell.KeyTab:
+			r.cycleFocus(1)
+		case tcell.KeyBacktab:
+			r.cycleFocus(-1)
+		}
+
+		return event
+	})
+}
+
+func (r *UIParameters) cycleFocus(move int) {
+	r.focus += move
+	idx := r.focus % len(r.selectable)
+	if idx < 0 {
+		idx = len(r.selectable) + idx
+	}
+	r.app.SetFocus(r.selectable[idx])
 }
