@@ -9,30 +9,6 @@ import (
 	"github.com/rivo/tview"
 )
 
-// This type is now obsolete, because we don't allow changing the base system
-// for inputs/outputs as we did previously This decision was made as it became
-// clearer that many (most, all?) inputs/outputs make the most sense with a
-// specific base system If you are adding two sets of floats, no other base
-// system is likely useful for representing the contents of the result. We'll
-// leave the struct here for a short while, in case some new observation
-// reverses everything. But most likely it will go away in the near future
-type UIParametersSet struct {
-	inst   assembly.Instruction
-	Base2  *UIInstruction
-	Base10 *UIInstruction
-	Base16 *UIInstruction
-}
-
-func NewUIParametersSet(app *stackapp.StackApp, inst assembly.Instruction) *UIParametersSet {
-	rs := &UIParametersSet{
-		Base2:  NewUIParameters(app, inst),
-		Base10: NewUIParameters(app, inst),
-		Base16: NewUIParameters(app, inst),
-	}
-
-	return rs
-}
-
 type UIInstruction struct {
 	instruction       assembly.Instruction
 	inputUIParameters []*UIParameterParts
@@ -44,7 +20,7 @@ type UIInstruction struct {
 	app        *stackapp.StackApp
 }
 
-func NewUIParameters(app *stackapp.StackApp, instruction assembly.Instruction) *UIInstruction {
+func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) *UIInstruction {
 	// UIRegister is required for callbacks in register input components.
 	// When the input components are changed they callback into the
 	// UIRegister to indicate that a value has been changed and

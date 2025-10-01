@@ -133,8 +133,8 @@ func buildInstructionSelectedFunc(app *stackapp.StackApp, inst assembly.Instruct
 		log.Printf("Chosen %s", inst.Name())
 		if inst.Supported() {
 			// If the instruction is supported, display the ui for it
-			rs := uiio.NewUIParametersSet(app, inst)
-			app.Push(rs.Base16.GetPrimitive())
+			uiInst := uiio.NewUIInstruction(app, inst)
+			app.Push(uiInst.GetPrimitive())
 		}
 	}
 }
