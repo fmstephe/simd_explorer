@@ -80,8 +80,8 @@ func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackAp
 
 	input.SetChangedFunc(func(txt string) {
 		// When the input-field is updated, update the list with
-		// filtered instructions
-		found := fuzzy.Find(txt, instNames)
+		// filtered instructions, using case-insensitive search
+		found := fuzzy.FindFold(txt, instNames)
 		list.Clear()
 		for _, name := range found {
 			inst := instMap[name]
