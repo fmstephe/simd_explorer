@@ -23,19 +23,19 @@ type UIParameterParts struct {
 	focus int
 
 	// Callback when the data in this set of parts is changed
-	uiParameters *UIParameters
+	uiParameters *UIInstruction
 	parameter    *number.Parameter
 }
 
-func NewUIParameterInputs(app *stackapp.StackApp, parameter *number.Parameter, uiRegister *UIParameters) *UIParameterParts {
+func NewUIParameterInputs(app *stackapp.StackApp, parameter *number.Parameter, uiRegister *UIInstruction) *UIParameterParts {
 	return NewUIParameterParts(app, parameter, &inputPartBuilder{}, uiRegister)
 }
 
-func NewUIParameterOutputs(app *stackapp.StackApp, parameter *number.Parameter, uiRegister *UIParameters) *UIParameterParts {
+func NewUIParameterOutputs(app *stackapp.StackApp, parameter *number.Parameter, uiRegister *UIInstruction) *UIParameterParts {
 	return NewUIParameterParts(app, parameter, &textViewPartBuilder{}, uiRegister)
 }
 
-func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, partsBuilder uiPartBuilder, uiParameters *UIParameters) *UIParameterParts {
+func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, partsBuilder uiPartBuilder, uiParameters *UIInstruction) *UIParameterParts {
 	grid := tview.NewGrid()
 	// We always have a maximum of 8 columns per row
 	grid.SetRows(3, 3, 3, 3, 3, 3, 3, 3)

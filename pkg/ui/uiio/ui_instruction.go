@@ -4,7 +4,6 @@ import (
 	"fmt"
 
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
-	"github.com/fmstephe/simd_explorer/pkg/ui/number"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/gdamore/tcell/v2"
 	"github.com/rivo/tview"
@@ -19,30 +18,25 @@ import (
 // reverses everything. But most likely it will go away in the near future
 type UIParametersSet struct {
 	inst   assembly.Instruction
-	Base2  *UIParameters
-	Base10 *UIParameters
-	Base16 *UIParameters
+	Base2  *UIInstruction
+	Base10 *UIInstruction
+	Base16 *UIInstruction
 }
 
 func NewUIParametersSet(app *stackapp.StackApp, inst assembly.Instruction) *UIParametersSet {
-	cBroadcaster := newChangeBroadcaster(inst)
-
 	rs := &UIParametersSet{
-		Base2:  NewUIParameters(app, inst.Inputs(), inst.Output(), cBroadcaster),
-		Base10: NewUIParameters(app, inst.Inputs(), inst.Output(), cBroadcaster),
-		Base16: NewUIParameters(app, inst.Inputs(), inst.Output(), cBroadcaster),
+		Base2:  NewUIParameters(app, inst),
+		Base10: NewUIParameters(app, inst),
+		Base16: NewUIParameters(app, inst),
 	}
-
-	// Set all parts to have 0 values
-	cBroadcaster.broadcastZeros()
 
 	return rs
 }
 
-type UIParameters struct {
+type UIInstruction struct {
+	instruction       assembly.Instruction
 	inputUIParameters []*UIParameterParts
 	outputUIParameter *UIParameterParts
-	cBroadcaster      *changeBroadcaster
 	box               *tview.Grid
 
 	focus      int
@@ -50,7 +44,7 @@ type UIParameters struct {
 	app        *stackapp.StackApp
 }
 
-func NewUIParameters(app *stackapp.StackApp, inputParameters []*number.Parameter, outputParameter *number.Parameter, cBroadcaster *changeBroadcaster) *UIParameters {
+func NewUIParameters(app *stackapp.StackApp, instruction assembly.Instruction) *UIInstruction {
 	// UIRegister is required for callbacks in register input components.
 	// When the input components are changed they callback into the
 	// UIRegister to indicate that a value has been changed and
@@ -58,29 +52,30 @@ func NewUIParameters(app *stackapp.StackApp, inputParameters []*number.Parameter
 	//
 	// TODO this design _feels_ awkward, so we should have a think about
 	// this in the future
-	r := &UIParameters{
-		focus:      0,
-		selectable: []tview.Primitive{},
-		app:        app,
+	r := &UIInstruction{
+		instruction: instruction,
+		focus:       0,
+		selectable:  []tview.Primitive{},
+		app:         app,
 	}
 
 	inputs := []*UIParameterParts{}
-	for _, param := range inputParameters {
+	for _, param := range instruction.Inputs() {
 		input := NewUIParameterInputs(app, param, r)
 		r.selectable = append(r.selectable, input.selectablePrimitives()...)
 		inputs = append(inputs, input)
 	}
 
-	output := NewUIParameterOutputs(app, outputParameter, r)
+	output := NewUIParameterOutputs(app, instruction.Output(), r)
 
 	gridLeft := tview.NewGrid()
 	gridLeft.SetBorder(true)
 	// TODO that's very fragile, need a better way to capture the base, or don't display it in this part of the UI?
-	gridLeft.SetTitle(fmt.Sprintf("Inputs Base %d", inputParameters[0].Base()))
+	gridLeft.SetTitle(fmt.Sprintf("Inputs Base %d", instruction.Inputs()[0].Base()))
 
 	gridRight := tview.NewGrid()
 	gridRight.SetBorder(true)
-	gridRight.SetTitle(fmt.Sprintf("Outputs Base %d", outputParameter.Base()))
+	gridRight.SetTitle(fmt.Sprintf("Outputs Base %d", instruction.Output().Base()))
 
 	for i, input := range inputs {
 		gridLeft.AddItem(input.GetBox(), i, 0, 1, 1, 0, 0, true)
@@ -95,39 +90,32 @@ func NewUIParameters(app *stackapp.StackApp, inputParameters []*number.Parameter
 	// Fill out the fields for the UIRegister
 	r.inputUIParameters = inputs
 	r.outputUIParameter = output
-	r.cBroadcaster = cBroadcaster
 	r.box = grid
-
-	// Add this UIRegister to the change broadcaster
-	cBroadcaster.addReceiver(r)
 
 	// Setup the tab focus cycling (is there a better way to approach
 	// this?)
 	r.initFocusCycling()
 
+	// Set output fields from zeroed inputs
+	r.inputsChanged()
+
 	return r
 }
 
-func (r *UIParameters) GetPrimitive() tview.Primitive {
+func (r *UIInstruction) GetPrimitive() tview.Primitive {
 	return r.box
 }
 
-func (r *UIParameters) setData(inputs [][]byte, output []byte) {
-	for i, input := range r.inputUIParameters {
-		input.setData(inputs[i])
-	}
-	r.outputUIParameter.setData(output)
-}
-
-func (r *UIParameters) inputsChanged() {
+func (r *UIInstruction) inputsChanged() {
 	inputs := [][]byte{}
 	for _, input := range r.inputUIParameters {
 		inputs = append(inputs, input.getData())
 	}
-	r.cBroadcaster.broadcastChange(inputs)
+	output := r.instruction.Run(inputs)
+	r.outputUIParameter.setData(output)
 }
 
-func (r *UIParameters) initFocusCycling() {
+func (r *UIInstruction) initFocusCycling() {
 	r.box.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
 		case tcell.KeyTab:
@@ -140,7 +128,7 @@ func (r *UIParameters) initFocusCycling() {
 	})
 }
 
-func (r *UIParameters) cycleFocus(move int) {
+func (r *UIInstruction) cycleFocus(move int) {
 	r.focus += move
 	idx := r.focus % len(r.selectable)
 	if idx < 0 {
