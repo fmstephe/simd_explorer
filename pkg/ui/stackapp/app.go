@@ -7,12 +7,14 @@ import (
 
 type StackApp struct {
 	app   *tview.Application
+	idx   int
 	stack []tview.Primitive
 }
 
 func NewStackApp() *StackApp {
 	a := &StackApp{
 		app:   tview.NewApplication(),
+		idx:   -1,
 		stack: []tview.Primitive{},
 	}
 	// Enable mouse capture
@@ -22,10 +24,10 @@ func NewStackApp() *StackApp {
 		switch event.Key() {
 		case tcell.KeyESC:
 			a.app.Stop()
-		}
-		switch event.Rune() {
-		case 'q':
-			a.app.Stop()
+		case tcell.KeyF1:
+			a.Pop()
+		case tcell.KeyF2:
+			a.Recover()
 		}
 		return event
 	})
@@ -34,21 +36,38 @@ func NewStackApp() *StackApp {
 }
 
 func (a *StackApp) Push(p tview.Primitive) {
+	a.clearRecover()
 	a.stack = append(a.stack, p)
+	a.idx++
 
 	a.setRoot()
 }
 
 func (a *StackApp) Pop() {
-	l := len(a.stack)
-	if l == 1 {
-		// Popping the last Primitive is a noop
+	// This method is a noop for an unused StackApp
+	if a.idx == -1 {
 		return
 	}
 
-	// Remove reference to avoid memmory leaks
-	a.stack[l-1] = nil
-	a.stack = a.stack[:l-1]
+	// If we are not at the bottom of the stack, go down one element. NB:
+	// This preserves the current primitive as a recoverable historical
+	// primitive, until clearRecover() is called.
+	if a.idx != 0 {
+		a.idx--
+	}
+	a.setRoot()
+}
+
+func (a *StackApp) Recover() {
+	// This method is a noop for an unused StackApp
+	if a.idx == -1 {
+		return
+	}
+
+	// If recoverable primitives live above our current level in the stack then go up one level and return to that previous primitive.
+	if a.idx < len(a.stack)-1 {
+		a.idx++
+	}
 
 	a.setRoot()
 }
@@ -61,6 +80,26 @@ func (a *StackApp) Run() error {
 	return a.app.Run()
 }
 
+// This resizes the stack to only include primitives up to and including the
+// current primitive. All recovery primitives are lost.
+func (a *StackApp) clearRecover() {
+	// This method is a noop for an unused StackApp
+	if a.idx == -1 {
+		return
+	}
+
+	for i := a.idx + 1; i < len(a.stack); i++ {
+		a.stack[i] = nil
+	}
+
+	a.stack = a.stack[:a.idx+1]
+}
+
 func (a *StackApp) setRoot() {
-	a.app.SetRoot(a.stack[len(a.stack)-1], true)
+	// This method is a noop for an unused StackApp
+	if a.idx == -1 {
+		return
+	}
+
+	a.app.SetRoot(a.stack[a.idx], true)
 }
