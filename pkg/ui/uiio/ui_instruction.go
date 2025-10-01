@@ -1,8 +1,6 @@
 package uiio
 
 import (
-	"fmt"
-
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/gdamore/tcell/v2"
@@ -46,12 +44,11 @@ func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) 
 
 	gridLeft := tview.NewGrid()
 	gridLeft.SetBorder(true)
-	// TODO that's very fragile, need a better way to capture the base, or don't display it in this part of the UI?
-	gridLeft.SetTitle(fmt.Sprintf("Inputs Base %d", instruction.Inputs()[0].Base()))
+	gridLeft.SetTitle("Inputs")
 
 	gridRight := tview.NewGrid()
 	gridRight.SetBorder(true)
-	gridRight.SetTitle(fmt.Sprintf("Outputs Base %d", instruction.Output().Base()))
+	gridRight.SetTitle("Outputs Base %d")
 
 	for i, input := range inputs {
 		gridLeft.AddItem(input.GetBox(), i, 0, 1, 1, 0, 0, true)
