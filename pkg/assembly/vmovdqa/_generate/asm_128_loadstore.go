@@ -5,9 +5,9 @@ import (
 	. "github.com/mmcloughlin/avo/operand"
 )
 
-//go:generate go run asm_128_loadstore.go -out ../asm_128_loadstore.s -stubs ../stub_128_loadstore.go -pkg vmovdqu
+//go:generate go run asm_128_loadstore.go -out ../asm_128_loadstore.s -stubs ../stub_128_loadstore.go -pkg vmovdqa
 func main() {
-	TEXT("vmovdqu128LoadStore", NOSPLIT, "func(vals *[4]uint32, ret *[4]uint32)")
+	TEXT("vmovdqa128LoadStore", NOSPLIT, "func(vals *[4]uint32, ret *[4]uint32)")
 
 	Comment("load params")
 	vals := Load(Param("vals"), GP64())

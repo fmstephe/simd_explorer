@@ -3,6 +3,7 @@ package all
 import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
 )
@@ -17,6 +18,8 @@ func Instructions() []assembly.Instruction {
 		&vpbroadcastb.Vpbroadcastb512K{},
 		&vmovdqu.VMOVDQU128LoadStore{},
 		&vmovdqu.VMOVDQU256LoadStore{},
+		&vmovdqa.VMOVDQA128LoadStore{},
+		&vmovdqa.VMOVDQA256LoadStore{},
 		&addps.ADDPS128{},
 		&addps.VADDPS128{},
 		&addps.VADDPS256{},

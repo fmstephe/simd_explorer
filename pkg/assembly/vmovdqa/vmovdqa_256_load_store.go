@@ -1,4 +1,4 @@
-package vmovdqu
+package vmovdqa
 
 import (
 	_ "embed"
@@ -49,7 +49,7 @@ func (v *VMOVDQA256LoadStore) Run(inputs [][]byte) (output []byte) {
 
 	ret := [8]uint32{}
 
-	vmovdqu256LoadStore(&uints, &ret)
+	vmovdqa256LoadStore(&uints, &ret)
 
 	log.Printf("VMOVDQA256LoadStore input %v output %v", uints, ret)
 
