@@ -100,13 +100,5 @@ func (c *UintConverter) stringToUint64(txt string) (uint64, error) {
 }
 
 func (c *UintConverter) uint64ToString(val uint64) string {
-	raw := strconv.FormatUint(val, c.base)
-	return c.leftPad(raw)
-}
-
-func (c *UintConverter) leftPad(txt string) string {
-	if len(txt) > c.GetTextWidth() {
-		panic(fmt.Errorf("Attempted to process string too long (%d) for bitWidth (%d) and base (%d) string must be %d or shorter", len(txt), c.bitWidth, c.base, c.GetTextWidth()))
-	}
-	return strings.Repeat("0", (c.GetTextWidth()-1)-len(txt)) + txt
+	return strconv.FormatUint(val, c.base)
 }

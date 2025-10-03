@@ -2,7 +2,6 @@ package number
 
 import (
 	"fmt"
-	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -64,11 +63,7 @@ func (c *FloatConverter) BytesToString(bytes []byte) string {
 // InputFieldInteger accepts unsigned integers.
 func (c *FloatConverter) InputAcceptor() func(string, rune) bool {
 	return func(txt string, _ rune) bool {
-		f, err := c.stringToFloat64(txt)
-		txt2 := c.float64ToString(f)
-		if txt != txt2 {
-			log.Printf("bad input float %s %s", txt, txt2)
-		}
+		_, err := c.stringToFloat64(txt)
 		return err == nil
 	}
 }
@@ -91,14 +86,5 @@ func (c *FloatConverter) stringToFloat64(txt string) (float64, error) {
 }
 
 func (c *FloatConverter) float64ToString(val float64) string {
-	raw := strconv.FormatFloat(val, 'f', -1, c.bitWidth)
-	return c.leftPad(raw)
-}
-
-// TODO - I bet this doesn't work for floats. Should probably rethink our approach to left padding altogether
-func (c *FloatConverter) leftPad(txt string) string {
-	if len(txt) > c.GetTextWidth() {
-		panic(fmt.Errorf("Attempted to process string too long (%d) for bitWidth (%d) and string must be %d or shorter", len(txt), c.bitWidth, c.GetTextWidth()))
-	}
-	return strings.Repeat("0", (c.GetTextWidth()-1)-len(txt)) + txt
+	return strconv.FormatFloat(val, 'f', -1, c.bitWidth)
 }

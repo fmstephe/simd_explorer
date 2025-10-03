@@ -100,14 +100,5 @@ func (c *IntConverter) stringToInt64(txt string) (int64, error) {
 }
 
 func (c *IntConverter) int64ToString(val int64) string {
-	raw := strconv.FormatInt(val, c.base)
-	return c.leftPad(raw)
-}
-
-// TODO the minus sign allowable in a signed integer may make this left padding look silly
-func (c *IntConverter) leftPad(txt string) string {
-	if len(txt) > c.GetTextWidth() {
-		panic(fmt.Errorf("Attempted to process string too long (%d) for bitWidth (%d) and base (%d) string must be %d or shorter", len(txt), c.bitWidth, c.base, c.GetTextWidth()))
-	}
-	return strings.Repeat("0", (c.GetTextWidth()-1)-len(txt)) + txt
+	return strconv.FormatInt(val, c.base)
 }
