@@ -43,7 +43,7 @@ func (c *IntConverter) GetBase() int {
 }
 
 func (c *IntConverter) StringToBytes(txt string) []byte {
-	val := c.stringToInt64(txt)
+	val := c.mustStringToInt64(txt)
 	switch c.bitWidth {
 	case 8:
 		return Int8ToBytes(int8(val))
@@ -77,20 +77,20 @@ func (c *IntConverter) BytesToString(bytes []byte) string {
 // InputFieldInteger accepts unsigned integers.
 func (c *IntConverter) InputAcceptor() func(string, rune) bool {
 	return func(txt string, _ rune) bool {
-		_, err := c.stringToInt64Err(txt)
+		_, err := c.stringToInt64(txt)
 		return err == nil
 	}
 }
 
-func (c *IntConverter) stringToInt64(txt string) int64 {
-	val, err := c.stringToInt64Err(txt)
+func (c *IntConverter) mustStringToInt64(txt string) int64 {
+	val, err := c.stringToInt64(txt)
 	if err != nil {
 		panic(fmt.Errorf("Unexpected value %q found in register input, expecting signed integer with bitWidth %d: %s", txt, c.bitWidth, err))
 	}
 	return val
 }
 
-func (c *IntConverter) stringToInt64Err(txt string) (int64, error) {
+func (c *IntConverter) stringToInt64(txt string) (int64, error) {
 	txt = strings.TrimSpace(txt)
 	if txt == "" {
 		// If the value of the field is empty default it to 0

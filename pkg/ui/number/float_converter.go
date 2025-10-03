@@ -2,6 +2,7 @@ package number
 
 import (
 	"fmt"
+	"log"
 	"math"
 	"strconv"
 	"strings"
@@ -37,7 +38,7 @@ func (c *FloatConverter) GetBase() int {
 }
 
 func (c *FloatConverter) StringToBytes(txt string) []byte {
-	val := c.stringToFloat64(txt)
+	val := c.mustStringToFloat64(txt)
 	switch c.bitWidth {
 	case 32:
 		return Float32ToBytes(float32(val))
@@ -63,20 +64,24 @@ func (c *FloatConverter) BytesToString(bytes []byte) string {
 // InputFieldInteger accepts unsigned integers.
 func (c *FloatConverter) InputAcceptor() func(string, rune) bool {
 	return func(txt string, _ rune) bool {
-		_, err := c.stringToFloat64Err(txt)
+		f, err := c.stringToFloat64(txt)
+		txt2 := c.float64ToString(f)
+		if txt != txt2 {
+			log.Printf("bad input float %s %s", txt, txt2)
+		}
 		return err == nil
 	}
 }
 
-func (c *FloatConverter) stringToFloat64(txt string) float64 {
-	val, err := c.stringToFloat64Err(txt)
+func (c *FloatConverter) mustStringToFloat64(txt string) float64 {
+	val, err := c.stringToFloat64(txt)
 	if err != nil {
 		panic(fmt.Errorf("Unexpected value %q found in register input, expecting unsigned integer with bitWidth %d: %s", txt, c.bitWidth, err))
 	}
 	return val
 }
 
-func (c *FloatConverter) stringToFloat64Err(txt string) (float64, error) {
+func (c *FloatConverter) stringToFloat64(txt string) (float64, error) {
 	txt = strings.TrimSpace(txt)
 	if txt == "" {
 		// If the value of the field is empty default it to 0
