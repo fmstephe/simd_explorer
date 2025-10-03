@@ -7,6 +7,7 @@ type Converter interface {
 
 	StringToBytes(txt string) []byte
 	BytesToString(bytes []byte) string
+	IsStable(txt string) bool
 
 	InputAcceptor() func(string, rune) bool
 }

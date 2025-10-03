@@ -1,6 +1,9 @@
 package uiio
 
-import "github.com/rivo/tview"
+import (
+	"github.com/gdamore/tcell/v2"
+	"github.com/rivo/tview"
+)
 
 type uiParameterPart interface {
 	getText() string
@@ -10,6 +13,7 @@ type uiParameterPart interface {
 	setFieldWidth(int)
 	setAcceptanceFunc(func(string, rune) bool)
 	setChangedFunc(func(string))
+	setBackgroundColor(tcell.Color)
 
 	primitive() tview.Primitive
 }
@@ -70,6 +74,10 @@ func (i *inputPart) setChangedFunc(cf func(string)) {
 	i.input.SetChangedFunc(cf)
 }
 
+func (i *inputPart) setBackgroundColor(color tcell.Color) {
+	i.input.SetBackgroundColor(color)
+}
+
 func (i *inputPart) primitive() tview.Primitive {
 	return i.input
 }
@@ -123,6 +131,10 @@ func (i *textViewPart) setAcceptanceFunc(af func(string, rune) bool) {
 
 func (i *textViewPart) setChangedFunc(cf func(string)) {
 	// No op
+}
+
+func (i *textViewPart) setBackgroundColor(color tcell.Color) {
+	i.textView.SetBackgroundColor(color)
 }
 
 func (i *textViewPart) primitive() tview.Primitive {

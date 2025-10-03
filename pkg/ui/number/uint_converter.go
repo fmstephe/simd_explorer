@@ -74,6 +74,10 @@ func (c *UintConverter) BytesToString(bytes []byte) string {
 	return c.uint64ToString(val)
 }
 
+func (c *UintConverter) IsStable(_ string) bool {
+	return true
+}
+
 // InputFieldInteger accepts unsigned integers.
 func (c *UintConverter) InputAcceptor() func(string, rune) bool {
 	return func(txt string, _ rune) bool {

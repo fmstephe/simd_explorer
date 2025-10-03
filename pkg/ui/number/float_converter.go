@@ -60,6 +60,14 @@ func (c *FloatConverter) BytesToString(bytes []byte) string {
 	return c.float64ToString(val)
 }
 
+func (c *FloatConverter) IsStable(txt string) bool {
+	f := c.mustStringToFloat64(txt)
+	txt2 := c.float64ToString(f)
+	f2 := c.mustStringToFloat64(txt2)
+
+	return txt == txt2 && f == f2
+}
+
 // InputFieldInteger accepts unsigned integers.
 func (c *FloatConverter) InputAcceptor() func(string, rune) bool {
 	return func(txt string, _ rune) bool {

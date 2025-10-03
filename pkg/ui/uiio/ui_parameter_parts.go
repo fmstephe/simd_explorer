@@ -77,6 +77,13 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 	// the logs
 	for _, part := range pParts.allParts {
 		part.setChangedFunc(func(txt string) {
+			// If the part's txt is an unstable value, then warn the user by setting background to yellow.
+			// This won't help colourblind users, but we can resolve that later if needed.
+			if !partConverter.IsStable(txt) {
+				part.setBackgroundColor(tcell.ColorRed)
+			} else {
+				part.setBackgroundColor(tview.Styles.ContrastBackgroundColor)
+			}
 			// Notify the uiParameters that some input data has changed
 			uiParameters.inputsChanged()
 		})
