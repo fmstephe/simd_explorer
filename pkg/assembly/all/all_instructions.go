@@ -5,6 +5,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movaps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/movups"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
@@ -30,6 +31,9 @@ func Instructions() []assembly.Instruction {
 		&movaps.MOVAPS128LoadStore{},
 		&movaps.VMOVAPS128LoadStore{},
 		&movaps.VMOVAPS256LoadStore{},
+		&movups.MOVUPS128LoadStore{},
+		&movups.VMOVUPS128LoadStore{},
+		&movups.VMOVUPS256LoadStore{},
 	}
 }
 
