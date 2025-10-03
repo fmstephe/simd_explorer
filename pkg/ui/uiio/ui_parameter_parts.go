@@ -20,8 +20,6 @@ type UIParameterParts struct {
 	allParts []uiParameterPart
 	box      *tview.Grid
 
-	focus int
-
 	// Callback when the data in this set of parts is changed
 	uiParameters *UIInstruction
 	parameter    *number.Parameter
@@ -42,15 +40,13 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 	grid.SetBorder(true)
 	grid.SetTitle(fmt.Sprintf("%d Bit %s In %d Bit Parts", parameter.TotalBitWidth(), partsBuilder.kind(), parameter.PartBitWidth()))
 
-	rParts := &UIParameterParts{
+	pParts := &UIParameterParts{
 		id:   uuid.New(),
 		kind: partsBuilder.kind(),
 
 		app:      app,
 		allParts: make([]uiParameterPart, parameter.Parts()),
 		box:      grid,
-
-		focus: 0,
 
 		uiParameters: uiParameters,
 		parameter:    parameter,
@@ -70,7 +66,7 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 		part.setFieldWidth(partConverter.GetTextWidth())
 		part.setAcceptanceFunc(partConverter.InputAcceptor())
 
-		rParts.allParts[i] = part
+		pParts.allParts[i] = part
 
 		column := i % partsPerLine
 		row := i / partsPerLine
@@ -79,14 +75,14 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 
 	// We delay setting the changed-func to reduce initialisation noise in
 	// the logs
-	for _, part := range rParts.allParts {
+	for _, part := range pParts.allParts {
 		part.setChangedFunc(func(txt string) {
-			// Notify the uiRegister that some input data has changed
+			// Notify the uiParameters that some input data has changed
 			uiParameters.inputsChanged()
 		})
 	}
 
-	return rParts
+	return pParts
 }
 
 func (in *UIParameterParts) receiverId() uuid.UUID {

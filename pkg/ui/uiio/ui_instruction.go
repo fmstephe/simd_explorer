@@ -26,7 +26,7 @@ func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) 
 	//
 	// TODO this design _feels_ awkward, so we should have a think about
 	// this in the future
-	r := &UIInstruction{
+	uiInst := &UIInstruction{
 		instruction: instruction,
 		focus:       0,
 		selectable:  []tview.Primitive{},
@@ -35,12 +35,12 @@ func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) 
 
 	inputs := []*UIParameterParts{}
 	for _, param := range instruction.Inputs() {
-		input := NewUIParameterInputs(app, param, r)
-		r.selectable = append(r.selectable, input.selectablePrimitives()...)
+		input := NewUIParameterInputs(app, param, uiInst)
+		uiInst.selectable = append(uiInst.selectable, input.selectablePrimitives()...)
 		inputs = append(inputs, input)
 	}
 
-	output := NewUIParameterOutputs(app, instruction.Output(), r)
+	output := NewUIParameterOutputs(app, instruction.Output(), uiInst)
 
 	gridLeft := tview.NewGrid()
 	gridLeft.SetBorder(true)
@@ -61,18 +61,18 @@ func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) 
 	grid.AddItem(gridRight, 0, 1, 1, 1, 0, 0, false)
 
 	// Fill out the fields for the UIRegister
-	r.inputUIParameters = inputs
-	r.outputUIParameter = output
-	r.box = grid
+	uiInst.inputUIParameters = inputs
+	uiInst.outputUIParameter = output
+	uiInst.box = grid
 
 	// Setup the tab focus cycling (is there a better way to approach
 	// this?)
-	r.initFocusCycling()
+	uiInst.initFocusCycling()
 
 	// Set output fields from zeroed inputs
-	r.inputsChanged()
+	uiInst.inputsChanged()
 
-	return r
+	return uiInst
 }
 
 func (r *UIInstruction) GetPrimitive() tview.Primitive {
