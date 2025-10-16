@@ -8,10 +8,10 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/ui/number"
 )
 
-//go:embed asm_64_loadstore_movlps.s
+//go:embed asm_64_loadmergestore_movlps.s
 var assembly64LoadStoreMovlps string
 
-//go:embed stub_64_loadstore_movlps.go
+//go:embed stub_64_loadmergestore_movlps.go
 var stub64LoadStoreMovlps string
 
 type MOVLPS64LoadStore struct {
@@ -20,15 +20,16 @@ type MOVLPS64LoadStore struct {
 func (v *MOVLPS64LoadStore) Inputs() []*number.Parameter {
 	return []*number.Parameter{
 		number.NewFloatParameter(64, 32),
+		number.NewFloatParameter(64, 32),
 	}
 }
 
 func (v *MOVLPS64LoadStore) Output() *number.Parameter {
-	return number.NewFloatParameter(64, 32)
+	return number.NewFloatParameter(128, 32)
 }
 
 func (v *MOVLPS64LoadStore) Name() string {
-	return "MOVLPS XMM (64 bit)"
+	return "MOVLPS XMM (2X 64 bit)"
 }
 
 func (v *MOVLPS64LoadStore) Description() string {
@@ -44,14 +45,17 @@ func (v *MOVLPS64LoadStore) Assembly() string {
 }
 
 func (v *MOVLPS64LoadStore) Run(inputs [][]byte) (output []byte) {
-	floats := [2]float32{}
-	copy(floats[:], number.ToFloat32Slice(inputs[0]))
+	lower := [2]float32{}
+	copy(lower[:], number.ToFloat32Slice(inputs[0]))
 
-	ret := [2]float32{}
+	upper := [2]float32{}
+	copy(upper[:], number.ToFloat32Slice(inputs[1]))
 
-	movlps64LoadStoreMovlps(&floats, &ret)
+	ret := [4]float32{}
 
-	log.Printf("MOVLPS64LoadStore input %v output %v", floats, ret)
+	movlps64LoadMergeStoreMovlps(&lower, &upper, &ret)
+
+	log.Printf("MOVLPS64LoadMergeStore input lower %v upper %v output %v", lower, upper, ret)
 
 	return number.Float32SliceToBytes(ret[:])
 }
