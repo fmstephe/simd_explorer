@@ -38,7 +38,7 @@ func Instructions() []assembly.Instruction {
 		&movups.VMOVUPS256LoadStore{},
 		&movlps.MOVLPS64LoadStore{},
 		&movlps.VMOVLPS64LoadStore{},
-		&movhps.MOVHPS64LoadStore{},
+		&movhps.MOVHPS64{},
 		&movhps.VMOVHPS64LoadStore{},
 	}
 }

@@ -9,6 +9,7 @@ import (
 )
 
 var (
+	flagPackage           = flag.String("package", "", "The name of the package")
 	flagInstruction       = flag.String("instruction", "", "The assembly name of the instruction to be demonstrated")
 	flagSizeClass         = flag.Int("size-class", -1, "The size class of the instruction being demonstrated. Many SIMD instructions work across a range of register sizes.")
 	flagDiscriminator     = flag.String("discriminator", "", "A discriminator (can be empty) useful when to demonstrate two versions of an instruction in the same size class, e.g. 'k' ")
@@ -39,6 +40,7 @@ func main() {
 	flag.Parse()
 	validateFlags()
 
+	pkg := strings.ToLower(*flagPackage)
 	instructionLower := strings.ToLower(*flagInstruction)
 	instructionUpper := strings.ToUpper(*flagInstruction)
 	instructionTitle := strings.Title(instructionLower)
@@ -55,7 +57,7 @@ func main() {
 	}
 
 	tValues := &templateValues{
-		PackageName:               instructionLower,
+		PackageName:               pkg,
 		InstructionUpper:          instructionUpper,
 		SizeClass:                 sizeClass,
 		Discriminator:             discriminatorLower,
@@ -76,6 +78,11 @@ func main() {
 }
 
 func validateFlags() {
+	if *flagPackage == "" {
+		fmt.Fprintf(os.Stderr, "Missing -package flag value\n")
+		flag.PrintDefaults()
+		os.Exit(1)
+	}
 	if *flagInstruction == "" {
 		fmt.Fprintf(os.Stderr, "Missing -instruction flag value\n")
 		flag.PrintDefaults()

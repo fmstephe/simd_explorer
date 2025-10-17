@@ -34,7 +34,8 @@ func main() {
 
 	// generate!
 	Generate()
-}`
+}
+`
 
 const instructionDemoSource = `package {{.PackageName}}
 
@@ -99,4 +100,5 @@ func (v *{{.DemoTypeName}}) Run(inputs [][]byte) (output []byte) {
 
 func (v *{{.DemoTypeName}}) Supported() bool {
 	return asmutil.IsSupported(v.Assembly())
-}`
+}
+`

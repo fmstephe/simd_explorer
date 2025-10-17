@@ -7,8 +7,7 @@ import (
 
 //go:generate go run asm_64_loadmergestore_movhps.go -out ../asm_64_loadmergestore_movhps.s -stubs ../stub_64_loadmergestore_movhps.go -pkg movhps
 func main() {
-	TEXT("movhps64LoadMergeStoreMovhps", NOSPLIT, "func(lower, upper *[2]float32, ret *[4]float32)")
-
+	TEXT("movhps64Loadmergestore", NOSPLIT, "func(lower, upper *[2]float32, ret *[4]float32)")
 	Comment("load params")
 	lower := Load(Param("lower"), GP64())
 	upper := Load(Param("upper"), GP64())

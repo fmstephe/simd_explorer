@@ -9,42 +9,42 @@ import (
 )
 
 //go:embed asm_64_loadmergestore_movhps.s
-var assembly64LoadStoreMovhps string
+var assemblyMovhps64Loadmergestore string
 
 //go:embed stub_64_loadmergestore_movhps.go
-var stub64LoadStoreMovhps string
+var stubMovhps64Loadmergestore string
 
-type MOVHPS64LoadStore struct {
+type MOVHPS64 struct {
 }
 
-func (v *MOVHPS64LoadStore) Inputs() []*number.Parameter {
+func (v *MOVHPS64) Inputs() []*number.Parameter {
 	return []*number.Parameter{
 		number.NewFloatParameter(64, 32),
 		number.NewFloatParameter(64, 32),
 	}
 }
 
-func (v *MOVHPS64LoadStore) Output() *number.Parameter {
+func (v *MOVHPS64) Output() *number.Parameter {
 	return number.NewFloatParameter(128, 32)
 }
 
-func (v *MOVHPS64LoadStore) Name() string {
+func (v *MOVHPS64) Name() string {
 	return "MOVHPS XMM (2X 64 bit)"
 }
 
-func (v *MOVHPS64LoadStore) Description() string {
+func (v *MOVHPS64) Description() string {
 	return "TODO"
 }
 
-func (v *MOVHPS64LoadStore) Stub() string {
-	return stub64LoadStoreMovhps
+func (v *MOVHPS64) Stub() string {
+	return stubMovhps64Loadmergestore
 }
 
-func (v *MOVHPS64LoadStore) Assembly() string {
-	return assembly64LoadStoreMovhps
+func (v *MOVHPS64) Assembly() string {
+	return assemblyMovhps64Loadmergestore
 }
 
-func (v *MOVHPS64LoadStore) Run(inputs [][]byte) (output []byte) {
+func (v *MOVHPS64) Run(inputs [][]byte) (output []byte) {
 	lower := [2]float32{}
 	copy(lower[:], number.ToFloat32Slice(inputs[0]))
 
@@ -53,13 +53,13 @@ func (v *MOVHPS64LoadStore) Run(inputs [][]byte) (output []byte) {
 
 	ret := [4]float32{}
 
-	movhps64LoadMergeStoreMovhps(&lower, &upper, &ret)
+	movhps64Loadmergestore(&lower, &upper, &ret)
 
 	log.Printf("MOVHPS64LoadMergeStore input lower %v upper %v output %v", lower, upper, ret)
 
 	return number.Float32SliceToBytes(ret[:])
 }
 
-func (v *MOVHPS64LoadStore) Supported() bool {
+func (v *MOVHPS64) Supported() bool {
 	return asmutil.IsSupported(v.Assembly())
 }
