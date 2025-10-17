@@ -2,4 +2,4 @@
 
 package movhps
 
-func movhps64LoadMergeStoreVmovhps(lower *[2]float32, upper *[2]float32, ret *[4]float32)
+func vmovhps64Loadmergestore(lower *[2]float32, upper *[2]float32, ret *[4]float32)

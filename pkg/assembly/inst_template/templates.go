@@ -48,10 +48,10 @@ import (
 )
 
 //go:embed {{.AssemblyFileName}}
-var assembly{{.FunctionNameTitle}} string
+var assembly{{.FunctionNameCamel}} string
 
 //go:embed {{.StubFileName}}
-var stub{{.FunctionNameTitle}} string
+var stub{{.FunctionNameCamel}} string
 
 type {{.DemoTypeName}} struct {
 }
@@ -75,11 +75,11 @@ func (v *{{.DemoTypeName}}) Description() string {
 }
 
 func (v *{{.DemoTypeName}}) Stub() string {
-	return stub{{.FunctionNameTitle}}
+	return stub{{.FunctionNameCamel}}
 }
 
 func (v *{{.DemoTypeName}}) Assembly() string {
-	return assembly{{.FunctionNameTitle}}
+	return assembly{{.FunctionNameCamel}}
 }
 
 func (v *{{.DemoTypeName}}) Run(inputs [][]byte) (output []byte) {

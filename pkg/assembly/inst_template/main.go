@@ -26,7 +26,7 @@ type templateValues struct {
 
 	// Derived Data
 	FunctionName      string
-	FunctionNameTitle string
+	FunctionNameCamel string
 	DemoTypeName      string
 
 	// File Names
@@ -55,19 +55,20 @@ func main() {
 	} else {
 		fileNameSuffix = fmt.Sprintf("%s_%d", instructionLower, sizeClass)
 	}
+	discriminatorUpper := strings.ToUpper(*flagTypeDiscriminator)
 
 	tValues := &templateValues{
 		PackageName:               pkg,
 		InstructionUpper:          instructionUpper,
 		SizeClass:                 sizeClass,
 		Discriminator:             discriminatorLower,
-		DemoTypeName:              fmt.Sprintf("%s%d%s", instructionUpper, sizeClass, typeDiscriminator),
+		DemoTypeName:              fmt.Sprintf("%s%d%s", instructionUpper, sizeClass, discriminatorUpper),
 		FunctionName:              fmt.Sprintf("%s%d%s", instructionLower, sizeClass, discriminatorTitle),
-		FunctionNameTitle:         fmt.Sprintf("%s%d%s", instructionTitle, sizeClass, discriminatorTitle),
-		AssemblyFileName:          fmt.Sprintf("asm_%d_%s_%s.s", sizeClass, discriminatorLower, instructionLower),
-		StubFileName:              fmt.Sprintf("stub_%d_%s_%s.go", sizeClass, discriminatorLower, instructionLower),
-		AssemblyGeneratorFileName: fmt.Sprintf("asm_%d_%s_%s.go", sizeClass, discriminatorLower, instructionLower),
-		DemoFileName:              fmt.Sprintf("%s_%d_%s.go", instructionLower, sizeClass, discriminatorLower),
+		FunctionNameCamel:         fmt.Sprintf("%s%d%s", instructionTitle, sizeClass, discriminatorTitle),
+		AssemblyGeneratorFileName: fmt.Sprintf("asm_%s.go", fileNameSuffix),
+		AssemblyFileName:          fmt.Sprintf("asm_%s.s", fileNameSuffix),
+		StubFileName:              fmt.Sprintf("stub_%s.go", fileNameSuffix),
+		DemoFileName:              fmt.Sprintf("demo_%s.go", fileNameSuffix),
 	}
 
 	fmt.Printf("%#v\n\n", tValues)
@@ -90,11 +91,6 @@ func validateFlags() {
 	}
 	if *flagSizeClass == -1 {
 		fmt.Fprintf(os.Stderr, "Missing -size-class flag value\n")
-		flag.PrintDefaults()
-		os.Exit(1)
-	}
-	if *flagDiscriminator == "" {
-		fmt.Fprintf(os.Stderr, "Missing -description-short flag value\n")
 		flag.PrintDefaults()
 		os.Exit(1)
 	}

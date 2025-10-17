@@ -5,10 +5,9 @@ import (
 	. "github.com/mmcloughlin/avo/operand"
 )
 
-//go:generate go run asm_64_loadmergestore_vmovhps.go -out ../asm_64_loadmergestore_vmovhps.s -stubs ../stub_64_loadmergestore_vmovhps.go -pkg movhps
+//go:generate go run asm_vmovhps_64.go -out ../asm_vmovhps_64.s -stubs ../stub_vmovhps_64.go -pkg movhps
 func main() {
-	TEXT("movhps64LoadMergeStoreVmovhps", NOSPLIT, "func(lower, upper *[2]float32, ret *[4]float32)")
-
+	TEXT("vmovhps64Loadmergestore", NOSPLIT, "func(lower, upper *[2]float32, ret *[4]float32)")
 	Comment("load params")
 	lower := Load(Param("lower"), GP64())
 	upper := Load(Param("upper"), GP64())

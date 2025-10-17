@@ -2,9 +2,9 @@
 
 #include "textflag.h"
 
-// func movhps64LoadMergeStoreVmovhps(lower *[2]float32, upper *[2]float32, ret *[4]float32)
+// func vmovhps64Loadmergestore(lower *[2]float32, upper *[2]float32, ret *[4]float32)
 // Requires: AVX, SSE
-TEXT ·movhps64LoadMergeStoreVmovhps(SB), NOSPLIT, $0-24
+TEXT ·vmovhps64Loadmergestore(SB), NOSPLIT, $0-24
 	// load params
 	MOVQ lower+0(FP), AX
 	MOVQ upper+8(FP), CX
