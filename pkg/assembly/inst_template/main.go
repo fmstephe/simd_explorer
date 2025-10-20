@@ -9,11 +9,10 @@ import (
 )
 
 var (
-	flagPackage           = flag.String("package", "", "The name of the package")
-	flagInstruction       = flag.String("instruction", "", "The assembly name of the instruction to be demonstrated")
-	flagSizeClass         = flag.Int("size-class", -1, "The size class of the instruction being demonstrated. Many SIMD instructions work across a range of register sizes.")
-	flagDiscriminator     = flag.String("discriminator", "", "A discriminator (can be empty) useful when to demonstrate two versions of an instruction in the same size class, e.g. 'k' ")
-	flagTypeDiscriminator = flag.String("type-discriminator", "", "Temporary flag used to add discriminator to type. Will be removed later when unnecessary use of discriminators is removed.")
+	flagPackage       = flag.String("package", "", "The name of the package")
+	flagInstruction   = flag.String("instruction", "", "The assembly name of the instruction to be demonstrated")
+	flagSizeClass     = flag.Int("size-class", -1, "The size class of the instruction being demonstrated. Many SIMD instructions work across a range of register sizes.")
+	flagDiscriminator = flag.String("discriminator", "", "A discriminator (can be empty) useful when to demonstrate two versions of an instruction in the same size class, e.g. 'k' ")
 )
 
 type templateValues struct {
