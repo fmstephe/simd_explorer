@@ -15,31 +15,39 @@ import (
 
 func Instructions() []assembly.Instruction {
 	return []assembly.Instruction{
-		&vpbroadcastb.Vpbroadcastb128{},
-		&vpbroadcastb.Vpbroadcastb256{},
-		&vpbroadcastb.Vpbroadcastb512{},
-		&vpbroadcastb.Vpbroadcastb128K{},
-		&vpbroadcastb.Vpbroadcastb256K{},
-		&vpbroadcastb.Vpbroadcastb512K{},
-		&vmovdqu.VMOVDQU128LoadStore{},
-		&vmovdqu.VMOVDQU256LoadStore{},
-		&vmovdqa.VMOVDQA128LoadStore{},
-		&vmovdqa.VMOVDQA256LoadStore{},
+		// vpbroadcastb
+		&vpbroadcastb.VPBROADCASTB128{},
+		&vpbroadcastb.VPBROADCASTB256{},
+		&vpbroadcastb.VPBROADCASTB512{},
+		&vpbroadcastb.VPBROADCASTB128K{},
+		&vpbroadcastb.VPBROADCASTB256K{},
+		&vpbroadcastb.VPBROADCASTB512K{},
+		// vmovdqu
+		&vmovdqu.VMOVDQU128{},
+		&vmovdqu.VMOVDQU256{},
+		&vmovdqa.VMOVDQA128{},
+		&vmovdqa.VMOVDQA256{},
+		// addps
 		&addps.ADDPS128{},
 		&addps.VADDPS128{},
 		&addps.VADDPS256{},
-		&movss.MOVSS128LoadStore{},
-		&movss.VMOVSS128LoadStore{},
-		&movaps.MOVAPS128LoadStore{},
-		&movaps.VMOVAPS128LoadStore{},
-		&movaps.VMOVAPS256LoadStore{},
-		&movups.MOVUPS128LoadStore{},
-		&movups.VMOVUPS128LoadStore{},
-		&movups.VMOVUPS256LoadStore{},
-		&movlps.MOVLPS64LoadStore{},
-		&movlps.VMOVLPS64LoadStore{},
+		// movss
+		&movss.MOVSS128{},
+		&movss.VMOVSS128{},
+		// movaps
+		&movaps.MOVAPS128{},
+		&movaps.VMOVAPS128{},
+		&movaps.VMOVAPS256{},
+		// movups
+		&movups.MOVUPS128{},
+		&movups.VMOVUPS128{},
+		&movups.VMOVUPS256{},
+		// movlps
+		&movlps.MOVLPS64{},
+		&movlps.VMOVLPS64{},
+		// movhpos
 		&movhps.MOVHPS64{},
-		&movhps.VMOVHPS64LoadStore{},
+		&movhps.VMOVHPS64{},
 	}
 }
 

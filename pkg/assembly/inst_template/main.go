@@ -55,7 +55,6 @@ func main() {
 	} else {
 		fileNameSuffix = fmt.Sprintf("%s_%d", instructionLower, sizeClass)
 	}
-	discriminatorUpper := strings.ToUpper(*flagTypeDiscriminator)
 
 	tValues := &templateValues{
 		PackageName:               pkg,
