@@ -7,6 +7,11 @@ import (
 	"strings"
 )
 
+// TODO with hex and binary it _feels_ more readable to me if all values are
+// displayed i.e if you have a 32 bit binary then 0 should be displayed as 32
+// '0' characters same thing for hex. This just feels more natural and
+// corresponds to my general expectations for how these values are typically
+// displayed.
 type UintConverter struct {
 	bitWidth int
 	base     int
