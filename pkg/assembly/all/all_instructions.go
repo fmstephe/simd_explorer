@@ -5,6 +5,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movaps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movhps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/movlhps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movlps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movups"
@@ -48,6 +49,9 @@ func Instructions() []assembly.Instruction {
 		// movhpos
 		&movhps.MOVHPS64{},
 		&movhps.VMOVHPS64{},
+		// movlhps
+		&movlhps.MOVLHPS64{},
+		&movlhps.VMOVLHPS64{},
 	}
 }
 
