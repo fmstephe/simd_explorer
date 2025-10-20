@@ -90,6 +90,12 @@ func (c *FloatConverter) stringToFloat64(txt string) (float64, error) {
 		// If the value of the field is empty default it to 0
 		return 0, nil
 	}
+	if txt == "-" {
+		// We allow a hanging '-', it's not a valid float but if we
+		// don't parse it the user can't type any negative float value,
+		// which necessarily _must_ start with a single '-'
+		return 0, nil
+	}
 	return strconv.ParseFloat(txt, c.bitWidth)
 }
 
