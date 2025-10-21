@@ -105,6 +105,14 @@ func Float32SliceToBytes(vals []float32) []byte {
 	return bytes
 }
 
+func Float64SliceToBytes(vals []float64) []byte {
+	bytes := []byte{}
+	for _, val := range vals {
+		bytes = endian.AppendUint64(bytes, math.Float64bits(val))
+	}
+	return bytes
+}
+
 func Uint64ToBytes(val uint64) []byte {
 	bytes := make([]byte, 8)
 	endian.PutUint64(bytes, uint64(val))
