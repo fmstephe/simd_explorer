@@ -26,6 +26,15 @@ func ToFloat32Slice(bytes []byte) []float32 {
 	return ret
 }
 
+func ToFloat64Slice(bytes []byte) []float64 {
+	ret := []float64{}
+	for i := 0; i < len(bytes); i += 8 {
+		ret = append(ret, ToFloat64(bytes[i:]))
+	}
+
+	return ret
+}
+
 func ToUint64(bytes []byte) uint64 {
 	return endian.Uint64(bytes)
 }

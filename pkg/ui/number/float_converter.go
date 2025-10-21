@@ -23,10 +23,16 @@ func (c *FloatConverter) GetBitWidth() int {
 
 func (c *FloatConverter) GetTextWidth() int {
 	switch c.bitWidth {
+	// This code looks like a bug, because we are using the width of
+	// integers and not floats, but the reason we do that is because the
+	// length of the max 64 bit float value is 309 characters. So it
+	// becomes a bad guide for how wide to make the input field. We now
+	// heuristically use integer width instead, until we can come up with a
+	// better solution
 	case 32:
-		return len(strconv.FormatFloat(math.MaxFloat32, 'f', -1, c.bitWidth)) + 1
+		return len(strconv.FormatUint(math.MaxUint32, 10)) + 1
 	case 64:
-		return len(strconv.FormatFloat(math.MaxFloat64, 'f', -1, c.bitWidth)) + 1
+		return len(strconv.FormatUint(math.MaxUint64, 10)) + 1
 	default:
 		panic("unreachable")
 	}
