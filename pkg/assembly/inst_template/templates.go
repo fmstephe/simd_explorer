@@ -32,6 +32,9 @@ func main() {
 	Comment("Write results into return memory address")
 	VMOVDQA(regX1, Mem{Base: ret})
 
+	Comment("Return from function")
+	RET()
+
 	// generate!
 	Generate()
 }
