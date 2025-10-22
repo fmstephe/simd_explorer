@@ -10,6 +10,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movlhps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movlps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/maxss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/minss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movmskpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movmskps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movss"
@@ -82,6 +83,9 @@ func Instructions() []assembly.Instruction {
 		// maxss
 		&maxss.MAXSS128{},
 		&maxss.VMAXSS128{},
+		// minss
+		&minss.MINSS128{},
+		&minss.VMINSS128{},
 		// movmskps
 		&movmskps.MOVMSKPS128{},
 		&movmskps.VMOVMSKPS128{},
