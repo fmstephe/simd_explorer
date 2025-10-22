@@ -12,6 +12,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movmskpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movmskps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movups"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/mulss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/subss"
@@ -53,6 +54,9 @@ func Instructions() []assembly.Instruction {
 		// movss
 		&movss.MOVSS128{},
 		&movss.VMOVSS128{},
+		// rcpss
+		&rcpss.RCPSS128{},
+		&rcpss.VRCPSS128{},
 		// movaps
 		&movaps.MOVAPS128{},
 		&movaps.VMOVAPS128{},
