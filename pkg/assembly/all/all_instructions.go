@@ -12,6 +12,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movmskps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movups"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/mulss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/subss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
@@ -42,6 +43,9 @@ func Instructions() []assembly.Instruction {
 		// subss
 		&subss.SUBSS128{},
 		&subss.VSUBSS128{},
+		// mulss
+		&mulss.MULSS128{},
+		&mulss.VMULSS128{},
 		// movss
 		&movss.MOVSS128{},
 		&movss.VMOVSS128{},
