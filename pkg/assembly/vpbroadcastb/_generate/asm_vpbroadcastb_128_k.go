@@ -15,12 +15,12 @@ func main() {
 	ret := Load(Param("ret"), GP64())
 
 	Comment("Need to move b into an XMM register to work with VPBROADCASTB instruction")
-	regXArg := XMM()
-	MOVQ(b, regXArg)
+	regXB := XMM()
+	MOVQ(b, regXB)
 
 	Comment("Broadcast b into XMM register")
 	regX := XMM()
-	VPBROADCASTB(regXArg, k, regX)
+	VPBROADCASTB(regXB, k, regX)
 
 	Comment("Write contents of XMM register into memory region")
 	VMOVDQU(regX, Mem{Base: ret})
@@ -30,4 +30,3 @@ func main() {
 	// generate!
 	Generate()
 }
-
