@@ -4,6 +4,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/divps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/maxss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/minss"
@@ -59,6 +60,10 @@ func Instructions() []assembly.Instruction {
 		// divss
 		&divss.DIVSS128{},
 		&divss.VDIVSS128{},
+		// divps
+		&divps.DIVPS128{},
+		&divps.VDIVPS128{},
+		&divps.VDIVPS256{},
 		// subss
 		&subss.SUBSS128{},
 		&subss.VSUBSS128{},
