@@ -18,14 +18,14 @@ type VSUBPS256 struct {
 }
 
 func (v *VSUBPS256) Inputs() []*number.Parameter {
-    return []*number.Parameter{
-        number.NewFloatParameter(256, 32),
-        number.NewFloatParameter(256, 32),
-    }
+	return []*number.Parameter{
+		number.NewFloatParameter(256, 32),
+		number.NewFloatParameter(256, 32),
+	}
 }
 
 func (v *VSUBPS256) Output() *number.Parameter {
-    return number.NewFloatParameter(256, 32)
+	return number.NewFloatParameter(256, 32)
 }
 
 func (v *VSUBPS256) Name() string {
@@ -46,14 +46,14 @@ func (v *VSUBPS256) Assembly() string {
 
 func (v *VSUBPS256) Run(inputs [][]byte) (output []byte) {
 	// Example arguments processing
-    floats1 := [8]float32{}
+	floats1 := [8]float32{}
 	copy(floats1[:], number.ToFloat32Slice(inputs[0]))
 	floats2 := [8]float32{}
 	copy(floats2[:], number.ToFloat32Slice(inputs[1]))
 
 	ret := [8]float32{}
 
-    vsubps256(&floats1, &floats2, &ret)
+	vsubps256(&floats1, &floats2, &ret)
 
 	log.Printf("VSUBPS256 input %v %v output %v", floats1, floats2, ret)
 
