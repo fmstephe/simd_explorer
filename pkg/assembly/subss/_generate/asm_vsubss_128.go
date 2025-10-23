@@ -21,7 +21,7 @@ func main() {
 	regX2 := XMM()
 	VMOVDQA(Mem{Base: vals2}, regX2)
 
-	Comment("Subtract scalar single precision values using VEX encoding")
+	Comment("Subtract scalar single precision values using VEX encoding: regX1 = regX1 - regX2")
 	VSUBSS(regX2, regX1, regX1)
 
 	Comment("Write results into return memory address")

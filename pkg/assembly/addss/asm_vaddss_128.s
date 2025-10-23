@@ -17,10 +17,10 @@ TEXT ·vaddss128(SB), NOSPLIT, $0-24
 	VMOVDQA (CX), X1
 
 	// Add scalar single precision values (lowest 32 bits)
-	VADDSS X0, X1, X1
+	VADDSS X1, X0, X0
 
 	// Write results into return memory address
-	VMOVDQA X1, (DX)
+	VMOVDQA X0, (DX)
 
 	// Return from function
 	RET

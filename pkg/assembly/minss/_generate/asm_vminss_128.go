@@ -22,10 +22,10 @@ func main() {
 	VMOVDQA(Mem{Base: vals2}, regX2)
 
 	Comment("Compare and return minimum scalar single precision values using VEX encoding")
-	VMINSS(regX1, regX2, regX2)
+	VMINSS(regX1, regX2, regX1)
 
 	Comment("Write results into return memory address")
-	VMOVDQA(regX2, Mem{Base: ret})
+	VMOVDQA(regX1, Mem{Base: ret})
 
 	Comment("Return from function")
 	RET()

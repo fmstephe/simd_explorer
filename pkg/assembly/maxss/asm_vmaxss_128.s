@@ -17,10 +17,10 @@ TEXT ·vmaxss128(SB), NOSPLIT, $0-24
 	VMOVDQA (CX), X1
 
 	// Compare and return maximum scalar single precision values using VEX encoding
-	VMAXSS X0, X1, X1
+	VMAXSS X0, X1, X0
 
 	// Write results into return memory address
-	VMOVDQA X1, (DX)
+	VMOVDQA X0, (DX)
 
 	// Return from function
 	RET

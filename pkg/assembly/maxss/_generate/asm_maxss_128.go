@@ -22,10 +22,10 @@ func main() {
 	VMOVDQA(Mem{Base: vals2}, regX2)
 
 	Comment("Compare and return maximum scalar single precision values (lowest 32 bits)")
-	MAXSS(regX1, regX2) // Go assembler: regX2 = max(regX2, regX1)
+	MAXSS(regX2, regX1) // Go assembler: regX1 = max(regX2, regX1)
 
 	Comment("Write results into return memory address")
-	VMOVDQA(regX2, Mem{Base: ret})
+	VMOVDQA(regX1, Mem{Base: ret})
 
 	Comment("Return from function")
 	RET()

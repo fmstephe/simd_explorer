@@ -22,10 +22,10 @@ func main() {
 	VMOVDQA(Mem{Base: vals2}, regX2)
 
 	Comment("Add scalar single precision values (lowest 32 bits)")
-	ADDSS(regX1, regX2)
+	ADDSS(regX2, regX1)
 
 	Comment("Write results into return memory address")
-	VMOVDQA(regX2, Mem{Base: ret})
+	VMOVDQA(regX1, Mem{Base: ret})
 
 	Comment("Return from function")
 	RET()

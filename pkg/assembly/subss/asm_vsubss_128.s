@@ -16,7 +16,7 @@ TEXT ·vsubss128(SB), NOSPLIT, $0-24
 	// Load vals2 into XMM register
 	VMOVDQA (CX), X1
 
-	// Subtract scalar single precision values using VEX encoding
+	// Subtract scalar single precision values using VEX encoding: regX1 = regX1 - regX2
 	VSUBSS X1, X0, X0
 
 	// Write results into return memory address

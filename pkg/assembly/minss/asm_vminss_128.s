@@ -17,10 +17,10 @@ TEXT ·vminss128(SB), NOSPLIT, $0-24
 	VMOVDQA (CX), X1
 
 	// Compare and return minimum scalar single precision values using VEX encoding
-	VMINSS X0, X1, X1
+	VMINSS X0, X1, X0
 
 	// Write results into return memory address
-	VMOVDQA X1, (DX)
+	VMOVDQA X0, (DX)
 
 	// Return from function
 	RET

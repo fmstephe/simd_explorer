@@ -22,10 +22,10 @@ func main() {
 	VMOVDQA(Mem{Base: vals2}, regX2)
 
 	Comment("Compare and return minimum scalar single precision values (lowest 32 bits)")
-	MINSS(regX1, regX2) // Go assembler: regX2 = min(regX1, regX2)
+	MINSS(regX2, regX1) // Go assembler: regX1 = min(regX1, regX2)
 
 	Comment("Write results into return memory address")
-	VMOVDQA(regX2, Mem{Base: ret})
+	VMOVDQA(regX1, Mem{Base: ret})
 
 	Comment("Return from function")
 	RET()
