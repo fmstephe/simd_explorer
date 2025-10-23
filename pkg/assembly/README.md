@@ -20,7 +20,7 @@ The stub file is likewise named 'stub_{instruction_name}_{size_class}[_{discrimi
 
 ## Generated Assembly File
 
-The generated assembly file is named 'asm_{instruction_name}_{size_class}[_{discriminator}]?.go'. The function name here is the same as the stub function name described above.
+The generated assembly file is named 'asm_{instruction_name}_{size_class}[_{discriminator}]?.s'. The function name here is the same as the stub function name described above.
 
 ## The Instruction Demo Type
 
@@ -44,3 +44,25 @@ type VMOVHPS64 struct {
 }
 
 The type has no fields and is completely stateless. The declared type implements the assembly.Instruction interface using pointer receivers.
+
+## Register Usage Conventions
+
+Most SIMD instructions take two registers and perform some operation on them, storing the result in another register. We typically name these registers regX1, regX2 (for XMM-sized registers, regY1... etc. for wider registers). We prefer to store the results in the first of these two registers where possible. For example
+
+MULPS(regX2, regX1)
+
+is preferred because this will store the result in regX1 and
+
+VMULPS(regX2, regX1, regX1)
+
+is preferred for the same reason.
+
+Some instructions have dramatically different behaviour with different argument orderings. In these cases we prefer to arrange register arguments so that the arithmetic expression when written down reads like x1 * x2 (where * is some arithmetic operator). This ordering is preferred even if the results must be stored in the x2 register. For example
+
+SUBPS(regX2, regX1)
+
+which performs x1 = x1 - x2 is preferred here, and matches both our preferred output register and order of operands. Obviously
+
+VSUBPS(regX2, regX1, regX1)
+
+is preferred when the output register can be specified independently.
