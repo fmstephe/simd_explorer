@@ -5,6 +5,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/mulps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movaps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movhps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/movlhps"
@@ -44,6 +45,10 @@ func Instructions() []assembly.Instruction {
 		&addps.ADDPS128{},
 		&addps.VADDPS128{},
 		&addps.VADDPS256{},
+		// mulps
+		&mulps.MULPS128{},
+		&mulps.VMULPS128{},
+		&mulps.VMULPS256{},
 		// subps
 		&subps.SUBPS128{},
 		&subps.VSUBPS128{},
