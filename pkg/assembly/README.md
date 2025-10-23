@@ -51,11 +51,13 @@ Most SIMD instructions take two registers and perform some operation on them, st
 
 MULPS(regX2, regX1)
 
-is preferred because this will store the result in regX1 and
+is preferred because this will store the result in regX1. Similarly
 
 VMULPS(regX2, regX1, regX1)
 
-is preferred for the same reason.
+is preferred for storing the results in regX1.
+
+Please note that we have preserved the register order from MULPS here, choosing regX2, regX1, even though the order here does not determine which register the output is directed to. This is preferred in order to make all assembly functions as identical as possible, with the only differences being meaningful differences between the instructions demoed. Accidental differences are deliberately minimised.
 
 Some instructions have dramatically different behaviour with different argument orderings. In these cases we prefer to arrange register arguments so that the arithmetic expression when written down reads like x1 * x2 (where * is some arithmetic operator). This ordering is preferred even if the results must be stored in the x2 register. For example
 
