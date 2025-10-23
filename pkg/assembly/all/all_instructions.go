@@ -21,6 +21,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rsqrtss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/sqrtps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/sqrtss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/subps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/subss"
@@ -78,6 +79,10 @@ func Instructions() []assembly.Instruction {
 		&rcpps.RCPPS128{},
 		&rcpps.VRCPPS128{},
 		&rcpps.VRCPPS256{},
+		// sqrtps
+		&sqrtps.SQRTPS128{},
+		&sqrtps.VSQRTPS128{},
+		&sqrtps.VSQRTPS256{},
 		// rcpss
 		&rcpss.RCPSS128{},
 		&rcpss.VRCPSS128{},
