@@ -4,6 +4,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/cmpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/maxps"
@@ -78,6 +79,23 @@ func Instructions() []assembly.Instruction {
 		// movss
 		&movss.MOVSS128{},
 		&movss.VMOVSS128{},
+		// cmpss
+		&cmpss.CMPSS128EQ{},
+		&cmpss.CMPSS128LT{},
+		&cmpss.CMPSS128LE{},
+		&cmpss.CMPSS128UNORD{},
+		&cmpss.CMPSS128NEQ{},
+		&cmpss.CMPSS128NLT{},
+		&cmpss.CMPSS128NLE{},
+		&cmpss.CMPSS128ORD{},
+		&cmpss.VCMPSS128EQ{},
+		&cmpss.VCMPSS128LT{},
+		&cmpss.VCMPSS128LE{},
+		&cmpss.VCMPSS128UNORD{},
+		&cmpss.VCMPSS128NEQ{},
+		&cmpss.VCMPSS128NLT{},
+		&cmpss.VCMPSS128NLE{},
+		&cmpss.VCMPSS128ORD{},
 		// rcpps
 		&rcpps.RCPPS128{},
 		&rcpps.VRCPPS128{},
@@ -86,16 +104,16 @@ func Instructions() []assembly.Instruction {
 		&sqrtps.SQRTPS128{},
 		&sqrtps.VSQRTPS128{},
 		&sqrtps.VSQRTPS256{},
+		// rsqrtps
+		&rsqrtps.RSQRTPS128{},
+		&rsqrtps.VRSQRTPS128{},
+		&rsqrtps.VRSQRTPS256{},
 		// rcpss
 		&rcpss.RCPSS128{},
 		&rcpss.VRCPSS128{},
 		// rsqrtss
 		&rsqrtss.RSQRTSS128{},
 		&rsqrtss.VRSQRTSS128{},
-		// rsqrtps
-		&rsqrtps.RSQRTPS128{},
-		&rsqrtps.VRSQRTPS128{},
-		&rsqrtps.VRSQRTPS256{},
 		// sqrtss
 		&sqrtss.SQRTSS128{},
 		&sqrtss.VSQRTSS128{},
@@ -123,13 +141,13 @@ func Instructions() []assembly.Instruction {
 		// maxss
 		&maxss.MAXSS128{},
 		&maxss.VMAXSS128{},
-		// minss
-		&minss.MINSS128{},
-		&minss.VMINSS128{},
 		// minps
 		&minps.MINPS128{},
 		&minps.VMINPS128{},
 		&minps.VMINPS256{},
+		// minss
+		&minss.MINSS128{},
+		&minss.VMINSS128{},
 		// movmskps
 		&movmskps.MOVMSKPS128{},
 		&movmskps.VMOVMSKPS128{},
