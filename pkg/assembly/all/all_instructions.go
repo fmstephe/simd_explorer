@@ -5,6 +5,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cmpss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/comiss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/maxps"
@@ -96,6 +97,9 @@ func Instructions() []assembly.Instruction {
 		&cmpss.VCMPSS128NLT{},
 		&cmpss.VCMPSS128NLE{},
 		&cmpss.VCMPSS128ORD{},
+		// comiss
+		&comiss.COMISS128{},
+		&comiss.VCOMISS128{},
 		// rcpps
 		&rcpps.RCPPS128{},
 		&rcpps.VRCPPS128{},
