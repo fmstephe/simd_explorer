@@ -30,6 +30,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/sqrtss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/subps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/subss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/ucomiss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
@@ -100,6 +101,9 @@ func Instructions() []assembly.Instruction {
 		// comiss
 		&comiss.COMISS128{},
 		&comiss.VCOMISS128{},
+		// ucomiss
+		&ucomiss.UCOMISS128{},
+		&ucomiss.VUCOMISS128{},
 		// rcpps
 		&rcpps.RCPPS128{},
 		&rcpps.VRCPPS128{},
