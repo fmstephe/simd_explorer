@@ -7,9 +7,6 @@ import (
 
 //go:generate go run asm_cmpss_128_neq.go -out ../asm_cmpss_128_neq.s -stubs ../stub_cmpss_128_neq.go -pkg cmpss
 func main() {
-	// NOTE: This is a generic template that generates valid assembly for testing purposes.
-	// It does NOT implement the actual CMPSS instruction.
-	// Replace this implementation with the correct CMPSS instruction code.
 	TEXT("cmpss128Neq", NOSPLIT, "func(vals1, vals2, ret *[4]float32)")
 	Comment("load params")
 	vals1 := Load(Param("vals1"), GP64())
