@@ -27,6 +27,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rsqrtps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rsqrtss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/shufps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/sqrtps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/sqrtss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/subps"
@@ -149,6 +150,25 @@ func Instructions() []assembly.Instruction {
 		// movhpos
 		&movhps.MOVHPS64{},
 		&movhps.VMOVHPS64{},
+		// shufps
+		&shufps.SHUFPS128ZEROS{},
+		&shufps.SHUFPS128ONES{},
+		&shufps.SHUFPS128TWOS{},
+		&shufps.SHUFPS128THREES{},
+		&shufps.SHUFPS128MIXED{},
+		&shufps.SHUFPS128REVERSE{},
+		&shufps.VSHUFPS128ZEROS{},
+		&shufps.VSHUFPS128ONES{},
+		&shufps.VSHUFPS128TWOS{},
+		&shufps.VSHUFPS128THREES{},
+		&shufps.VSHUFPS128MIXED{},
+		&shufps.VSHUFPS128REVERSE{},
+		&shufps.VSHUFPS256ZEROS{},
+		&shufps.VSHUFPS256ONES{},
+		&shufps.VSHUFPS256TWOS{},
+		&shufps.VSHUFPS256THREES{},
+		&shufps.VSHUFPS256MIXED{},
+		&shufps.VSHUFPS256REVERSE{},
 		// movlhps
 		&movlhps.MOVLHPS64{},
 		&movlhps.VMOVLHPS64{},
