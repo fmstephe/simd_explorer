@@ -4,12 +4,10 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/andps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cmpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cmpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/comiss"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/cvtsi2ss"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/cvtss2si"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/cvttss2si"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/maxps"
@@ -37,7 +35,6 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/subss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/ucomiss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/unpckhps"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/unpcklps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
@@ -69,6 +66,10 @@ func Instructions() []assembly.Instruction {
 		&subps.SUBPS128{},
 		&subps.VSUBPS128{},
 		&subps.VSUBPS256{},
+		// andps
+		&andps.ANDPS128{},
+		&andps.VANDPS128{},
+		&andps.VANDPS256{},
 		// addss
 		&addss.ADDSS128{},
 		&addss.VADDSS128{},
@@ -159,10 +160,6 @@ func Instructions() []assembly.Instruction {
 		&unpckhps.UNPCKHPS128{},
 		&unpckhps.VUNPCKHPS128{},
 		&unpckhps.VUNPCKHPS256{},
-		// unpcklps
-		&unpcklps.UNPCKLPS128{},
-		&unpcklps.VUNPCKLPS128{},
-		&unpcklps.VUNPCKLPS256{},
 		// shufps
 		&shufps.SHUFPS128ZEROS{},
 		&shufps.SHUFPS128ONES{},
@@ -207,15 +204,6 @@ func Instructions() []assembly.Instruction {
 		&movmskpd.MOVMSKPD128{},
 		&movmskpd.VMOVMSKPD128{},
 		&movmskpd.VMOVMSKPD256{},
-		// cvtsi2ss
-		&cvtsi2ss.VCVTSI2SS128INT32{},
-		&cvtsi2ss.VCVTSI2SS128INT64{},
-		// cvtsi2ss
-		&cvtss2si.VCVTSS2SI128INT32{},
-		&cvtss2si.VCVTSS2SI128INT64{},
-		// cvtsi2ss
-		&cvttss2si.VCVTTSS2SI128INT32{},
-		&cvttss2si.VCVTTSS2SI128INT64{},
 	}
 }
 
