@@ -7,6 +7,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cmpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cmpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/comiss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/cvtsi2ss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/maxps"
@@ -204,6 +205,9 @@ func Instructions() []assembly.Instruction {
 		&movmskpd.MOVMSKPD128{},
 		&movmskpd.VMOVMSKPD128{},
 		&movmskpd.VMOVMSKPD256{},
+		// cvtsi2ss
+		&cvtsi2ss.VCVTSI2SS128INT32{},
+		&cvtsi2ss.VCVTSI2SS128INT64{},
 	}
 }
 
