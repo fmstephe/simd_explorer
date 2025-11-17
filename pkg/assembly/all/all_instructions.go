@@ -33,6 +33,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/subps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/subss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/ucomiss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/unpckhps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
@@ -150,6 +151,10 @@ func Instructions() []assembly.Instruction {
 		// movhpos
 		&movhps.MOVHPS64{},
 		&movhps.VMOVHPS64{},
+		// unpckhps
+		&unpckhps.UNPCKHPS128{},
+		&unpckhps.VUNPCKHPS128{},
+		&unpckhps.VUNPCKHPS256{},
 		// shufps
 		&shufps.SHUFPS128ZEROS{},
 		&shufps.SHUFPS128ONES{},
