@@ -9,6 +9,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/comiss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cvtsi2ss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cvtss2si"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/cvttss2si"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/maxps"
@@ -212,6 +213,9 @@ func Instructions() []assembly.Instruction {
 		// cvtsi2ss
 		&cvtss2si.VCVTSS2SI128INT32{},
 		&cvtss2si.VCVTSS2SI128INT64{},
+		// cvtsi2ss
+		&cvttss2si.VCVTTSS2SI128INT32{},
+		&cvttss2si.VCVTTSS2SI128INT64{},
 	}
 }
 
