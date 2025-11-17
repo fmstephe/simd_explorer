@@ -1,0 +1,64 @@
+package orps
+
+import (
+	_ "embed"
+	"log"
+
+	"github.com/fmstephe/simd_explorer/pkg/assembly/asmutil"
+	"github.com/fmstephe/simd_explorer/pkg/ui/number"
+)
+
+//go:embed asm_vorps_128.s
+var assemblyVorps128 string
+
+//go:embed stub_vorps_128.go
+var stubVorps128 string
+
+type VORPS128 struct {
+}
+
+func (v *VORPS128) Inputs() []*number.Parameter {
+	return []*number.Parameter{
+		number.NewFloatParameter(128, 32),
+		number.NewFloatParameter(128, 32),
+	}
+}
+
+func (v *VORPS128) Output() *number.Parameter {
+	return number.NewUintParameter(128, 32, 16)
+}
+
+func (v *VORPS128) Name() string {
+	return "VORPS (128 bit)"
+}
+
+func (v *VORPS128) Description() string {
+	return "Bitwise AND of packed single-precision values; output shown as 32-bit hex lanes."
+}
+
+func (v *VORPS128) Stub() string {
+	return stubVorps128
+}
+
+func (v *VORPS128) Assembly() string {
+	return assemblyVorps128
+}
+
+func (v *VORPS128) Run(inputs [][]byte) (output []byte) {
+	vals1 := [4]float32{}
+	copy(vals1[:], number.ToFloat32Slice(inputs[0]))
+	vals2 := [4]float32{}
+	copy(vals2[:], number.ToFloat32Slice(inputs[1]))
+
+	ret := [4]float32{}
+
+	vorps128(&vals1, &vals2, &ret)
+
+	log.Printf("VORPS128 input %v %v output %v", vals1, vals2, ret)
+
+	return number.Float32SliceToBytes(ret[:])
+}
+
+func (v *VORPS128) Supported() bool {
+	return asmutil.IsSupported(v.Assembly())
+}
