@@ -4,6 +4,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/andnps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/andps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cmpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cmpss"
@@ -75,6 +76,10 @@ func Instructions() []assembly.Instruction {
 		&orps.ORPS128{},
 		&orps.VORPS128{},
 		&orps.VORPS256{},
+		// andnps
+		&andnps.ANDNPS128{},
+		&andnps.VANDNPS128{},
+		&andnps.VANDNPS256{},
 		// addss
 		&addss.ADDSS128{},
 		&addss.VADDSS128{},
