@@ -27,6 +27,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/mulss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/orps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhuw"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/psadbw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rsqrtps"
@@ -224,6 +225,10 @@ func Instructions() []assembly.Instruction {
 		&movmskpd.MOVMSKPD128{},
 		&movmskpd.VMOVMSKPD128{},
 		&movmskpd.VMOVMSKPD256{},
+		// psadbw
+		&psadbw.PSADBW128{},
+		&psadbw.VPSADBW128{},
+		&psadbw.VPSADBW256{},
 	}
 }
 
