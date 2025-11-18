@@ -8,7 +8,7 @@ import (
 )
 
 func main() {
-	if f, err := os.OpenFile("./simd_explorer.log", os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666); err != nil {
+	if f, err := os.OpenFile("./debug.log", os.O_TRUNC|os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666); err != nil {
 		log.Fatalf("Error opening log file %v", err)
 	} else {
 		log.SetOutput(f)
