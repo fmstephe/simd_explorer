@@ -26,6 +26,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/mulps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/mulss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/orps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhuw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rsqrtps"
@@ -85,6 +86,10 @@ func Instructions() []assembly.Instruction {
 		&andnps.ANDNPS128{},
 		&andnps.VANDNPS128{},
 		&andnps.VANDNPS256{},
+		// pmulhuw
+		&pmulhuw.PMULHUW128{},
+		&pmulhuw.VPMULHUW128{},
+		&pmulhuw.VPMULHUW256{},
 		// addss
 		&addss.ADDSS128{},
 		&addss.VADDSS128{},

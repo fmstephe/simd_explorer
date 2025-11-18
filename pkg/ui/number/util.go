@@ -73,6 +73,15 @@ func ToUint16(bytes []byte) uint16 {
 	return endian.Uint16(bytes)
 }
 
+func ToUint16Slice(bytes []byte) []uint16 {
+	ret := []uint16{}
+	for i := 0; i < len(bytes); i += 2 {
+		ret = append(ret, ToUint16(bytes[i:]))
+	}
+
+	return ret
+}
+
 func ToInt16(bytes []byte) int16 {
 	return int16(ToUint64(bytes))
 }
