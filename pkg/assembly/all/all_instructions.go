@@ -27,6 +27,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/mulss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/orps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgb"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhuw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psadbw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
@@ -234,6 +235,10 @@ func Instructions() []assembly.Instruction {
 		&pavgb.PAVGB128{},
 		&pavgb.VPAVGB128{},
 		&pavgb.VPAVGB256{},
+		// pavgw
+		&pavgw.PAVGW128{},
+		&pavgw.VPAVGW128{},
+		&pavgw.VPAVGW256{},
 	}
 }
 
