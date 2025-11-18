@@ -40,6 +40,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/xorps"
 )
 
 func Instructions() []assembly.Instruction {
@@ -76,6 +77,10 @@ func Instructions() []assembly.Instruction {
 		&orps.ORPS128{},
 		&orps.VORPS128{},
 		&orps.VORPS256{},
+		// xorps
+		&xorps.XORPS128{},
+		&xorps.VXORPS128{},
+		&xorps.VXORPS256{},
 		// andnps
 		&andnps.ANDNPS128{},
 		&andnps.VANDNPS128{},
