@@ -29,6 +29,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxub"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pminub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhuw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psadbw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
@@ -244,6 +245,10 @@ func Instructions() []assembly.Instruction {
 		&pmaxub.PMAXUB128{},
 		&pmaxub.VPMAXUB128{},
 		&pmaxub.VPMAXUB256{},
+		// pminub
+		&pminub.PMINUB128{},
+		&pminub.VPMINUB128{},
+		&pminub.VPMINUB256{},
 	}
 }
 
