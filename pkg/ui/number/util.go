@@ -3,6 +3,7 @@ package number
 import (
 	"encoding/binary"
 	"math"
+	"strings"
 )
 
 // Convenient collection of number<->bytes conversion functions
@@ -183,4 +184,12 @@ func Uint8ToBytes(val byte) []byte {
 
 func Int8ToBytes(val int8) []byte {
 	return Uint8ToBytes(uint8(val))
+}
+
+func normaliseNegatives(val string) string {
+	pVal := strings.ReplaceAll(val, "-", "")
+	if strings.Count(val, "-")%2 == 0 {
+		return pVal
+	}
+	return "-" + pVal
 }

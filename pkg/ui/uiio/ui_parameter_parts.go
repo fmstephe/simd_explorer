@@ -77,6 +77,14 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 	// the logs
 	for _, part := range pParts.allParts {
 		part.setChangedFunc(func(txt string) {
+			if normalised, changed := partConverter.Normalised(txt); changed {
+				// If normalisation changed the text value -
+				// set it again with the normalised value.
+				// Carefully avoid any of the other processing
+				// here.
+				part.setText(normalised)
+				return
+			}
 			// If the part's txt is an unstable value, then warn the user by setting background to yellow.
 			// This won't help colourblind users, but we can resolve that later if needed.
 			if !partConverter.IsStable(txt) {

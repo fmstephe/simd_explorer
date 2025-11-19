@@ -66,6 +66,11 @@ func (c *FloatConverter) BytesToString(bytes []byte) string {
 	return c.float64ToString(val)
 }
 
+func (c *FloatConverter) Normalised(txt string) (normalised string, changed bool) {
+	normalised = normaliseNegatives(txt)
+	return normalised, normalised != txt
+}
+
 func (c *FloatConverter) IsStable(txt string) bool {
 	f := c.mustStringToFloat64(txt)
 	txt2 := c.float64ToString(f)
@@ -77,7 +82,8 @@ func (c *FloatConverter) IsStable(txt string) bool {
 // InputFieldInteger accepts unsigned integers.
 func (c *FloatConverter) InputAcceptor() func(string, rune) bool {
 	return func(txt string, _ rune) bool {
-		_, err := c.stringToFloat64(txt)
+		normalised, _ := c.Normalised(txt)
+		_, err := c.stringToFloat64(normalised)
 		return err == nil
 	}
 }

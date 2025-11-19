@@ -74,6 +74,11 @@ func (c *IntConverter) BytesToString(bytes []byte) string {
 	return c.int64ToString(val)
 }
 
+func (c *IntConverter) Normalised(txt string) (normalised string, changed bool) {
+	normalised = normaliseNegatives(txt)
+	return normalised, normalised != txt
+}
+
 func (c *IntConverter) IsStable(_ string) bool {
 	return true
 }
@@ -81,7 +86,8 @@ func (c *IntConverter) IsStable(_ string) bool {
 // InputFieldInteger accepts unsigned integers.
 func (c *IntConverter) InputAcceptor() func(string, rune) bool {
 	return func(txt string, _ rune) bool {
-		_, err := c.stringToInt64(txt)
+		normalised, _ := c.Normalised(txt)
+		_, err := c.stringToInt64(normalised)
 		return err == nil
 	}
 }

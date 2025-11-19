@@ -79,6 +79,12 @@ func (c *UintConverter) BytesToString(bytes []byte) string {
 	return c.uint64ToString(val)
 }
 
+// Normalisation is mostly about processing "-" signs in the value.
+// Since we don't allow "-" in uint values we don't do anything here.
+func (c *UintConverter) Normalised(txt string) (normalised string, changed bool) {
+	return txt, false
+}
+
 func (c *UintConverter) IsStable(_ string) bool {
 	return true
 }
@@ -86,7 +92,8 @@ func (c *UintConverter) IsStable(_ string) bool {
 // InputFieldInteger accepts unsigned integers.
 func (c *UintConverter) InputAcceptor() func(string, rune) bool {
 	return func(txt string, _ rune) bool {
-		_, err := c.stringToUint64(txt)
+		normalised, _ := c.Normalised(txt)
+		_, err := c.stringToUint64(normalised)
 		return err == nil
 	}
 }
