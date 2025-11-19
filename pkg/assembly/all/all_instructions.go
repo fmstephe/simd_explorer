@@ -28,6 +28,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/orps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgw"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxsw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pminub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhuw"
@@ -249,6 +250,10 @@ func Instructions() []assembly.Instruction {
 		&pminub.PMINUB128{},
 		&pminub.VPMINUB128{},
 		&pminub.VPMINUB256{},
+		// pmaxsw
+		&pmaxsw.PMAXSW128{},
+		&pmaxsw.VPMAXSW128{},
+		&pmaxsw.VPMAXSW256{},
 	}
 }
 

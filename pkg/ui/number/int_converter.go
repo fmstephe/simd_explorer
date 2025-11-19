@@ -79,6 +79,7 @@ func (c *IntConverter) IsStable(_ string) bool {
 }
 
 // InputFieldInteger accepts unsigned integers.
+// TODO we need to accept a naked '-' sign. Otherwise it's impossible to input a negative number starting with '-'
 func (c *IntConverter) InputAcceptor() func(string, rune) bool {
 	return func(txt string, _ rune) bool {
 		_, err := c.stringToInt64(txt)
