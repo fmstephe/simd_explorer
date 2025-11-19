@@ -79,7 +79,6 @@ func (c *IntConverter) IsStable(_ string) bool {
 }
 
 // InputFieldInteger accepts unsigned integers.
-// TODO we need to accept a naked '-' sign. Otherwise it's impossible to input a negative number starting with '-'
 func (c *IntConverter) InputAcceptor() func(string, rune) bool {
 	return func(txt string, _ rune) bool {
 		_, err := c.stringToInt64(txt)
@@ -99,6 +98,12 @@ func (c *IntConverter) stringToInt64(txt string) (int64, error) {
 	txt = strings.TrimSpace(txt)
 	if txt == "" {
 		// If the value of the field is empty default it to 0
+		return 0, nil
+	}
+	if txt == "-" {
+		// We allow a hanging '-', it's not a valid int but if we
+		// don't parse it the user can't type any negative int value,
+		// which necessarily _must_ start with a single '-'
 		return 0, nil
 	}
 	return strconv.ParseInt(txt, c.base, c.bitWidth)
