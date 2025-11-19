@@ -34,6 +34,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pminsw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pminub"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pmovmskb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhuw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psadbw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
@@ -295,6 +296,9 @@ func Instructions() []assembly.Instruction {
 		&pinsrw.VPINSRW128FIVE_IDX{},
 		&pinsrw.VPINSRW128SIX_IDX{},
 		&pinsrw.VPINSRW128SEVEN_IDX{},
+		// pmovmskb
+		&pmovmskb.PMOVMSKB128{},
+		&pmovmskb.VPMOVMSKB128{},
 	}
 }
 
