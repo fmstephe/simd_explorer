@@ -40,6 +40,8 @@ func hasFeature(feature string) bool {
 	switch feature {
 	case "SSE", "SSE2":
 		return cpu.X86.HasSSE2
+	case "SSE4.1":
+		return cpu.X86.HasSSE41
 	case "AVX":
 		return cpu.X86.HasAVX
 	case "AVX2":

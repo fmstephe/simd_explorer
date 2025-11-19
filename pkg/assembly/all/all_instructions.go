@@ -28,6 +28,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/orps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgw"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pextrw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxsw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pminsw"
@@ -259,6 +260,24 @@ func Instructions() []assembly.Instruction {
 		&pminsw.PMINSW128{},
 		&pminsw.VPMINSW128{},
 		&pminsw.VPMINSW256{},
+		// pextrw
+		&pextrw.PEXTRW128ZERO_IDX{},
+		&pextrw.PEXTRW128ONE_IDX{},
+		&pextrw.PEXTRW128TWO_IDX{},
+		&pextrw.PEXTRW128THREE_IDX{},
+		&pextrw.PEXTRW128FOUR_IDX{},
+		&pextrw.PEXTRW128FIVE_IDX{},
+		&pextrw.PEXTRW128SIX_IDX{},
+		&pextrw.PEXTRW128SEVEN_IDX{},
+		// pextrw
+		&pextrw.VPEXTRW128ZERO_IDX{},
+		&pextrw.VPEXTRW128ONE_IDX{},
+		&pextrw.VPEXTRW128TWO_IDX{},
+		&pextrw.VPEXTRW128THREE_IDX{},
+		&pextrw.VPEXTRW128FOUR_IDX{},
+		&pextrw.VPEXTRW128FIVE_IDX{},
+		&pextrw.VPEXTRW128SIX_IDX{},
+		&pextrw.VPEXTRW128SEVEN_IDX{},
 	}
 }
 
