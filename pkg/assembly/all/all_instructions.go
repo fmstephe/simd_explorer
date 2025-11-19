@@ -30,6 +30,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxsw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxub"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pminsw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pminub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhuw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psadbw"
@@ -254,6 +255,10 @@ func Instructions() []assembly.Instruction {
 		&pmaxsw.PMAXSW128{},
 		&pmaxsw.VPMAXSW128{},
 		&pmaxsw.VPMAXSW256{},
+		// pminsw
+		&pminsw.PMINSW128{},
+		&pminsw.VPMINSW128{},
+		&pminsw.VPMINSW256{},
 	}
 }
 
