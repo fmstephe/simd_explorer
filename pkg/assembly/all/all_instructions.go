@@ -49,6 +49,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/ucomiss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/unpckhps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vbroadcast"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vinsertf128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
@@ -305,6 +306,9 @@ func Instructions() []assembly.Instruction {
 		&vbroadcast.VBROADCASTSS256M32{},
 		&vbroadcast.VBROADCASTSD256M64{},
 		&vbroadcast.VBROADCASTSF128256M128{},
+		// finsertf128
+		&vinsertf128.VINSERTF128256ZERO{},
+		&vinsertf128.VINSERTF128256ONE{},
 	}
 }
 
