@@ -57,6 +57,8 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vperm2f128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermilps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestpd"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/xorps"
 )
 
@@ -352,6 +354,12 @@ func Instructions() []assembly.Instruction {
 		&vperm2f128.VPERM2F128128ZEROED_HIGHB{},
 		&vperm2f128.VPERM2F128128LOWA_ZEROED{},
 		&vperm2f128.VPERM2F128128ZEROED_ZEROED{},
+		// vtestps
+		&vtestps.VTESTPS128{},
+		&vtestps.VTESTPS256{},
+		// vtestpd
+		&vtestpd.VTESTPD128{},
+		&vtestpd.VTESTPD256{},
 	}
 }
 
