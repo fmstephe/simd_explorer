@@ -55,6 +55,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vperm2f128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermilps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/xorps"
 )
@@ -339,6 +340,18 @@ func Instructions() []assembly.Instruction {
 		&vpermilps.VPERMILPS256ALL_TWO{},
 		&vpermilps.VPERMILPS256ALL_THREE{},
 		&vpermilps.VPERMILPS256REVERSE{},
+		// vperm2f128
+		&vperm2f128.VPERM2F128128LOWA_HIGHA{},
+		&vperm2f128.VPERM2F128128LOWB_HIGHB{},
+		&vperm2f128.VPERM2F128128LOWA_HIGHB{},
+		&vperm2f128.VPERM2F128128LOWB_HIGHA{},
+		&vperm2f128.VPERM2F128128LOWA_LOWA{},
+		&vperm2f128.VPERM2F128128HIGHA_HIGHA{},
+		&vperm2f128.VPERM2F128128LOWB_LOWB{},
+		&vperm2f128.VPERM2F128128HIGHB_HIGHB{},
+		&vperm2f128.VPERM2F128128ZEROED_HIGHB{},
+		&vperm2f128.VPERM2F128128LOWA_ZEROED{},
+		&vperm2f128.VPERM2F128128ZEROED_ZEROED{},
 	}
 }
 
