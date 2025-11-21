@@ -14,6 +14,8 @@ We see here an outline of the naming convention for these files.
 
 The generator file is named 'asm_{instruction_name}_{size_class}.go'. It should be noted that some instructions have variations for the same size class. For example VPBROADCAST has a version with two arguments at each size class, but also can take a third argument 'k', so our naming convention in full is 'asm_{instruction}_{size_class}[_{discriminator}]?.go', where for our example 'discriminator' would be 'k'. The discriminator value should be avoided when it is not required.
 
+The arguments, and return value, are always expressed as pointers to the desired value. This is done to make the assembly code look the same for everything, and isn't intended as a good way to write assembly functions generally. Numerical arguments are typically named 'vals' (vector) and 'scalar' (single value) , where there are multiple numerical inputs they are named 'vals1', 'vals2' etc. Mask inputs should be named 'mask', control inputs should be named 'control', predicate inputs should be named 'pred'. The final return value should always be named 'ret'.
+
 ## Method Stub File
 
 The stub file is likewise named 'stub_{instruction_name}_{size_class}[_{discriminator}]?.go'. The stub method is named '{instruction_name}{size_class}[{discriminator}]?(...)', where the first letter of Discriminator is capitalised to approximate camel case.
@@ -44,6 +46,8 @@ type VMOVHPS64 struct {
 }
 
 The type has no fields and is completely stateless. The declared type implements the assembly.Instruction interface using pointer receivers.
+
+The types of the parameters (defined in the Inputs() and Output() methods) generally have obvious types. But any input which is used as a mask, control vector, predicate, or any non-numeric data, should be type uint with base 16 'number.NewUintParameter(fullWidth, partWidth, 16)'.
 
 ## Register Usage Conventions
 
