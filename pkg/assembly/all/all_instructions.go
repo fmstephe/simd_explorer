@@ -55,6 +55,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermilps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/xorps"
 )
 
@@ -323,6 +324,21 @@ func Instructions() []assembly.Instruction {
 		&vmaskmov.VMASKMOVPD128STORE{},
 		&vmaskmov.VMASKMOVPD256STORE{},
 		&vmaskmov.VMASKMOVPD256STORE{},
+		// vpermilps
+		&vpermilps.VPERMILPS128{},
+		&vpermilps.VPERMILPS128IDENTITY{},
+		&vpermilps.VPERMILPS128ALL_ZERO{},
+		&vpermilps.VPERMILPS128ALL_ONE{},
+		&vpermilps.VPERMILPS128ALL_TWO{},
+		&vpermilps.VPERMILPS128ALL_THREE{},
+		&vpermilps.VPERMILPS128REVERSE{},
+		&vpermilps.VPERMILPS256{},
+		&vpermilps.VPERMILPS256IDENTITY{},
+		&vpermilps.VPERMILPS256ALL_ZERO{},
+		&vpermilps.VPERMILPS256ALL_ONE{},
+		&vpermilps.VPERMILPS256ALL_TWO{},
+		&vpermilps.VPERMILPS256ALL_THREE{},
+		&vpermilps.VPERMILPS256REVERSE{},
 	}
 }
 
