@@ -20,3 +20,13 @@ Some instructions are intentionally omitted because their effects are not easily
   - Store fence/ordering primitive. Cross thread memory ordering instruction. Very subtle and hard to demonstrate.
 - CVTPI2PS, CVTTPS2PI
   - MMX↔SSE bridge conversions. Not supported by Go’s assembler (and AVO).
+
+# TODO
+
+Revisit the way we manage arguments to assembly functions. We may want to use letters A, B... instead of numbers 1, 2... for repeated argument names. We may want to actually return our return values, instead of making them pointer arguments which get set as a side-effect of the function.
+
+We should also revisit how we deal with ZF,CF etc. flags. Right now we combine them into a single integer value - and the result is really hard to interpret.
+
+We should give the parameters useful names in the UI itself - right now there is text headings, but they seem totally unhelpful.
+
+We should make the assembly function itself viewable inside the actual demo - this could be challenging to implement, because the assembly takes up a lot of screen space.
