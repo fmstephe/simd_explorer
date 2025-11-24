@@ -25,6 +25,9 @@ func main() {
 	Comment("Store result")
 	VMOVDQA(regY1, Mem{Base: ret})
 
+	Comment("YMM/ZMM processing complete, clear upper half of YMM registers")
+	VZEROUPPER()
+
 	Comment("Return from function")
 	RET()
 

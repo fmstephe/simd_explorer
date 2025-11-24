@@ -22,6 +22,9 @@ func main() {
 	Comment("Masked store: store selected single-precision elements to memory (ret)")
 	VMASKMOVPS(regMask, regVals, Mem{Base: ret})
 
+	Comment("YMM/ZMM processing complete, clear upper half of YMM registers")
+	VZEROUPPER()
+
 	Comment("Return from function")
 	RET()
 

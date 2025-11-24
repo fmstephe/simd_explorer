@@ -19,5 +19,8 @@ TEXT ·vinsertf128256Zero(SB), NOSPLIT, $0-24
 	// Write result into return memory address
 	VMOVDQA Y0, (DX)
 
+	// YMM/ZMM processing complete, clear upper half of YMM registers
+	VZEROUPPER
+
 	// Return from function
 	RET

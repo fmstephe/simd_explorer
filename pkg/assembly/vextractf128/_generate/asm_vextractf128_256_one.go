@@ -19,6 +19,9 @@ func main() {
 	Comment("Extract upper 128-bit lane (imm8=1) directly to memory")
 	VEXTRACTF128(U8(0x01), regY1, Mem{Base: ret})
 
+	Comment("YMM/ZMM processing complete, clear upper half of YMM registers")
+	VZEROUPPER()
+
 	Comment("Return from function")
 	RET()
 

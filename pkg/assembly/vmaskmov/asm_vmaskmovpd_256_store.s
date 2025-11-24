@@ -17,9 +17,6 @@ TEXT ·vmaskmovpd256Store(SB), NOSPLIT, $0-24
 	// Masked store: store selected double-precision elements to memory (ret)
 	VMASKMOVPD Y1, Y0, (DX)
 
-
-
-
 	// YMM/ZMM processing complete, clear upper half of YMM registers
 	VZEROUPPER
 

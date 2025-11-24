@@ -35,6 +35,9 @@ func main() {
 	ORL(z32, c32)
 	MOVL(c32, Mem{Base: ret})
 
+	Comment("YMM/ZMM processing complete, clear upper half of YMM registers")
+	VZEROUPPER()
+
 	Comment("Return from function")
 	RET()
 

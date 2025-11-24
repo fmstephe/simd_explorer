@@ -26,5 +26,8 @@ TEXT ·vtestps256(SB), NOSPLIT, $0-24
 	ORL     AX, CX
 	MOVL    CX, (DX)
 
+	// YMM/ZMM processing complete, clear upper half of YMM registers
+	VZEROUPPER
+
 	// Return from function
 	RET

@@ -15,5 +15,8 @@ TEXT ·vextractf128256One(SB), NOSPLIT, $0-16
 	// Extract upper 128-bit lane (imm8=1) directly to memory
 	VEXTRACTF128 $0x01, Y0, (CX)
 
+	// YMM/ZMM processing complete, clear upper half of YMM registers
+	VZEROUPPER
+
 	// Return from function
 	RET
