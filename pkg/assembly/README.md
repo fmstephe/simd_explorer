@@ -72,3 +72,12 @@ which performs x1 = x1 - x2 is preferred here, and matches both our preferred ou
 VSUBPS(regX2, regX1, regX1)
 
 is preferred when the output register can be specified independently.
+
+# VZEROUPPER
+
+After completing any 256 or 512 bit operations we should _always_ invoke VZEROUPPER. This is required to break possible dependencies with the upper parts of the YMM registers. This is a behavioural oddity with Intel CPUs treatment of uncleared YMM registers. The performance penalty of failing to do this is _severe_ when 128 bit SSE instructions are executed after 256/512 bit instructions. Any assembly function which uses 256/512 bit SIMD operations should invoke VZEROUPPER before returning. We should likely _never_ mix 128 and 256/512 bit operations in a single function. It's also good to have this as an implementation note for people learning SIMD assembly for the first time. This needs an explanatory comment, and should look like
+
+// YMM/ZMM processing complete, clear upper half of YMM registers
+VZEROUPPER
+
+For some clarification around the need and historical background of this please see this discussion [thread](https://community.intel.com/t5/Intel-ISA-Extensions/What-is-the-status-of-VZEROUPPER-use/td-p/1098375)
