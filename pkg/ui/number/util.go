@@ -138,6 +138,14 @@ func Uint64ToBytes(val uint64) []byte {
 	return bytes
 }
 
+func Uint64SliceToBytes(vals []uint64) []byte {
+	bytes := []byte{}
+	for _, val := range vals {
+		bytes = endian.AppendUint64(bytes, val)
+	}
+	return bytes
+}
+
 func Int64ToBytes(val int64) []byte {
 	return Uint64ToBytes(uint64(val))
 }

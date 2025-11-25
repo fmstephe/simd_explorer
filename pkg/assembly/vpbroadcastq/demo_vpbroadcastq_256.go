@@ -1,0 +1,52 @@
+package vpbroadcastq
+
+import (
+	_ "embed"
+
+	"github.com/fmstephe/simd_explorer/pkg/assembly/asmutil"
+	"github.com/fmstephe/simd_explorer/pkg/ui/number"
+)
+
+//go:embed asm_vpbroadcastq_256.s
+var assemblyVpbroadcastq256 string
+
+//go:embed stub_vpbroadcastq_256.go
+var stubVpbroadcastq256 string
+
+type VPBROADCASTQ256 struct {
+}
+
+func (v *VPBROADCASTQ256) Inputs() []*number.Parameter {
+	return []*number.Parameter{number.NewUintParameter(64, 64, 16)}
+}
+
+func (v *VPBROADCASTQ256) Output() *number.Parameter {
+	return number.NewUintParameter(256, 64, 16)
+}
+
+func (v *VPBROADCASTQ256) Name() string {
+	return "VPBROADCASTQ YMM (256 bit)"
+}
+
+func (v *VPBROADCASTQ256) Description() string {
+	return "Broadcast 64-bit scalar to all lanes of YMM."
+}
+
+func (v *VPBROADCASTQ256) Stub() string {
+	return stubVpbroadcastq256
+}
+
+func (v *VPBROADCASTQ256) Assembly() string {
+	return assemblyVpbroadcastq256
+}
+
+func (v *VPBROADCASTQ256) Run(inputs [][]byte) (output []byte) {
+	q := number.ToUint64(inputs[0])
+	ret := [4]uint64{}
+	vpbroadcastq256(q, &ret)
+	return number.Uint64SliceToBytes(ret[:])
+}
+
+func (v *VPBROADCASTQ256) Supported() bool {
+	return asmutil.IsSupported(v.Assembly())
+}
