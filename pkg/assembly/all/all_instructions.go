@@ -55,6 +55,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vperm2f128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermilps"
@@ -75,6 +76,9 @@ func Instructions() []assembly.Instruction {
 		// vpbroadcastw
 		&vpbroadcastw.VPBROADCASTW128{},
 		&vpbroadcastw.VPBROADCASTW256{},
+		// vpbroadcastd
+		&vpbroadcastd.VPBROADCASTD128{},
+		&vpbroadcastd.VPBROADCASTD256{},
 		// vmovdqu
 		&vmovdqu.VMOVDQU128{},
 		&vmovdqu.VMOVDQU256{},
