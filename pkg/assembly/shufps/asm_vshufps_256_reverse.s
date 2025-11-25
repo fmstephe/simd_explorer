@@ -23,4 +23,6 @@ TEXT ·vshufps256Reverse(SB), NOSPLIT, $0-24
 	VMOVDQA Y0, (DX)
 
 	// Return from function
+	// YMM/ZMM processing complete, clear upper half of YMM registers
+	VZEROUPPER
 	RET

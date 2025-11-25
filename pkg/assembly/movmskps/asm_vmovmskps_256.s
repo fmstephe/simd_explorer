@@ -18,5 +18,8 @@ TEXT ·vmovmskps256(SB), NOSPLIT, $0-16
 	// Write sign mask values into return memory address
 	MOVL AX, (CX)
 
+	// YMM/ZMM processing complete, clear upper half of YMM registers
+	VZEROUPPER
+
 	// Return from function
 	RET

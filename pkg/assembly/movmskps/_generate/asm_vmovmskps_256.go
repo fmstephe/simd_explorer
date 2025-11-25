@@ -23,6 +23,8 @@ func main() {
 	Comment("Write sign mask values into return memory address")
 	MOVL(reg32, Mem{Base: ret})
 
+	Comment("YMM/ZMM processing complete, clear upper half of YMM registers")
+	VZEROUPPER()
 	Comment("Return from function")
 	RET()
 

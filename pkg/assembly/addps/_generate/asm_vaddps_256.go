@@ -28,6 +28,9 @@ func main() {
 	Comment("Write results into return memory address")
 	VMOVDQA(regY1, Mem{Base: ret})
 
+	Comment("YMM/ZMM processing complete, clear upper half of YMM registers")
+	VZEROUPPER()
+
 	RET()
 
 	// generate!
