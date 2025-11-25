@@ -20,6 +20,9 @@ func main() {
 	Comment("Write contents of YMM register into memory region")
 	VMOVDQU(regY, Mem{Base: ret})
 
+	Comment("YMM/ZMM processing complete, clear upper half of YMM registers")
+	VZEROUPPER()
+
 	RET()
 
 	// generate!

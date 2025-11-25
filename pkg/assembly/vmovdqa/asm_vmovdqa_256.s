@@ -14,4 +14,7 @@ TEXT ·vmovdqa256(SB), NOSPLIT, $0-16
 
 	// Write contents of YMM register into memory region
 	VMOVDQA Y0, (CX)
+
+	// YMM/ZMM processing complete, clear upper half of YMM registers
+	VZEROUPPER
 	RET

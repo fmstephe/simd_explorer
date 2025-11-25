@@ -24,6 +24,9 @@ func main() {
 	Comment("Write contents of the second YMM register into memory region")
 	VMOVAPS(regY2, Mem{Base: ret})
 
+	Comment("YMM/ZMM processing complete, clear upper half of YMM registers")
+	VZEROUPPER()
+
 	RET()
 
 	// generate!

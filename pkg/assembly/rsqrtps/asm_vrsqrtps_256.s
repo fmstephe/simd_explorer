@@ -18,5 +18,8 @@ TEXT ·vrsqrtps256(SB), NOSPLIT, $0-16
 	// Write results into return memory address
 	VMOVDQA Y0, (CX)
 
+	// YMM/ZMM processing complete, clear upper half of YMM registers
+	VZEROUPPER
+
 	// Return from function
 	RET
