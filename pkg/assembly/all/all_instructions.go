@@ -52,6 +52,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vbroadcasti128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vextractf128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vinsertf128"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vinserti128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmaskmov"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
@@ -86,6 +87,9 @@ func Instructions() []assembly.Instruction {
 		&vpbroadcastq.VPBROADCASTQ256{},
 		// vbroadcasti128
 		&vbroadcasti128.VBROADCASTI128256{},
+		// vinserti128
+		&vinserti128.VINSERTI128256ZERO{},
+		&vinserti128.VINSERTI128256ONE{},
 		// vmovdqu
 		&vmovdqu.VMOVDQU128{},
 		&vmovdqu.VMOVDQU256{},
