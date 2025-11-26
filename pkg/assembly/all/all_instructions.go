@@ -66,6 +66,8 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/xorps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vgatherdpd"
+	// NOTE: keep v* imports grouped
 )
 
 func Instructions() []assembly.Instruction {
@@ -383,6 +385,9 @@ func Instructions() []assembly.Instruction {
 		// vtestpd
 		&vtestpd.VTESTPD128{},
 		&vtestpd.VTESTPD256{},
+		// vgatherdpd
+		&vgatherdpd.VGATHERDPD128{},
+		&vgatherdpd.VGATHERDPD256{},
 	}
 }
 
