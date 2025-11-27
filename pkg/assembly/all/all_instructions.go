@@ -70,6 +70,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vgatherqdp"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherdd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherqd"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherdq"
 	// NOTE: keep v* imports grouped
 )
 
@@ -400,6 +401,9 @@ func Instructions() []assembly.Instruction {
 		// vpgatherqd
 		&vpgatherqd.VPGATHERQD128{},
 		&vpgatherqd.VPGATHERQD256{},
+		// vpgatherdq
+		&vpgatherdq.VPGATHERDQ128{},
+		&vpgatherdq.VPGATHERDQ256{},
 	}
 }
 
