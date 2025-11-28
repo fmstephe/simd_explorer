@@ -33,7 +33,7 @@ func (v *MULSS128) Name() string {
 }
 
 func (v *MULSS128) Description() string {
-	return "TODO"
+	return "Multiply scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *MULSS128) Stub() string {

@@ -33,7 +33,7 @@ func (v *VMINPS128) Name() string {
 }
 
 func (v *VMINPS128) Description() string {
-	return "TODO"
+	return "AVX form: compute element-wise minimum of packed single-precision floats in XMM."
 }
 
 func (v *VMINPS128) Stub() string {

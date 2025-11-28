@@ -33,7 +33,7 @@ func (v *COMISS128) Name() string {
 }
 
 func (v *COMISS128) Description() string {
-	return "TODO"
+	return "Ordered compare scalar single-precision (lane 0); writes EFLAGS (ZF, PF, CF)."
 }
 
 func (v *COMISS128) Stub() string {

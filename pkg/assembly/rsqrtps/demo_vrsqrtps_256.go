@@ -32,7 +32,7 @@ func (v *VRSQRTPS256) Name() string {
 }
 
 func (v *VRSQRTPS256) Description() string {
-	return "TODO"
+	return "AVX form: reciprocal square root estimate of packed single-precision floats in YMM, lane-wise."
 }
 
 func (v *VRSQRTPS256) Stub() string {

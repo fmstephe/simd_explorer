@@ -33,7 +33,7 @@ func (v *SUBSS128) Name() string {
 }
 
 func (v *SUBSS128) Description() string {
-	return "TODO"
+	return "Subtract scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *SUBSS128) Stub() string {

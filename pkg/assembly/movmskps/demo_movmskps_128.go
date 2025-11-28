@@ -32,7 +32,7 @@ func (v *MOVMSKPS128) Name() string {
 }
 
 func (v *MOVMSKPS128) Description() string {
-	return "TODO"
+	return "Extract sign bits of packed single-precision elements in XMM into a 4-bit integer mask."
 }
 
 func (v *MOVMSKPS128) Stub() string {

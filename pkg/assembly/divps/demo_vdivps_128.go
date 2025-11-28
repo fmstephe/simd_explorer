@@ -33,7 +33,7 @@ func (v *VDIVPS128) Name() string {
 }
 
 func (v *VDIVPS128) Description() string {
-	return "TODO"
+	return "AVX form: divide packed single-precision floats in XMM, lane-wise (dest / src)."
 }
 
 func (v *VDIVPS128) Stub() string {

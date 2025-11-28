@@ -29,7 +29,7 @@ func (v *VPBROADCASTB128) Name() string {
 }
 
 func (v *VPBROADCASTB128) Description() string {
-	return "TODO"
+	return "Broadcast an 8-bit value to all 16 byte elements in XMM."
 }
 
 func (v *VPBROADCASTB128) Stub() string {

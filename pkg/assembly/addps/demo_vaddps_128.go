@@ -33,7 +33,7 @@ func (v *VADDPS128) Name() string {
 }
 
 func (v *VADDPS128) Description() string {
-	return "TODO"
+	return "AVX form: add packed single-precision floats in XMM, lane-wise."
 }
 
 func (v *VADDPS128) Stub() string {

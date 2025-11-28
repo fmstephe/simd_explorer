@@ -33,7 +33,7 @@ func (v *MINSS128) Name() string {
 }
 
 func (v *MINSS128) Description() string {
-	return "TODO"
+	return "Compute minimum of scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *MINSS128) Stub() string {

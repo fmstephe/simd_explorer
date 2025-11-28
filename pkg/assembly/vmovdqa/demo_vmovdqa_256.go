@@ -32,7 +32,7 @@ func (v *VMOVDQA256) Name() string {
 }
 
 func (v *VMOVDQA256) Description() string {
-	return "TODO"
+	return "Aligned move of packed 32-bit integers between memory and YMM; copies data unchanged."
 }
 
 func (v *VMOVDQA256) Stub() string {

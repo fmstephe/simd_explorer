@@ -32,7 +32,7 @@ func (v *RCPSS128) Name() string {
 }
 
 func (v *RCPSS128) Description() string {
-	return "TODO"
+	return "Compute reciprocal estimate of scalar single-precision (lane 0); upper lanes pass through."
 }
 
 func (v *RCPSS128) Stub() string {

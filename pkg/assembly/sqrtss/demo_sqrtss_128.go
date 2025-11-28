@@ -32,7 +32,7 @@ func (v *SQRTSS128) Name() string {
 }
 
 func (v *SQRTSS128) Description() string {
-	return "TODO"
+	return "Compute square root of scalar single-precision (lane 0); upper lanes pass through."
 }
 
 func (v *SQRTSS128) Stub() string {

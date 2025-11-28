@@ -33,7 +33,7 @@ func (v *DIVSS128) Name() string {
 }
 
 func (v *DIVSS128) Description() string {
-	return "TODO"
+	return "Divide scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *DIVSS128) Stub() string {

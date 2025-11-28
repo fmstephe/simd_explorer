@@ -33,7 +33,7 @@ func (v *VSUBSS128) Name() string {
 }
 
 func (v *VSUBSS128) Description() string {
-	return "TODO"
+	return "AVX form: subtract scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *VSUBSS128) Stub() string {

@@ -33,7 +33,7 @@ func (v *MAXSS128) Name() string {
 }
 
 func (v *MAXSS128) Description() string {
-	return "TODO"
+	return "Compute maximum of scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *MAXSS128) Stub() string {

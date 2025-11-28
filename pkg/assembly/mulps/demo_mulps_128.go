@@ -33,7 +33,7 @@ func (v *MULPS128) Name() string {
 }
 
 func (v *MULPS128) Description() string {
-	return "TODO"
+	return "Multiply packed single-precision floats in XMM, lane-wise."
 }
 
 func (v *MULPS128) Stub() string {

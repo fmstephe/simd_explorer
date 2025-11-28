@@ -32,7 +32,7 @@ func (v *VRCPPS128) Name() string {
 }
 
 func (v *VRCPPS128) Description() string {
-	return "TODO"
+	return "AVX form: reciprocal estimate of packed single-precision floats in XMM, lane-wise."
 }
 
 func (v *VRCPPS128) Stub() string {

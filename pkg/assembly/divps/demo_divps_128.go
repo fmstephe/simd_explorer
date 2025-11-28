@@ -33,7 +33,7 @@ func (v *DIVPS128) Name() string {
 }
 
 func (v *DIVPS128) Description() string {
-	return "TODO"
+	return "Divide packed single-precision floats in XMM, lane-wise (dest / src)."
 }
 
 func (v *DIVPS128) Stub() string {

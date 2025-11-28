@@ -32,7 +32,7 @@ func (v *RSQRTPS128) Name() string {
 }
 
 func (v *RSQRTPS128) Description() string {
-	return "TODO"
+	return "Compute reciprocal square root estimate of packed single-precision floats in XMM, lane-wise."
 }
 
 func (v *RSQRTPS128) Stub() string {

@@ -33,7 +33,7 @@ func (v *SUBPS128) Name() string {
 }
 
 func (v *SUBPS128) Description() string {
-	return "TODO"
+	return "Subtract packed single-precision floats in XMM, lane-wise (dest - src)."
 }
 
 func (v *SUBPS128) Stub() string {

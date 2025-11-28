@@ -29,7 +29,7 @@ func (v *VPBROADCASTB512) Name() string {
 }
 
 func (v *VPBROADCASTB512) Description() string {
-	return "TODO"
+	return "Broadcast an 8-bit value to all 64 byte elements in ZMM."
 }
 
 func (v *VPBROADCASTB512) Stub() string {

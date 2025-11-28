@@ -33,7 +33,7 @@ func (v *CMPSS128NEQ) Name() string {
 }
 
 func (v *CMPSS128NEQ) Description() string {
-	return "TODO"
+	return "Compare scalar single-precision (lane 0) for inequality; result mask in lane 0, upper lanes pass through."
 }
 
 func (v *CMPSS128NEQ) Stub() string {

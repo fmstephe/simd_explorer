@@ -33,7 +33,7 @@ func (v *VDIVSS128) Name() string {
 }
 
 func (v *VDIVSS128) Description() string {
-	return "TODO"
+	return "AVX form: divide scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *VDIVSS128) Stub() string {

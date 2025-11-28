@@ -33,7 +33,7 @@ func (v *VMAXPS128) Name() string {
 }
 
 func (v *VMAXPS128) Description() string {
-	return "TODO"
+	return "AVX form: compute element-wise maximum of packed single-precision floats in XMM."
 }
 
 func (v *VMAXPS128) Stub() string {

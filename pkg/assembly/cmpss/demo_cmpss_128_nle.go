@@ -33,7 +33,7 @@ func (v *CMPSS128NLE) Name() string {
 }
 
 func (v *CMPSS128NLE) Description() string {
-	return "TODO"
+	return "Compare scalar single-precision (lane 0) for not-less-or-equal; result mask in lane 0, upper lanes pass through."
 }
 
 func (v *CMPSS128NLE) Stub() string {

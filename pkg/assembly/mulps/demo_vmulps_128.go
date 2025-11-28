@@ -33,7 +33,7 @@ func (v *VMULPS128) Name() string {
 }
 
 func (v *VMULPS128) Description() string {
-	return "TODO"
+	return "AVX form: multiply packed single-precision floats in XMM, lane-wise."
 }
 
 func (v *VMULPS128) Stub() string {

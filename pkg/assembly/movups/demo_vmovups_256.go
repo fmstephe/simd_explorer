@@ -32,7 +32,7 @@ func (v *VMOVUPS256) Name() string {
 }
 
 func (v *VMOVUPS256) Description() string {
-	return "TODO"
+	return "Unaligned move of packed single-precision floats between memory and YMM; copies data unchanged."
 }
 
 func (v *VMOVUPS256) Stub() string {

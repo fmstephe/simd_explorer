@@ -33,7 +33,7 @@ func (v *VMINSS128) Name() string {
 }
 
 func (v *VMINSS128) Description() string {
-	return "TODO"
+	return "AVX form: compute minimum of scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *VMINSS128) Stub() string {

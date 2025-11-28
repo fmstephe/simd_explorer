@@ -33,7 +33,7 @@ func (v *VCMPSS128UNORD) Name() string {
 }
 
 func (v *VCMPSS128UNORD) Description() string {
-	return "TODO"
+	return "AVX form: compare scalar single-precision (lane 0) for unordered (either operand is NaN); result mask in lane 0."
 }
 
 func (v *VCMPSS128UNORD) Stub() string {

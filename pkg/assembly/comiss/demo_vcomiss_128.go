@@ -33,7 +33,7 @@ func (v *VCOMISS128) Name() string {
 }
 
 func (v *VCOMISS128) Description() string {
-	return "TODO"
+	return "AVX form: ordered compare scalar single-precision (lane 0); writes EFLAGS (ZF, PF, CF)."
 }
 
 func (v *VCOMISS128) Stub() string {

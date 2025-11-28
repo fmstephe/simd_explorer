@@ -32,7 +32,7 @@ func (v *VSQRTPS128) Name() string {
 }
 
 func (v *VSQRTPS128) Description() string {
-	return "TODO"
+	return "AVX form: compute square root of packed single-precision floats in XMM, lane-wise."
 }
 
 func (v *VSQRTPS128) Stub() string {

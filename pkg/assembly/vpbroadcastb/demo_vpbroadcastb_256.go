@@ -29,7 +29,7 @@ func (v *VPBROADCASTB256) Name() string {
 }
 
 func (v *VPBROADCASTB256) Description() string {
-	return "TODO"
+	return "Broadcast an 8-bit value to all 32 byte elements in YMM."
 }
 
 func (v *VPBROADCASTB256) Stub() string {

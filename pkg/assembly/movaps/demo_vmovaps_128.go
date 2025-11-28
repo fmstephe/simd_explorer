@@ -32,7 +32,7 @@ func (v *VMOVAPS128) Name() string {
 }
 
 func (v *VMOVAPS128) Description() string {
-	return "TODO"
+	return "Aligned move of packed single-precision floats between memory and XMM; copies data unchanged."
 }
 
 func (v *VMOVAPS128) Stub() string {

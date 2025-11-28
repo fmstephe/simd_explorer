@@ -33,7 +33,7 @@ func (v *ADDPS128) Name() string {
 }
 
 func (v *ADDPS128) Description() string {
-	return "TODO"
+	return "Add packed single-precision floats in XMM, lane-wise."
 }
 
 func (v *ADDPS128) Stub() string {

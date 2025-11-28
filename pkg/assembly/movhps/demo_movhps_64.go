@@ -33,7 +33,7 @@ func (v *MOVHPS64) Name() string {
 }
 
 func (v *MOVHPS64) Description() string {
-	return "TODO"
+	return "Move two floats into the high 64 bits of XMM; low 64 supplied separately."
 }
 
 func (v *MOVHPS64) Stub() string {

@@ -33,7 +33,7 @@ func (v *VMAXPS256) Name() string {
 }
 
 func (v *VMAXPS256) Description() string {
-	return "TODO"
+	return "AVX form: compute element-wise maximum of packed single-precision floats in YMM."
 }
 
 func (v *VMAXPS256) Stub() string {

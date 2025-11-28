@@ -32,7 +32,7 @@ func (v *VRSQRTSS128) Name() string {
 }
 
 func (v *VRSQRTSS128) Description() string {
-	return "TODO"
+	return "AVX form: reciprocal square root estimate of scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *VRSQRTSS128) Stub() string {

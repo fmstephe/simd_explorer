@@ -33,7 +33,7 @@ func (v *VMULSS128) Name() string {
 }
 
 func (v *VMULSS128) Description() string {
-	return "TODO"
+	return "AVX form: multiply scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *VMULSS128) Stub() string {

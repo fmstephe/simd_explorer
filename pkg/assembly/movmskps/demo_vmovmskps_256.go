@@ -32,7 +32,7 @@ func (v *VMOVMSKPS256) Name() string {
 }
 
 func (v *VMOVMSKPS256) Description() string {
-	return "TODO"
+	return "Extract sign bits of packed single-precision elements in YMM into an 8-bit integer mask."
 }
 
 func (v *VMOVMSKPS256) Stub() string {

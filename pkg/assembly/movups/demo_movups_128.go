@@ -32,7 +32,7 @@ func (v *MOVUPS128) Name() string {
 }
 
 func (v *MOVUPS128) Description() string {
-	return "TODO"
+	return "Unaligned move of packed single-precision floats between memory and XMM; copies data unchanged."
 }
 
 func (v *MOVUPS128) Stub() string {

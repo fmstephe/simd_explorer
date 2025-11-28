@@ -32,7 +32,7 @@ func (v *VRCPSS128) Name() string {
 }
 
 func (v *VRCPSS128) Description() string {
-	return "TODO"
+	return "AVX form: reciprocal estimate of scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *VRCPSS128) Stub() string {

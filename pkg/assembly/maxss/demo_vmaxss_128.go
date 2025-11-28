@@ -33,7 +33,7 @@ func (v *VMAXSS128) Name() string {
 }
 
 func (v *VMAXSS128) Description() string {
-	return "TODO"
+	return "AVX form: compute maximum of scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *VMAXSS128) Stub() string {

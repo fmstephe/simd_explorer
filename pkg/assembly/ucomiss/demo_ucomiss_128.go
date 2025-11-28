@@ -33,7 +33,7 @@ func (v *UCOMISS128) Name() string {
 }
 
 func (v *UCOMISS128) Description() string {
-	return "TODO"
+	return "Unordered compare scalar single-precision (lane 0); writes EFLAGS (ZF, PF, CF). Upper lanes are ignored."
 }
 
 func (v *UCOMISS128) Stub() string {

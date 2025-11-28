@@ -32,7 +32,7 @@ func (v *VSQRTSS128) Name() string {
 }
 
 func (v *VSQRTSS128) Description() string {
-	return "TODO"
+	return "AVX form: compute square root of scalar single-precision (lane 0); upper lanes pass through."
 }
 
 func (v *VSQRTSS128) Stub() string {

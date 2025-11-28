@@ -32,7 +32,7 @@ func (v *MOVLHPS64) Name() string {
 }
 
 func (v *MOVLHPS64) Description() string {
-	return "TODO"
+	return "Move low 64 bits of source into high 64 of destination XMM; low 64 preserved."
 }
 
 func (v *MOVLHPS64) Stub() string {

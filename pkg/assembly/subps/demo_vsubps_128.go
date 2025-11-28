@@ -33,7 +33,7 @@ func (v *VSUBPS128) Name() string {
 }
 
 func (v *VSUBPS128) Description() string {
-	return "TODO"
+	return "AVX form: subtract packed single-precision floats in XMM, lane-wise (dest - src)."
 }
 
 func (v *VSUBPS128) Stub() string {

@@ -33,7 +33,7 @@ func (v *MINPS128) Name() string {
 }
 
 func (v *MINPS128) Description() string {
-	return "TODO"
+	return "Compute element-wise minimum of packed single-precision floats in XMM."
 }
 
 func (v *MINPS128) Stub() string {

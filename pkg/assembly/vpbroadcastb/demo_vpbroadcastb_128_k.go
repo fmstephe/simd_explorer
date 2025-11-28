@@ -32,7 +32,7 @@ func (v *VPBROADCASTB128K) Name() string {
 }
 
 func (v *VPBROADCASTB128K) Description() string {
-	return "TODO"
+	return "AVX-512 form: broadcast an 8-bit value to XMM byte elements; lanes written are selected by writemask k."
 }
 
 func (v *VPBROADCASTB128K) Stub() string {

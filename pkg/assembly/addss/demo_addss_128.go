@@ -33,7 +33,7 @@ func (v *ADDSS128) Name() string {
 }
 
 func (v *ADDSS128) Description() string {
-	return "TODO"
+	return "Add scalar single-precision (lane 0); upper lanes pass through from the first operand."
 }
 
 func (v *ADDSS128) Stub() string {

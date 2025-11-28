@@ -32,7 +32,7 @@ func (v *VMOVSS128) Name() string {
 }
 
 func (v *VMOVSS128) Description() string {
-	return "TODO"
+	return "AVX form: move scalar single-precision (lane 0) between XMM and memory; upper lanes pass through."
 }
 
 func (v *VMOVSS128) Stub() string {

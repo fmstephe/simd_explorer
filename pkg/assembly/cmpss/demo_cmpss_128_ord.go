@@ -33,7 +33,7 @@ func (v *CMPSS128ORD) Name() string {
 }
 
 func (v *CMPSS128ORD) Description() string {
-	return "TODO"
+	return "Compare scalar single-precision (lane 0) for ordered (neither operand is NaN); result mask in lane 0."
 }
 
 func (v *CMPSS128ORD) Stub() string {

@@ -32,7 +32,7 @@ func (v *SQRTPS128) Name() string {
 }
 
 func (v *SQRTPS128) Description() string {
-	return "TODO"
+	return "Compute square root of packed single-precision floats in XMM, lane-wise."
 }
 
 func (v *SQRTPS128) Stub() string {

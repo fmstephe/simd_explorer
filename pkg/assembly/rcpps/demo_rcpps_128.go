@@ -32,7 +32,7 @@ func (v *RCPPS128) Name() string {
 }
 
 func (v *RCPPS128) Description() string {
-	return "TODO"
+	return "Compute reciprocal estimate of packed single-precision floats in XMM, lane-wise."
 }
 
 func (v *RCPPS128) Stub() string {

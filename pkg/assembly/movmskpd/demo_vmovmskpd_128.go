@@ -32,7 +32,7 @@ func (v *VMOVMSKPD128) Name() string {
 }
 
 func (v *VMOVMSKPD128) Description() string {
-	return "TODO"
+	return "Extract sign bits of packed double-precision elements in XMM into a 2-bit integer mask."
 }
 
 func (v *VMOVMSKPD128) Stub() string {

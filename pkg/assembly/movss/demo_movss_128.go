@@ -32,7 +32,7 @@ func (v *MOVSS128) Name() string {
 }
 
 func (v *MOVSS128) Description() string {
-	return "TODO"
+	return "Move scalar single-precision (lane 0) between XMM and memory; upper lanes pass through."
 }
 
 func (v *MOVSS128) Stub() string {

@@ -33,7 +33,7 @@ func (v *VMOVLPS64) Name() string {
 }
 
 func (v *VMOVLPS64) Description() string {
-	return "TODO"
+	return "AVX form: move two floats into the low 64 bits of XMM; high 64 supplied separately."
 }
 
 func (v *VMOVLPS64) Stub() string {

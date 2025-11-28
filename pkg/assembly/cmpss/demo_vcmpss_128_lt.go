@@ -33,7 +33,7 @@ func (v *VCMPSS128LT) Name() string {
 }
 
 func (v *VCMPSS128LT) Description() string {
-	return "TODO"
+	return "AVX form: compare scalar single-precision (lane 0) for less-than; result mask in lane 0, upper lanes pass through."
 }
 
 func (v *VCMPSS128LT) Stub() string {

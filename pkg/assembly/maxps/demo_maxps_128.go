@@ -33,7 +33,7 @@ func (v *MAXPS128) Name() string {
 }
 
 func (v *MAXPS128) Description() string {
-	return "TODO"
+	return "Compute element-wise maximum of packed single-precision floats in XMM."
 }
 
 func (v *MAXPS128) Stub() string {
