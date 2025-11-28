@@ -52,6 +52,8 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vbroadcasti128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vextractf128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vextracti128"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vgatherdpd"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vgatherqdp"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vinsertf128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vinserti128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmaskmov"
@@ -63,14 +65,12 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vperm2f128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermilps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherdd"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherdq"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherqd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/xorps"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/vgatherdpd"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/vgatherqdp"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherdd"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherqd"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherdq"
 	// NOTE: keep v* imports grouped
 )
 
@@ -351,10 +351,8 @@ func Instructions() []assembly.Instruction {
 		&vmaskmov.VMASKMOVPS128LOAD{},
 		&vmaskmov.VMASKMOVPD128LOAD{},
 		&vmaskmov.VMASKMOVPD256LOAD{},
-		&vmaskmov.VMASKMOVPD256LOAD{},
 		&vmaskmov.VMASKMOVPS128STORE{},
 		&vmaskmov.VMASKMOVPD128STORE{},
-		&vmaskmov.VMASKMOVPD256STORE{},
 		&vmaskmov.VMASKMOVPD256STORE{},
 		// vpermilps
 		&vpermilps.VPERMILPS128{},

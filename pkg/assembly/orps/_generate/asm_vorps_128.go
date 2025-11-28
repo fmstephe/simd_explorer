@@ -16,7 +16,7 @@ func main() {
 	Comment("Load vals1 into XMM register")
 	regX1 := XMM()
 	VMOVDQA(Mem{Base: vals1}, regX1)
-	
+
 	Comment("Load vals2 into XMM register")
 	regX2 := XMM()
 	VMOVDQA(Mem{Base: vals2}, regX2)

@@ -16,7 +16,7 @@ func main() {
 	Comment("Load vals1 into YMM register")
 	regY1 := YMM()
 	VMOVDQA(Mem{Base: vals1}, regY1)
-	
+
 	Comment("Load vals2 into YMM register")
 	regY2 := YMM()
 	VMOVDQA(Mem{Base: vals2}, regY2)

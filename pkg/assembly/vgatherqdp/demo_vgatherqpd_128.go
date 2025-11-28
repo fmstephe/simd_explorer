@@ -19,10 +19,10 @@ type VGATHERQPD128 struct {
 
 func (v *VGATHERQPD128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(512, 64),   // base memory (8 x f64)
-		number.NewIntParameter(128, 64, 10), // indices (i64; lower 2 used)
+		number.NewFloatParameter(512, 64),    // base memory (8 x f64)
+		number.NewIntParameter(128, 64, 10),  // indices (i64; lower 2 used)
 		number.NewUintParameter(128, 64, 16), // mask (MSB of each f64 lane)
-		number.NewFloatParameter(128, 64),   // src/dst (merge for masked-off lanes)
+		number.NewFloatParameter(128, 64),    // src/dst (merge for masked-off lanes)
 	}
 }
 
