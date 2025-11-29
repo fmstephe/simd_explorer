@@ -71,7 +71,7 @@ func mustValidTotalBitWidth(totalBitWidth int) {
 	switch totalBitWidth {
 	case 8, 16, 32, 64, 128, 256, 512:
 	default:
-		panic(fmt.Errorf("Unsupported total bit width: %d", totalBitWidth))
+		panic(fmt.Errorf("unsupported total bit width: %d", totalBitWidth))
 	}
 }
 
@@ -79,6 +79,6 @@ func mustValidPartBitWidth(partBitWidth int) {
 	switch partBitWidth {
 	case 8, 16, 32, 64:
 	default:
-		panic(fmt.Errorf("Unsupported bit width value: %d", partBitWidth))
+		panic(fmt.Errorf("unsupported bit width value: %d", partBitWidth))
 	}
 }

@@ -101,7 +101,7 @@ func (c *UintConverter) InputAcceptor() func(string, rune) bool {
 func (c *UintConverter) mustStringToUint64(txt string) uint64 {
 	val, err := c.stringToUint64(txt)
 	if err != nil {
-		panic(fmt.Errorf("Unexpected value %q found in register input, expecting unsigned integer with bitWidth %d: %s", txt, c.bitWidth, err))
+		panic(fmt.Errorf("unexpected value %q found in register input, expecting unsigned integer with bitWidth %d: %s", txt, c.bitWidth, err))
 	}
 	return val
 }

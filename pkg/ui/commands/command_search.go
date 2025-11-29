@@ -106,13 +106,6 @@ func (s *CommandSearch) GetBox() *tview.Flex {
 	return s.flex
 }
 
-func deleteFrom(txt string) string {
-	if txt == "" {
-		return ""
-	}
-	return txt[:len(txt)-1]
-}
-
 func buildInstructionMap(instructions []assembly.Instruction) (instMap map[string]assembly.Instruction, instNames []string) {
 	instMap = map[string]assembly.Instruction{}
 	instNames = []string{}

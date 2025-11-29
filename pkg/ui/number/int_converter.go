@@ -95,7 +95,7 @@ func (c *IntConverter) InputAcceptor() func(string, rune) bool {
 func (c *IntConverter) mustStringToInt64(txt string) int64 {
 	val, err := c.stringToInt64(txt)
 	if err != nil {
-		panic(fmt.Errorf("Unexpected value %q found in register input, expecting signed integer with bitWidth %d: %s", txt, c.bitWidth, err))
+		panic(fmt.Errorf("unexpected value %q found in register input, expecting signed integer with bitWidth %d: %s", txt, c.bitWidth, err))
 	}
 	return val
 }

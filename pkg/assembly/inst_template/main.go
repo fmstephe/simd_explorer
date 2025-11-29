@@ -42,9 +42,11 @@ func main() {
 	pkg := strings.ToLower(*flagPackage)
 	instructionLower := strings.ToLower(*flagInstruction)
 	instructionUpper := strings.ToUpper(*flagInstruction)
+	//lint:ignore SA1019 The strings Title function is good enough for our limited purposes
 	instructionTitle := strings.Title(instructionLower)
 	sizeClass := *flagSizeClass
 	discriminatorLower := strings.ToLower(*flagDiscriminator)
+	//lint:ignore SA1019 The strings Title function is good enough for our limited purposes
 	discriminatorTitle := strings.Title(discriminatorLower)
 	discriminatorUpper := strings.ToUpper(*flagDiscriminator)
 	// File names without discriminator unless needed

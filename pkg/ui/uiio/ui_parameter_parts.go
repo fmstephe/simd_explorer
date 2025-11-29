@@ -100,10 +100,6 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 	return pParts
 }
 
-func (in *UIParameterParts) receiverId() uuid.UUID {
-	return in.id
-}
-
 func (in *UIParameterParts) GetBox() *tview.Grid {
 	return in.box
 }

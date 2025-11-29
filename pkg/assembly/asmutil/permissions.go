@@ -53,6 +53,6 @@ func hasFeature(feature string) bool {
 	case "AVX512BW":
 		return cpu.X86.HasAVX512BW
 	default:
-		panic(fmt.Errorf("Unknown feature name %q", feature))
+		panic(fmt.Errorf("unknown feature name %q", feature))
 	}
 }

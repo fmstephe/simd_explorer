@@ -91,7 +91,7 @@ func (c *FloatConverter) InputAcceptor() func(string, rune) bool {
 func (c *FloatConverter) mustStringToFloat64(txt string) float64 {
 	val, err := c.stringToFloat64(txt)
 	if err != nil {
-		panic(fmt.Errorf("Unexpected value %q found in register input, expecting unsigned integer with bitWidth %d: %s", txt, c.bitWidth, err))
+		panic(fmt.Errorf("unexpected value %q found in register input, expecting unsigned integer with bitWidth %d: %s", txt, c.bitWidth, err))
 	}
 	return val
 }
