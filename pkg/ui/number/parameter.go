@@ -3,16 +3,22 @@ package number
 import "fmt"
 
 type Parameter struct {
+	name          string
 	totalBitWidth int
 	parts         int
 	converter     Converter
 }
 
 func NewUintParameter(totalBitWidth, partBitWidth, base int) *Parameter {
+	return NewNamedUintParameter("", totalBitWidth, partBitWidth, base)
+}
+
+func NewNamedUintParameter(name string, totalBitWidth, partBitWidth, base int) *Parameter {
 	parts := partsCount(partBitWidth, totalBitWidth)
 	converter := NewUintConverter(partBitWidth, base)
 
 	return &Parameter{
+		name:          name,
 		totalBitWidth: totalBitWidth,
 		parts:         parts,
 		converter:     converter,
@@ -20,10 +26,15 @@ func NewUintParameter(totalBitWidth, partBitWidth, base int) *Parameter {
 }
 
 func NewIntParameter(totalBitWidth, partBitWidth, base int) *Parameter {
+	return NewNamedIntParameter("", totalBitWidth, partBitWidth, base)
+}
+
+func NewNamedIntParameter(name string, totalBitWidth, partBitWidth, base int) *Parameter {
 	parts := partsCount(partBitWidth, totalBitWidth)
 	converter := NewIntConverter(partBitWidth, base)
 
 	return &Parameter{
+		name:          name,
 		totalBitWidth: totalBitWidth,
 		parts:         parts,
 		converter:     converter,
@@ -31,6 +42,10 @@ func NewIntParameter(totalBitWidth, partBitWidth, base int) *Parameter {
 }
 
 func NewFloatParameter(totalBitWidth, partBitWidth int) *Parameter {
+	return NewNamedFloatParameter("", totalBitWidth, partBitWidth)
+}
+
+func NewNamedFloatParameter(name string, totalBitWidth, partBitWidth int) *Parameter {
 	parts := partsCount(partBitWidth, totalBitWidth)
 	converter := NewFloatConverter(partBitWidth)
 
@@ -39,6 +54,10 @@ func NewFloatParameter(totalBitWidth, partBitWidth int) *Parameter {
 		parts:         parts,
 		converter:     converter,
 	}
+}
+
+func (p *Parameter) Name() string {
+	return p.name
 }
 
 func (p *Parameter) TotalBitWidth() int {
