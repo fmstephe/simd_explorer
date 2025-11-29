@@ -3,10 +3,13 @@ package number
 import "fmt"
 
 type Parameter struct {
+	// Immutable
 	name          string
 	totalBitWidth int
 	parts         int
 	converter     Converter
+	// Mutable
+	data []byte
 }
 
 func NewUintParameter(totalBitWidth, partBitWidth, base int) *Parameter {
@@ -84,22 +87,35 @@ func (p *Parameter) Base() int {
 	return p.converter.GetBase()
 }
 
+func (p *Parameter) SetData(bytes []byte) {
+	p.data = bytes
+}
+
+func (p *Parameter) DataAsString() string {
+	return p.converter.BytesToString(p.data)
+}
+
+// This method is stateless and will be removed shortly
 func (p *Parameter) StringToBytes(txt string) []byte {
 	return p.converter.StringToBytes(txt)
 }
 
+// This method is stateless and will be removed shortly
 func (p *Parameter) BytesToString(bytes []byte) string {
 	return p.converter.BytesToString(bytes)
 }
 
+// TODO have a think about where this method should live
 func (p *Parameter) Normalised(txt string) (string, bool) {
 	return p.converter.Normalised(txt)
 }
 
+// TODO have a think about where this method should live
 func (p *Parameter) IsStable(txt string) bool {
 	return p.converter.IsStable(txt)
 }
 
+// TODO have a think about where this method should live
 func (p *Parameter) InputAcceptor() func(string, rune) bool {
 	return p.converter.InputAcceptor()
 }
