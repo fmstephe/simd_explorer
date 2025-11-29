@@ -15,17 +15,28 @@ var assemblyVpmulhuw256 string
 var stubVpmulhuw256 string
 
 type VPMULHUW256 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVPMULHUW256() *VPMULHUW256 {
+	return &VPMULHUW256{
+		vals1: number.NewNamedUintParameter("vals1", 256, 16, 10),
+		vals2: number.NewNamedUintParameter("vals2", 256, 16, 10),
+		ret:   number.NewNamedUintParameter("ret", 256, 16, 10),
+	}
 }
 
 func (v *VPMULHUW256) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(256, 16, 10),
-		number.NewUintParameter(256, 16, 10),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *VPMULHUW256) Output() *number.Parameter {
-	return number.NewUintParameter(256, 16, 10)
+	return v.ret
 }
 
 func (v *VPMULHUW256) Name() string {
@@ -44,23 +55,21 @@ func (v *VPMULHUW256) Assembly() string {
 	return assemblyVpmulhuw256
 }
 
-func (v *VPMULHUW256) Run(inputs [][]byte) (output []byte) {
-	u1 := [16]uint16{}
-	copy(u1[:], number.ToUint16Slice(inputs[0]))
-	u2 := [16]uint16{}
-	copy(u2[:], number.ToUint16Slice(inputs[1]))
+func (v *VPMULHUW256) Run(_ [][]byte) (output []byte) {
+	vals1 := [16]uint16{}
+	copy(vals1[:], number.ToUint16Slice(v.vals1.FlatData()))
+	vals2 := [16]uint16{}
+	copy(vals2[:], number.ToUint16Slice(v.vals2.FlatData()))
 
 	ret := [16]uint16{}
 
-	vpmulhuw256(&u1, &u2, &ret)
+	vpmulhuw256(&vals1, &vals2, &ret)
 
-	log.Printf("VPMULHUW256 input %v %v output %v", u1, u2, ret)
+	log.Printf("VPMULHUW256 input %v %v output %v", vals1, vals2, ret)
 
-	bytes := []byte{}
-	for _, v := range ret {
-		bytes = append(bytes, number.Uint16ToBytes(v)...)
-	}
-	return bytes
+	out := number.Uint16SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPMULHUW256) Supported() bool {

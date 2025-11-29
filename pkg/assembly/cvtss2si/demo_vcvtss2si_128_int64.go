@@ -15,16 +15,25 @@ var assemblyVcvtss2si128Int64 string
 var stubVcvtss2si128Int64 string
 
 type VCVTSS2SI128INT64 struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVCVTSS2SI128INT64() *VCVTSS2SI128INT64 {
+	return &VCVTSS2SI128INT64{
+		vals: number.NewNamedFloatParameter("vals", 128, 32),
+		ret:  number.NewNamedIntParameter("ret", 64, 64, 10),
+	}
 }
 
 func (v *VCVTSS2SI128INT64) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(128, 32),
+		v.vals,
 	}
 }
 
 func (v *VCVTSS2SI128INT64) Output() *number.Parameter {
-	return number.NewIntParameter(64, 64, 10)
+	return v.ret
 }
 
 func (v *VCVTSS2SI128INT64) Name() string {
@@ -43,9 +52,9 @@ func (v *VCVTSS2SI128INT64) Assembly() string {
 	return assemblyVcvtss2si128Int64
 }
 
-func (v *VCVTSS2SI128INT64) Run(inputs [][]byte) (output []byte) {
+func (v *VCVTSS2SI128INT64) Run(_ [][]byte) (output []byte) {
 	vals := [4]float32{}
-	copy(vals[:], number.ToFloat32Slice(inputs[0]))
+	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 
 	var ret int64
 
@@ -53,7 +62,9 @@ func (v *VCVTSS2SI128INT64) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("VCVTSS2SI128INT64 input %v output %d", vals, ret)
 
-	return number.Int64ToBytes(ret)
+	out := number.Int64ToBytes(ret)
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VCVTSS2SI128INT64) Supported() bool {

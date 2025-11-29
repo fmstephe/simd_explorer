@@ -15,16 +15,25 @@ var assemblyVpermilpd256All_zero string
 var stubVpermilpd256All_zero string
 
 type VPERMILPD256ALL_ZERO struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVPERMILPD256ALL_ZERO() *VPERMILPD256ALL_ZERO {
+	return &VPERMILPD256ALL_ZERO{
+		vals: number.NewNamedFloatParameter("vals", 256, 64),
+		ret:  number.NewNamedFloatParameter("ret", 256, 64),
+	}
 }
 
 func (v *VPERMILPD256ALL_ZERO) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(256, 64),
+		v.vals,
 	}
 }
 
 func (v *VPERMILPD256ALL_ZERO) Output() *number.Parameter {
-	return number.NewFloatParameter(256, 64)
+	return v.ret
 }
 
 func (v *VPERMILPD256ALL_ZERO) Name() string {
@@ -43,9 +52,9 @@ func (v *VPERMILPD256ALL_ZERO) Assembly() string {
 	return assemblyVpermilpd256All_zero
 }
 
-func (v *VPERMILPD256ALL_ZERO) Run(inputs [][]byte) (output []byte) {
+func (v *VPERMILPD256ALL_ZERO) Run(_ [][]byte) (output []byte) {
 	vals := [4]float64{}
-	copy(vals[:], number.ToFloat64Slice(inputs[0]))
+	copy(vals[:], number.ToFloat64Slice(v.vals.FlatData()))
 
 	ret := [4]float64{}
 
@@ -53,7 +62,9 @@ func (v *VPERMILPD256ALL_ZERO) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("VPERMILPD256ALL_ZERO vals %v ret %v", vals, ret)
 
-	return number.Float64SliceToBytes(ret[:])
+	out := number.Float64SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPERMILPD256ALL_ZERO) Supported() bool {

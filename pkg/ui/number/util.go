@@ -183,6 +183,14 @@ func Uint16ToBytes(val uint16) []byte {
 	return bytes
 }
 
+func Uint16SliceToBytes(vals []uint16) []byte {
+	bytes := []byte{}
+	for _, val := range vals {
+		bytes = endian.AppendUint16(bytes, val)
+	}
+	return bytes
+}
+
 func Int16ToBytes(val int16) []byte {
 	return Uint16ToBytes(uint16(val))
 }

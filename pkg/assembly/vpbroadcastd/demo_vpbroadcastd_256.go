@@ -14,14 +14,23 @@ var assemblyVpbroadcastd256 string
 var stubVpbroadcastd256 string
 
 type VPBROADCASTD256 struct {
+	scalar *number.Parameter
+	ret    *number.Parameter
+}
+
+func NewVPBROADCASTD256() *VPBROADCASTD256 {
+	return &VPBROADCASTD256{
+		scalar: number.NewNamedUintParameter("scalar", 32, 32, 16),
+		ret:    number.NewNamedUintParameter("ret", 256, 32, 16),
+	}
 }
 
 func (v *VPBROADCASTD256) Inputs() []*number.Parameter {
-	return []*number.Parameter{number.NewUintParameter(32, 32, 16)}
+	return []*number.Parameter{v.scalar}
 }
 
 func (v *VPBROADCASTD256) Output() *number.Parameter {
-	return number.NewUintParameter(256, 32, 16)
+	return v.ret
 }
 
 func (v *VPBROADCASTD256) Name() string {
@@ -40,11 +49,13 @@ func (v *VPBROADCASTD256) Assembly() string {
 	return assemblyVpbroadcastd256
 }
 
-func (v *VPBROADCASTD256) Run(inputs [][]byte) (output []byte) {
-	d := number.ToUint32(inputs[0])
+func (v *VPBROADCASTD256) Run(_ [][]byte) (output []byte) {
+	d := number.ToUint32(v.scalar.FlatData())
 	ret := [8]uint32{}
 	vpbroadcastd256(d, &ret)
-	return number.Uint32SliceToBytes(ret[:])
+	out := number.Uint32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPBROADCASTD256) Supported() bool {

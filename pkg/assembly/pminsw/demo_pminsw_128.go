@@ -15,17 +15,28 @@ var assemblyPminsw128 string
 var stubPminsw128 string
 
 type PMINSW128 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewPMINSW128() *PMINSW128 {
+	return &PMINSW128{
+		vals1: number.NewNamedIntParameter("vals1", 128, 16, 10),
+		vals2: number.NewNamedIntParameter("vals2", 128, 16, 10),
+		ret:   number.NewNamedIntParameter("ret", 128, 16, 10),
+	}
 }
 
 func (v *PMINSW128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewIntParameter(128, 16, 10),
-		number.NewIntParameter(128, 16, 10),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *PMINSW128) Output() *number.Parameter {
-	return number.NewIntParameter(128, 16, 10)
+	return v.ret
 }
 
 func (v *PMINSW128) Name() string {
@@ -44,11 +55,11 @@ func (v *PMINSW128) Assembly() string {
 	return assemblyPminsw128
 }
 
-func (v *PMINSW128) Run(inputs [][]byte) (output []byte) {
+func (v *PMINSW128) Run(_ [][]byte) (output []byte) {
 	vals1 := [8]int16{}
-	copy(vals1[:], number.ToInt16Slice(inputs[0]))
+	copy(vals1[:], number.ToInt16Slice(v.vals1.FlatData()))
 	vals2 := [8]int16{}
-	copy(vals2[:], number.ToInt16Slice(inputs[1]))
+	copy(vals2[:], number.ToInt16Slice(v.vals2.FlatData()))
 
 	ret := [8]int16{}
 
@@ -56,7 +67,9 @@ func (v *PMINSW128) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("PMINSW128 input %v %v output %v", vals1, vals2, ret)
 
-	return number.Int16SliceToBytes(ret[:])
+	out := number.Int16SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *PMINSW128) Supported() bool {

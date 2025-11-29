@@ -15,17 +15,28 @@ var assemblyVinsertf128256Zero string
 var stubVinsertf128256Zero string
 
 type VINSERTF128256ZERO struct {
+	vals  *number.Parameter
+	block *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVINSERTF128256ZERO() *VINSERTF128256ZERO {
+	return &VINSERTF128256ZERO{
+		vals:  number.NewNamedFloatParameter("vals", 256, 32),
+		block: number.NewNamedFloatParameter("block", 128, 32),
+		ret:   number.NewNamedFloatParameter("ret", 256, 32),
+	}
 }
 
 func (v *VINSERTF128256ZERO) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(256, 32),
-		number.NewFloatParameter(128, 32),
+		v.vals,
+		v.block,
 	}
 }
 
 func (v *VINSERTF128256ZERO) Output() *number.Parameter {
-	return number.NewFloatParameter(256, 32)
+	return v.ret
 }
 
 func (v *VINSERTF128256ZERO) Name() string {
@@ -44,19 +55,21 @@ func (v *VINSERTF128256ZERO) Assembly() string {
 	return assemblyVinsertf128256Zero
 }
 
-func (v *VINSERTF128256ZERO) Run(inputs [][]byte) (output []byte) {
-	base := [8]float32{}
-	copy(base[:], number.ToFloat32Slice(inputs[0]))
+func (v *VINSERTF128256ZERO) Run(_ [][]byte) (output []byte) {
+	vals := [8]float32{}
+	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	block := [4]float32{}
-	copy(block[:], number.ToFloat32Slice(inputs[1]))
+	copy(block[:], number.ToFloat32Slice(v.block.FlatData()))
 
 	ret := [8]float32{}
 
-	vinsertf128256Zero(&base, &block, &ret)
+	vinsertf128256Zero(&vals, &block, &ret)
 
-	log.Printf("VINSERTF128256ZERO base %v block %v output %v", base, block, ret)
+	log.Printf("VINSERTF128256ZERO vals %v block %v output %v", vals, block, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VINSERTF128256ZERO) Supported() bool {

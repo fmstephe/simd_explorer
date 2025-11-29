@@ -15,19 +15,27 @@ var assemblyVpgatherqd128 string
 var stubVpgatherqd128 string
 
 type VPGATHERQD128 struct {
+	base  *number.Parameter
+	index *number.Parameter
+	mask  *number.Parameter
+	ret   *number.Parameter
 }
 
-func (v *VPGATHERQD128) Inputs() []*number.Parameter {
-	return []*number.Parameter{
-		number.NewUintParameter(256, 32, 10), // base memory (8 x u32)
-		number.NewIntParameter(128, 64, 10),  // indices (i64; lower 2 used)
-		number.NewUintParameter(128, 32, 16), // mask (MSB of each dword lane)
-		number.NewUintParameter(128, 32, 10), // src/dst (merge for masked-off lanes)
+func NewVPGATHERQD128() *VPGATHERQD128 {
+	return &VPGATHERQD128{
+		base:  number.NewNamedUintParameter("base", 256, 32, 10),
+		index: number.NewNamedIntParameter("index", 128, 64, 10),
+		mask:  number.NewNamedUintParameter("mask", 128, 32, 16),
+		ret:   number.NewNamedUintParameter("ret", 128, 32, 10),
 	}
 }
 
+func (v *VPGATHERQD128) Inputs() []*number.Parameter {
+	return []*number.Parameter{v.base, v.index, v.mask}
+}
+
 func (v *VPGATHERQD128) Output() *number.Parameter {
-	return number.NewUintParameter(128, 32, 10) // gathered vector
+	return v.ret
 }
 
 func (v *VPGATHERQD128) Name() string {
@@ -46,21 +54,23 @@ func (v *VPGATHERQD128) Assembly() string {
 	return assemblyVpgatherqd128
 }
 
-func (v *VPGATHERQD128) Run(inputs [][]byte) (output []byte) {
+func (v *VPGATHERQD128) Run(_ [][]byte) (output []byte) {
 	base := [8]uint32{}
-	copy(base[:], number.ToUint32Slice(inputs[0]))
+	copy(base[:], number.ToUint32Slice(v.base.FlatData()))
 	index := [2]uint64{}
-	copy(index[:], number.ToUint64Slice(inputs[1]))
+	copy(index[:], number.ToUint64Slice(v.index.FlatData()))
 	mask := [4]uint32{}
-	copy(mask[:], number.ToUint32Slice(inputs[2]))
+	copy(mask[:], number.ToUint32Slice(v.mask.FlatData()))
 	ret := [4]uint32{}
-	copy(ret[:], number.ToUint32Slice(inputs[3]))
+	copy(ret[:], number.ToUint32Slice(v.ret.FlatData()))
 
 	vpgatherqd128(&base, &index, &mask, &ret)
 
 	log.Printf("VPGATHERQD128 base %v index %v mask %v ret %v", base, index, mask, ret)
 
-	return number.Uint32SliceToBytes(ret[:])
+	out := number.Uint32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPGATHERQD128) Supported() bool {

@@ -15,16 +15,25 @@ var assemblyPextrw128Six_idx string
 var stubPextrw128Six_idx string
 
 type PEXTRW128SIX_IDX struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewPEXTRW128SIX_IDX() *PEXTRW128SIX_IDX {
+	return &PEXTRW128SIX_IDX{
+		vals: number.NewNamedUintParameter("vals", 128, 16, 10),
+		ret:  number.NewNamedUintParameter("ret", 32, 32, 10),
+	}
 }
 
 func (v *PEXTRW128SIX_IDX) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(128, 16, 10),
+		v.vals,
 	}
 }
 
 func (v *PEXTRW128SIX_IDX) Output() *number.Parameter {
-	return number.NewUintParameter(32, 32, 10)
+	return v.ret
 }
 
 func (v *PEXTRW128SIX_IDX) Name() string {
@@ -43,9 +52,9 @@ func (v *PEXTRW128SIX_IDX) Assembly() string {
 	return assemblyPextrw128Six_idx
 }
 
-func (v *PEXTRW128SIX_IDX) Run(inputs [][]byte) (output []byte) {
+func (v *PEXTRW128SIX_IDX) Run(_ [][]byte) (output []byte) {
 	vals := [8]uint16{}
-	copy(vals[:], number.ToUint16Slice(inputs[0]))
+	copy(vals[:], number.ToUint16Slice(v.vals.FlatData()))
 
 	var ret uint32
 
@@ -53,7 +62,9 @@ func (v *PEXTRW128SIX_IDX) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("PEXTRW128SIX_IDX input %v output %v", vals, ret)
 
-	return number.Uint32ToBytes(ret)
+	out := number.Uint32ToBytes(ret)
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *PEXTRW128SIX_IDX) Supported() bool {

@@ -15,16 +15,25 @@ var assemblyVmovmskpd256 string
 var stubVmovmskpd256 string
 
 type VMOVMSKPD256 struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVMOVMSKPD256() *VMOVMSKPD256 {
+	return &VMOVMSKPD256{
+		vals: number.NewNamedFloatParameter("vals", 256, 64),
+		ret:  number.NewNamedUintParameter("ret", 32, 32, 16),
+	}
 }
 
 func (v *VMOVMSKPD256) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(256, 64),
+		v.vals,
 	}
 }
 
 func (v *VMOVMSKPD256) Output() *number.Parameter {
-	return number.NewUintParameter(32, 32, 2)
+	return v.ret
 }
 
 func (v *VMOVMSKPD256) Name() string {
@@ -43,18 +52,19 @@ func (v *VMOVMSKPD256) Assembly() string {
 	return assemblyVmovmskpd256
 }
 
-func (v *VMOVMSKPD256) Run(inputs [][]byte) (output []byte) {
-	// Example arguments processing
-	floats := [4]float64{}
-	copy(floats[:], number.ToFloat64Slice(inputs[0]))
+func (v *VMOVMSKPD256) Run(_ [][]byte) (output []byte) {
+	vals := [4]float64{}
+	copy(vals[:], number.ToFloat64Slice(v.vals.FlatData()))
 
 	ret := [4]byte{}
 
-	vmovmskpd256(&floats, &ret)
+	vmovmskpd256(&vals, &ret)
 
-	log.Printf("VMOVMSKPD256 input %v output %v", floats, ret)
+	log.Printf("VMOVMSKPD256 input %v output %v", vals, ret)
 
-	return ret[:]
+	out := ret[:]
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VMOVMSKPD256) Supported() bool {

@@ -15,17 +15,28 @@ var assemblyComiss128 string
 var stubComiss128 string
 
 type COMISS128 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewCOMISS128() *COMISS128 {
+	return &COMISS128{
+		vals1: number.NewNamedFloatParameter("vals1", 128, 32),
+		vals2: number.NewNamedFloatParameter("vals2", 128, 32),
+		ret:   number.NewNamedUintParameter("ret", 32, 32, 2),
+	}
 }
 
 func (v *COMISS128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(128, 32),
-		number.NewFloatParameter(128, 32),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *COMISS128) Output() *number.Parameter {
-	return number.NewUintParameter(32, 32, 2)
+	return v.ret
 }
 
 func (v *COMISS128) Name() string {
@@ -44,23 +55,25 @@ func (v *COMISS128) Assembly() string {
 	return assemblyComiss128
 }
 
-func (v *COMISS128) Run(inputs [][]byte) (output []byte) {
-	floats1 := [4]float32{}
-	copy(floats1[:], number.ToFloat32Slice(inputs[0]))
-	floats2 := [4]float32{}
-	copy(floats2[:], number.ToFloat32Slice(inputs[1]))
+func (v *COMISS128) Run(_ [][]byte) (output []byte) {
+	vals1 := [4]float32{}
+	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
+	vals2 := [4]float32{}
+	copy(vals2[:], number.ToFloat32Slice(v.vals2.FlatData()))
 
-	flags := comiss128(&floats1, &floats2)
+	flags := comiss128(&vals1, &vals2)
 
 	log.Printf("COMISS128 input %v %v output flags=0x%08X [ZF=%d PF=%d CF=%d]",
-		floats1, floats2, flags, (flags>>16)&0xFF, (flags>>8)&0xFF, flags&0xFF)
+		vals1, vals2, flags, (flags>>16)&0xFF, (flags>>8)&0xFF, flags&0xFF)
 
-	return []byte{
+	out := []byte{
 		byte(flags),
 		byte(flags >> 8),
 		byte(flags >> 16),
 		byte(flags >> 24),
 	}
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *COMISS128) Supported() bool {

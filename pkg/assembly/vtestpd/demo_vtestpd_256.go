@@ -15,17 +15,28 @@ var assemblyVtestpd256 string
 var stubVtestpd256 string
 
 type VTESTPD256 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVTESTPD256() *VTESTPD256 {
+	return &VTESTPD256{
+		vals1: number.NewNamedFloatParameter("vals1", 256, 64),
+		vals2: number.NewNamedFloatParameter("vals2", 256, 64),
+		ret:   number.NewNamedUintParameter("ret", 32, 32, 16),
+	}
 }
 
 func (v *VTESTPD256) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(256, 64),
-		number.NewFloatParameter(256, 64),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *VTESTPD256) Output() *number.Parameter {
-	return number.NewUintParameter(32, 32, 16) // bit0=ZF, bit1=CF
+	return v.ret
 }
 
 func (v *VTESTPD256) Name() string {
@@ -44,19 +55,21 @@ func (v *VTESTPD256) Assembly() string {
 	return assemblyVtestpd256
 }
 
-func (v *VTESTPD256) Run(inputs [][]byte) (output []byte) {
-	a := [4]float64{}
-	copy(a[:], number.ToFloat64Slice(inputs[0]))
-	b := [4]float64{}
-	copy(b[:], number.ToFloat64Slice(inputs[1]))
+func (v *VTESTPD256) Run(_ [][]byte) (output []byte) {
+	vals1 := [4]float64{}
+	copy(vals1[:], number.ToFloat64Slice(v.vals1.FlatData()))
+	vals2 := [4]float64{}
+	copy(vals2[:], number.ToFloat64Slice(v.vals2.FlatData()))
 
 	var flags uint32
 
-	vtestpd256(&a, &b, &flags)
+	vtestpd256(&vals1, &vals2, &flags)
 
-	log.Printf("VTESTPD256 A %v B %v flags 0x%X", a, b, flags)
+	log.Printf("VTESTPD256 vals1 %v vals2 %v flags 0x%X", vals1, vals2, flags)
 
-	return number.Uint32ToBytes(flags)
+	out := number.Uint32ToBytes(flags)
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VTESTPD256) Supported() bool {

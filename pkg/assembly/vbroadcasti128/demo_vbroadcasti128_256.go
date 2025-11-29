@@ -15,16 +15,25 @@ var assemblyVbroadcasti128256 string
 var stubVbroadcasti128256 string
 
 type VBROADCASTI128256 struct {
+	block *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVBROADCASTI128256() *VBROADCASTI128256 {
+	return &VBROADCASTI128256{
+		block: number.NewNamedUintParameter("block", 128, 64, 16),
+		ret:   number.NewNamedUintParameter("ret", 256, 64, 16),
+	}
 }
 
 func (v *VBROADCASTI128256) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(128, 64, 16),
+		v.block,
 	}
 }
 
 func (v *VBROADCASTI128256) Output() *number.Parameter {
-	return number.NewUintParameter(256, 64, 16)
+	return v.ret
 }
 
 func (v *VBROADCASTI128256) Name() string {
@@ -43,13 +52,15 @@ func (v *VBROADCASTI128256) Assembly() string {
 	return assemblyVbroadcasti128256
 }
 
-func (v *VBROADCASTI128256) Run(inputs [][]byte) (output []byte) {
+func (v *VBROADCASTI128256) Run(_ [][]byte) (output []byte) {
 	var val [2]uint64
-	copy(val[:], number.ToUint64Slice(inputs[0]))
+	copy(val[:], number.ToUint64Slice(v.block.FlatData()))
 	var ret [4]uint64
 	vbroadcasti128256(&val, &ret)
 	log.Printf("VBROADCASTI128256 block %v output %v", val, ret)
-	return number.Uint64SliceToBytes(ret[:])
+	out := number.Uint64SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VBROADCASTI128256) Supported() bool {

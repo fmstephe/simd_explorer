@@ -15,17 +15,28 @@ var assemblyVpmaxub256 string
 var stubVpmaxub256 string
 
 type VPMAXUB256 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVPMAXUB256() *VPMAXUB256 {
+	return &VPMAXUB256{
+		vals1: number.NewNamedUintParameter("vals1", 256, 8, 10),
+		vals2: number.NewNamedUintParameter("vals2", 256, 8, 10),
+		ret:   number.NewNamedUintParameter("ret", 256, 8, 10),
+	}
 }
 
 func (v *VPMAXUB256) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(256, 8, 10),
-		number.NewUintParameter(256, 8, 10),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *VPMAXUB256) Output() *number.Parameter {
-	return number.NewUintParameter(256, 8, 10)
+	return v.ret
 }
 
 func (v *VPMAXUB256) Name() string {
@@ -44,19 +55,21 @@ func (v *VPMAXUB256) Assembly() string {
 	return assemblyVpmaxub256
 }
 
-func (v *VPMAXUB256) Run(inputs [][]byte) (output []byte) {
-	b1 := [32]uint8{}
-	copy(b1[:], inputs[0])
-	b2 := [32]uint8{}
-	copy(b2[:], inputs[1])
+func (v *VPMAXUB256) Run(_ [][]byte) (output []byte) {
+	vals1 := [32]uint8{}
+	copy(vals1[:], v.vals1.FlatData())
+	vals2 := [32]uint8{}
+	copy(vals2[:], v.vals2.FlatData())
 
 	ret := [32]uint8{}
 
-	vpmaxub256(&b1, &b2, &ret)
+	vpmaxub256(&vals1, &vals2, &ret)
 
-	log.Printf("VPMAXUB256 input %v %v output %v", b1, b2, ret)
+	log.Printf("VPMAXUB256 input %v %v output %v", vals1, vals2, ret)
 
-	return ret[:]
+	out := ret[:]
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPMAXUB256) Supported() bool {

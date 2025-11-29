@@ -15,17 +15,28 @@ var assemblyVmaskmovps128Store string
 var stubVmaskmovps128Store string
 
 type VMASKMOVPS128STORE struct {
+	vals *number.Parameter
+	mask *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVMASKMOVPS128STORE() *VMASKMOVPS128STORE {
+	return &VMASKMOVPS128STORE{
+		vals: number.NewNamedFloatParameter("vals", 128, 32),
+		mask: number.NewNamedUintParameter("mask", 128, 32, 16),
+		ret:  number.NewNamedFloatParameter("ret", 128, 32),
+	}
 }
 
 func (v *VMASKMOVPS128STORE) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(128, 32),    // src
-		number.NewUintParameter(128, 32, 16), // mask (sign bit selects, 16)
+		v.vals,
+		v.mask,
 	}
 }
 
 func (v *VMASKMOVPS128STORE) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 32) // memory after store
+	return v.ret
 }
 
 func (v *VMASKMOVPS128STORE) Name() string {
@@ -44,19 +55,21 @@ func (v *VMASKMOVPS128STORE) Assembly() string {
 	return assemblyVmaskmovps128Store
 }
 
-func (v *VMASKMOVPS128STORE) Run(inputs [][]byte) (output []byte) {
-	src := [4]float32{}
-	copy(src[:], number.ToFloat32Slice(inputs[0]))
+func (v *VMASKMOVPS128STORE) Run(_ [][]byte) (output []byte) {
+	vals := [4]float32{}
+	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	mask := [4]float32{}
-	copy(mask[:], number.ToFloat32Slice(inputs[1]))
+	copy(mask[:], number.ToFloat32Slice(v.mask.FlatData()))
 
-	mem := [4]float32{}
+	ret := [4]float32{}
 
-	vmaskmovps128Store(&src, &mask, &mem)
+	vmaskmovps128Store(&vals, &mask, &ret)
 
-	log.Printf("VMASKMOVPS128STORE src %v mask %v mem %v", src, mask, mem)
+	log.Printf("VMASKMOVPS128STORE vals %v mask %v ret %v", vals, mask, ret)
 
-	return number.Float32SliceToBytes(mem[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VMASKMOVPS128STORE) Supported() bool {

@@ -15,16 +15,25 @@ var assemblyVbroadcastss128M32 string
 var stubVbroadcastss128M32 string
 
 type VBROADCASTSS128M32 struct {
+	scalar *number.Parameter
+	ret    *number.Parameter
+}
+
+func NewVBROADCASTSS128M32() *VBROADCASTSS128M32 {
+	return &VBROADCASTSS128M32{
+		scalar: number.NewNamedFloatParameter("scalar", 32, 32),
+		ret:    number.NewNamedFloatParameter("ret", 128, 32),
+	}
 }
 
 func (v *VBROADCASTSS128M32) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(32, 32),
+		v.scalar,
 	}
 }
 
 func (v *VBROADCASTSS128M32) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 32)
+	return v.ret
 }
 
 func (v *VBROADCASTSS128M32) Name() string {
@@ -43,8 +52,8 @@ func (v *VBROADCASTSS128M32) Assembly() string {
 	return assemblyVbroadcastss128M32
 }
 
-func (v *VBROADCASTSS128M32) Run(inputs [][]byte) (output []byte) {
-	scalar := number.ToFloat32(inputs[0])
+func (v *VBROADCASTSS128M32) Run(_ [][]byte) (output []byte) {
+	scalar := number.ToFloat32(v.scalar.FlatData())
 
 	ret := [4]float32{}
 
@@ -52,7 +61,9 @@ func (v *VBROADCASTSS128M32) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("VBROADCASTSS128M32 scalar %v output %v", scalar, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VBROADCASTSS128M32) Supported() bool {

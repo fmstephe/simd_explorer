@@ -14,17 +14,25 @@ var assemblyVpbroadcastb256K string
 var stubVpbroadcastb256K string
 
 type VPBROADCASTB256K struct {
+	scalar *number.Parameter
+	pred   *number.Parameter
+	ret    *number.Parameter
 }
 
-func (v *VPBROADCASTB256K) Inputs() []*number.Parameter {
-	return []*number.Parameter{
-		number.NewUintParameter(8, 8, 16),
-		number.NewUintParameter(64, 64, 16),
+func NewVPBROADCASTB256K() *VPBROADCASTB256K {
+	return &VPBROADCASTB256K{
+		scalar: number.NewNamedUintParameter("scalar", 8, 8, 16),
+		pred:   number.NewNamedUintParameter("pred", 64, 64, 16),
+		ret:    number.NewNamedUintParameter("ret", 256, 64, 16),
 	}
 }
 
+func (v *VPBROADCASTB256K) Inputs() []*number.Parameter {
+	return []*number.Parameter{v.scalar, v.pred}
+}
+
 func (v *VPBROADCASTB256K) Output() *number.Parameter {
-	return number.NewUintParameter(256, 64, 16)
+	return v.ret
 }
 
 func (v *VPBROADCASTB256K) Name() string {
@@ -43,10 +51,14 @@ func (v *VPBROADCASTB256K) Assembly() string {
 	return assemblyVpbroadcastb256K
 }
 
-func (v *VPBROADCASTB256K) Run(inputs [][]byte) (output []byte) {
+func (v *VPBROADCASTB256K) Run(_ [][]byte) (output []byte) {
 	ret := [32]byte{}
-	vpbroadcastb256K(inputs[0][0], number.ToUint64(inputs[1]), &ret)
-	return ret[:]
+	b := number.ToUint8(v.scalar.FlatData())
+	k := number.ToUint64(v.pred.FlatData())
+	vpbroadcastb256K(b, k, &ret)
+	out := ret[:]
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPBROADCASTB256K) Supported() bool {

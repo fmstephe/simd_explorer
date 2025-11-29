@@ -15,17 +15,28 @@ var assemblyVpavgb128 string
 var stubVpavgb128 string
 
 type VPAVGB128 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVPAVGB128() *VPAVGB128 {
+	return &VPAVGB128{
+		vals1: number.NewNamedUintParameter("vals1", 128, 8, 10),
+		vals2: number.NewNamedUintParameter("vals2", 128, 8, 10),
+		ret:   number.NewNamedUintParameter("ret", 128, 8, 10),
+	}
 }
 
 func (v *VPAVGB128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(128, 8, 10),
-		number.NewUintParameter(128, 8, 10),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *VPAVGB128) Output() *number.Parameter {
-	return number.NewUintParameter(128, 8, 10)
+	return v.ret
 }
 
 func (v *VPAVGB128) Name() string {
@@ -44,19 +55,21 @@ func (v *VPAVGB128) Assembly() string {
 	return assemblyVpavgb128
 }
 
-func (v *VPAVGB128) Run(inputs [][]byte) (output []byte) {
-	b1 := [16]uint8{}
-	copy(b1[:], inputs[0])
-	b2 := [16]uint8{}
-	copy(b2[:], inputs[1])
+func (v *VPAVGB128) Run(_ [][]byte) (output []byte) {
+	vals1 := [16]uint8{}
+	copy(vals1[:], v.vals1.FlatData())
+	vals2 := [16]uint8{}
+	copy(vals2[:], v.vals2.FlatData())
 
 	ret := [16]uint8{}
 
-	vpavgb128(&b1, &b2, &ret)
+	vpavgb128(&vals1, &vals2, &ret)
 
-	log.Printf("VPAVGB128 input %v %v output %v", b1, b2, ret)
+	log.Printf("VPAVGB128 input %v %v output %v", vals1, vals2, ret)
 
-	return ret[:]
+	out := ret[:]
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPAVGB128) Supported() bool {

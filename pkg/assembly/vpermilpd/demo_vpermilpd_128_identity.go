@@ -15,16 +15,25 @@ var assemblyVpermilpd128Identity string
 var stubVpermilpd128Identity string
 
 type VPERMILPD128IDENTITY struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVPERMILPD128IDENTITY() *VPERMILPD128IDENTITY {
+	return &VPERMILPD128IDENTITY{
+		vals: number.NewNamedFloatParameter("vals", 128, 64),
+		ret:  number.NewNamedFloatParameter("ret", 128, 64),
+	}
 }
 
 func (v *VPERMILPD128IDENTITY) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(128, 64),
+		v.vals,
 	}
 }
 
 func (v *VPERMILPD128IDENTITY) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 64)
+	return v.ret
 }
 
 func (v *VPERMILPD128IDENTITY) Name() string {
@@ -43,9 +52,9 @@ func (v *VPERMILPD128IDENTITY) Assembly() string {
 	return assemblyVpermilpd128Identity
 }
 
-func (v *VPERMILPD128IDENTITY) Run(inputs [][]byte) (output []byte) {
+func (v *VPERMILPD128IDENTITY) Run(_ [][]byte) (output []byte) {
 	vals := [2]float64{}
-	copy(vals[:], number.ToFloat64Slice(inputs[0]))
+	copy(vals[:], number.ToFloat64Slice(v.vals.FlatData()))
 
 	ret := [2]float64{}
 
@@ -53,7 +62,9 @@ func (v *VPERMILPD128IDENTITY) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("VPERMILPD128IDENTITY vals %v ret %v", vals, ret)
 
-	return number.Float64SliceToBytes(ret[:])
+	out := number.Float64SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPERMILPD128IDENTITY) Supported() bool {

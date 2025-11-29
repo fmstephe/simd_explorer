@@ -15,16 +15,25 @@ var assemblyVextractf128256One string
 var stubVextractf128256One string
 
 type VEXTRACTF128256ONE struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVEXTRACTF128256ONE() *VEXTRACTF128256ONE {
+	return &VEXTRACTF128256ONE{
+		vals: number.NewNamedFloatParameter("vals", 256, 32),
+		ret:  number.NewNamedFloatParameter("ret", 128, 32),
+	}
 }
 
 func (v *VEXTRACTF128256ONE) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(256, 32),
+		v.vals,
 	}
 }
 
 func (v *VEXTRACTF128256ONE) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 32)
+	return v.ret
 }
 
 func (v *VEXTRACTF128256ONE) Name() string {
@@ -43,9 +52,9 @@ func (v *VEXTRACTF128256ONE) Assembly() string {
 	return assemblyVextractf128256One
 }
 
-func (v *VEXTRACTF128256ONE) Run(inputs [][]byte) (output []byte) {
+func (v *VEXTRACTF128256ONE) Run(_ [][]byte) (output []byte) {
 	base := [8]float32{}
-	copy(base[:], number.ToFloat32Slice(inputs[0]))
+	copy(base[:], number.ToFloat32Slice(v.vals.FlatData()))
 
 	ret := [4]float32{}
 
@@ -53,7 +62,9 @@ func (v *VEXTRACTF128256ONE) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("VEXTRACTF128256ONE base %v output %v", base, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VEXTRACTF128256ONE) Supported() bool {

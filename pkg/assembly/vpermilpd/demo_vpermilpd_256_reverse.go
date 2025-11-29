@@ -15,16 +15,25 @@ var assemblyVpermilpd256Reverse string
 var stubVpermilpd256Reverse string
 
 type VPERMILPD256REVERSE struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVPERMILPD256REVERSE() *VPERMILPD256REVERSE {
+	return &VPERMILPD256REVERSE{
+		vals: number.NewNamedFloatParameter("vals", 256, 64),
+		ret:  number.NewNamedFloatParameter("ret", 256, 64),
+	}
 }
 
 func (v *VPERMILPD256REVERSE) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(256, 64),
+		v.vals,
 	}
 }
 
 func (v *VPERMILPD256REVERSE) Output() *number.Parameter {
-	return number.NewFloatParameter(256, 64)
+	return v.ret
 }
 
 func (v *VPERMILPD256REVERSE) Name() string {
@@ -43,9 +52,9 @@ func (v *VPERMILPD256REVERSE) Assembly() string {
 	return assemblyVpermilpd256Reverse
 }
 
-func (v *VPERMILPD256REVERSE) Run(inputs [][]byte) (output []byte) {
+func (v *VPERMILPD256REVERSE) Run(_ [][]byte) (output []byte) {
 	vals := [4]float64{}
-	copy(vals[:], number.ToFloat64Slice(inputs[0]))
+	copy(vals[:], number.ToFloat64Slice(v.vals.FlatData()))
 
 	ret := [4]float64{}
 
@@ -53,7 +62,9 @@ func (v *VPERMILPD256REVERSE) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("VPERMILPD256REVERSE vals %v ret %v", vals, ret)
 
-	return number.Float64SliceToBytes(ret[:])
+	out := number.Float64SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPERMILPD256REVERSE) Supported() bool {

@@ -14,15 +14,20 @@ var assemblyVpbroadcastq128 string
 var stubVpbroadcastq128 string
 
 type VPBROADCASTQ128 struct {
+	scalar *number.Parameter
+	ret    *number.Parameter
 }
 
-func (v *VPBROADCASTQ128) Inputs() []*number.Parameter {
-	return []*number.Parameter{number.NewUintParameter(64, 64, 16)}
+func NewVPBROADCASTQ128() *VPBROADCASTQ128 {
+	return &VPBROADCASTQ128{
+		scalar: number.NewNamedUintParameter("scalar", 64, 64, 16),
+		ret:    number.NewNamedUintParameter("ret", 128, 64, 16),
+	}
 }
 
-func (v *VPBROADCASTQ128) Output() *number.Parameter {
-	return number.NewUintParameter(128, 64, 16)
-}
+func (v *VPBROADCASTQ128) Inputs() []*number.Parameter { return []*number.Parameter{v.scalar} }
+
+func (v *VPBROADCASTQ128) Output() *number.Parameter { return v.ret }
 
 func (v *VPBROADCASTQ128) Name() string {
 	return "VPBROADCASTQ XMM (128 bit)"
@@ -40,11 +45,13 @@ func (v *VPBROADCASTQ128) Assembly() string {
 	return assemblyVpbroadcastq128
 }
 
-func (v *VPBROADCASTQ128) Run(inputs [][]byte) (output []byte) {
-	q := number.ToUint64(inputs[0])
+func (v *VPBROADCASTQ128) Run(_ [][]byte) (output []byte) {
+	q := number.ToUint64(v.scalar.FlatData())
 	ret := [2]uint64{}
 	vpbroadcastq128(q, &ret)
-	return number.Uint64SliceToBytes(ret[:])
+	out := number.Uint64SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPBROADCASTQ128) Supported() bool {

@@ -15,16 +15,25 @@ var assemblyVpmovmskb128 string
 var stubVpmovmskb128 string
 
 type VPMOVMSKB128 struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVPMOVMSKB128() *VPMOVMSKB128 {
+	return &VPMOVMSKB128{
+		vals: number.NewNamedUintParameter("vals", 128, 8, 10),
+		ret:  number.NewNamedUintParameter("ret", 32, 32, 16),
+	}
 }
 
 func (v *VPMOVMSKB128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(128, 8, 10),
+		v.vals,
 	}
 }
 
 func (v *VPMOVMSKB128) Output() *number.Parameter {
-	return number.NewUintParameter(32, 32, 16)
+	return v.ret
 }
 
 func (v *VPMOVMSKB128) Name() string {
@@ -43,9 +52,9 @@ func (v *VPMOVMSKB128) Assembly() string {
 	return assemblyVpmovmskb128
 }
 
-func (v *VPMOVMSKB128) Run(inputs [][]byte) (output []byte) {
+func (v *VPMOVMSKB128) Run(_ [][]byte) (output []byte) {
 	vals := [16]uint8{}
-	copy(vals[:], inputs[0])
+	copy(vals[:], v.vals.FlatData())
 
 	var ret uint32
 
@@ -53,7 +62,9 @@ func (v *VPMOVMSKB128) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("VPMOVMSKB128 input %v mask 0x%08x", vals, ret)
 
-	return number.Uint32ToBytes(ret)
+	out := number.Uint32ToBytes(ret)
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPMOVMSKB128) Supported() bool {

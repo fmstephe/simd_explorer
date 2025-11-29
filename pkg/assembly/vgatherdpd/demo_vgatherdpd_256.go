@@ -15,19 +15,34 @@ var assemblyVgatherdpd256 string
 var stubVgatherdpd256 string
 
 type VGATHERDPD256 struct {
+	base  *number.Parameter
+	index *number.Parameter
+	mask  *number.Parameter
+	src   *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVGATHERDPD256() *VGATHERDPD256 {
+	return &VGATHERDPD256{
+		base:  number.NewNamedFloatParameter("base", 512, 64),
+		index: number.NewNamedIntParameter("index", 128, 32, 10),
+		mask:  number.NewNamedUintParameter("mask", 256, 64, 16),
+		src:   number.NewNamedFloatParameter("src", 256, 64),
+		ret:   number.NewNamedFloatParameter("ret", 256, 64),
+	}
 }
 
 func (v *VGATHERDPD256) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(512, 64),    // base memory (8 x f64)
-		number.NewIntParameter(128, 32, 10),  // indices (i32; lower 4 used)
-		number.NewUintParameter(256, 64, 16), // mask (MSB of each f64 lane)
-		number.NewFloatParameter(256, 64),    // src/dst (merge for masked-off lanes)
+		v.base,
+		v.index,
+		v.mask,
+		v.src,
 	}
 }
 
 func (v *VGATHERDPD256) Output() *number.Parameter {
-	return number.NewFloatParameter(256, 64) // gathered vector
+	return v.ret
 }
 
 func (v *VGATHERDPD256) Name() string {
@@ -46,25 +61,27 @@ func (v *VGATHERDPD256) Assembly() string {
 	return assemblyVgatherdpd256
 }
 
-func (v *VGATHERDPD256) Run(inputs [][]byte) (output []byte) {
+func (v *VGATHERDPD256) Run(_ [][]byte) (output []byte) {
 	base := [8]float64{}
-	copy(base[:], number.ToFloat64Slice(inputs[0]))
-	// indices are provided as signed i32 in base 10 in the UI; we read bits
+	copy(base[:], number.ToFloat64Slice(v.base.FlatData()))
+	// indices are provided as signed i32 in base 10; we read bits from Parameter storage
 	index := [4]uint32{}
-	copy(index[:], number.ToUint32Slice(inputs[1]))
+	copy(index[:], number.ToUint32Slice(v.index.FlatData()))
 	// mask provided in hex; bits are interpreted as f64 lane masks (MSB)
 	mask := [4]float64{}
-	copy(mask[:], number.ToFloat64Slice(inputs[2]))
+	copy(mask[:], number.ToFloat64Slice(v.mask.FlatData()))
 
 	ret := [4]float64{}
 	// seed destination with src for masked merge behaviour
-	copy(ret[:], number.ToFloat64Slice(inputs[3]))
+	copy(ret[:], number.ToFloat64Slice(v.src.FlatData()))
 
 	vgatherdpd256(&base, &index, &mask, &ret)
 
 	log.Printf("VGATHERDPD256 base %v index %v mask %v ret %v", base, index, mask, ret)
 
-	return number.Float64SliceToBytes(ret[:])
+	out := number.Float64SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VGATHERDPD256) Supported() bool {

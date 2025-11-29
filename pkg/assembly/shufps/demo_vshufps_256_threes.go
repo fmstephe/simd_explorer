@@ -15,17 +15,28 @@ var assemblyVshufps256Threes string
 var stubVshufps256Threes string
 
 type VSHUFPS256THREES struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVSHUFPS256THREES() *VSHUFPS256THREES {
+	return &VSHUFPS256THREES{
+		vals1: number.NewNamedFloatParameter("vals1", 256, 32),
+		vals2: number.NewNamedFloatParameter("vals2", 256, 32),
+		ret:   number.NewNamedFloatParameter("ret", 256, 32),
+	}
 }
 
 func (v *VSHUFPS256THREES) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(256, 32),
-		number.NewFloatParameter(256, 32),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *VSHUFPS256THREES) Output() *number.Parameter {
-	return number.NewFloatParameter(256, 32)
+	return v.ret
 }
 
 func (v *VSHUFPS256THREES) Name() string {
@@ -44,19 +55,21 @@ func (v *VSHUFPS256THREES) Assembly() string {
 	return assemblyVshufps256Threes
 }
 
-func (v *VSHUFPS256THREES) Run(inputs [][]byte) (output []byte) {
-	floats1 := [8]float32{}
-	copy(floats1[:], number.ToFloat32Slice(inputs[0]))
-	floats2 := [8]float32{}
-	copy(floats2[:], number.ToFloat32Slice(inputs[1]))
+func (v *VSHUFPS256THREES) Run(_ [][]byte) (output []byte) {
+	vals1 := [8]float32{}
+	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
+	vals2 := [8]float32{}
+	copy(vals2[:], number.ToFloat32Slice(v.vals2.FlatData()))
 
 	ret := [8]float32{}
 
-	vshufps256Threes(&floats1, &floats2, &ret)
+	vshufps256Threes(&vals1, &vals2, &ret)
 
-	log.Printf("VSHUFPS256THREES input %v %v output %v", floats1, floats2, ret)
+	log.Printf("VSHUFPS256THREES input %v %v output %v", vals1, vals2, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VSHUFPS256THREES) Supported() bool {

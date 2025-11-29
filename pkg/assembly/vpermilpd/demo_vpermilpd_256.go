@@ -15,17 +15,25 @@ var assemblyVpermilpd256 string
 var stubVpermilpd256 string
 
 type VPERMILPD256 struct {
+	vals    *number.Parameter
+	control *number.Parameter
+	ret     *number.Parameter
 }
 
-func (v *VPERMILPD256) Inputs() []*number.Parameter {
-	return []*number.Parameter{
-		number.NewFloatParameter(256, 64),    // vals
-		number.NewUintParameter(256, 64, 16), // control
+func NewVPERMILPD256() *VPERMILPD256 {
+	return &VPERMILPD256{
+		vals:    number.NewNamedFloatParameter("vals", 256, 64),
+		control: number.NewNamedUintParameter("control", 256, 64, 16),
+		ret:     number.NewNamedFloatParameter("ret", 256, 64),
 	}
 }
 
+func (v *VPERMILPD256) Inputs() []*number.Parameter {
+	return []*number.Parameter{v.vals, v.control}
+}
+
 func (v *VPERMILPD256) Output() *number.Parameter {
-	return number.NewFloatParameter(256, 64)
+	return v.ret
 }
 
 func (v *VPERMILPD256) Name() string {
@@ -44,19 +52,20 @@ func (v *VPERMILPD256) Assembly() string {
 	return assemblyVpermilpd256
 }
 
-func (v *VPERMILPD256) Run(inputs [][]byte) (output []byte) {
+func (v *VPERMILPD256) Run(_ [][]byte) (output []byte) {
 	vals := [4]float64{}
-	copy(vals[:], number.ToFloat64Slice(inputs[0]))
+	copy(vals[:], number.ToFloat64Slice(v.vals.FlatData()))
 	control := [4]float64{}
-	copy(control[:], number.ToFloat64Slice(inputs[1]))
-
+	copy(control[:], number.ToFloat64Slice(v.control.FlatData()))
 	ret := [4]float64{}
 
 	vpermilpd256(&vals, &control, &ret)
 
 	log.Printf("VPERMILPD256 vals %v control %v ret %v", vals, control, ret)
 
-	return number.Float64SliceToBytes(ret[:])
+	out := number.Float64SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPERMILPD256) Supported() bool {

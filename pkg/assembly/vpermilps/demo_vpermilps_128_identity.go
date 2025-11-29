@@ -15,16 +15,23 @@ var assemblyVpermilps128Identity string
 var stubVpermilps128Identity string
 
 type VPERMILPS128IDENTITY struct {
+	vals *number.Parameter
+	ret  *number.Parameter
 }
 
-func (v *VPERMILPS128IDENTITY) Inputs() []*number.Parameter {
-	return []*number.Parameter{
-		number.NewFloatParameter(128, 32),
+func NewVPERMILPS128IDENTITY() *VPERMILPS128IDENTITY {
+	return &VPERMILPS128IDENTITY{
+		vals: number.NewNamedFloatParameter("vals", 128, 32),
+		ret:  number.NewNamedFloatParameter("ret", 128, 32),
 	}
 }
 
+func (v *VPERMILPS128IDENTITY) Inputs() []*number.Parameter {
+	return []*number.Parameter{v.vals}
+}
+
 func (v *VPERMILPS128IDENTITY) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 32)
+	return v.ret
 }
 
 func (v *VPERMILPS128IDENTITY) Name() string {
@@ -32,7 +39,7 @@ func (v *VPERMILPS128IDENTITY) Name() string {
 }
 
 func (v *VPERMILPS128IDENTITY) Description() string {
-	return "Permute single-precision floats with imm8=0xE4: identity per 128-bit lane."
+	return "Permute single-precision floats with imm8=0xE4 per 128-bit lane: identity."
 }
 
 func (v *VPERMILPS128IDENTITY) Stub() string {
@@ -43,17 +50,18 @@ func (v *VPERMILPS128IDENTITY) Assembly() string {
 	return assemblyVpermilps128Identity
 }
 
-func (v *VPERMILPS128IDENTITY) Run(inputs [][]byte) (output []byte) {
+func (v *VPERMILPS128IDENTITY) Run(_ [][]byte) (output []byte) {
 	vals := [4]float32{}
-	copy(vals[:], number.ToFloat32Slice(inputs[0]))
-
+	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	ret := [4]float32{}
 
 	vpermilps128Identity(&vals, &ret)
 
 	log.Printf("VPERMILPS128IDENTITY vals %v ret %v", vals, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPERMILPS128IDENTITY) Supported() bool {

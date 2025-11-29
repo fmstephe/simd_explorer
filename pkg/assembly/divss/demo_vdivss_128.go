@@ -15,17 +15,28 @@ var assemblyVdivss128 string
 var stubVdivss128 string
 
 type VDIVSS128 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVDIVSS128() *VDIVSS128 {
+	return &VDIVSS128{
+		vals1: number.NewNamedFloatParameter("vals1", 128, 32),
+		vals2: number.NewNamedFloatParameter("vals2", 128, 32),
+		ret:   number.NewNamedFloatParameter("ret", 128, 32),
+	}
 }
 
 func (v *VDIVSS128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(128, 32),
-		number.NewFloatParameter(128, 32),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *VDIVSS128) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 32)
+	return v.ret
 }
 
 func (v *VDIVSS128) Name() string {
@@ -44,20 +55,21 @@ func (v *VDIVSS128) Assembly() string {
 	return assemblyVdivss128
 }
 
-func (v *VDIVSS128) Run(inputs [][]byte) (output []byte) {
-	// Example arguments processing
-	floats1 := [4]float32{}
-	copy(floats1[:], number.ToFloat32Slice(inputs[0]))
-	floats2 := [4]float32{}
-	copy(floats2[:], number.ToFloat32Slice(inputs[1]))
+func (v *VDIVSS128) Run(_ [][]byte) (output []byte) {
+	vals1 := [4]float32{}
+	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
+	vals2 := [4]float32{}
+	copy(vals2[:], number.ToFloat32Slice(v.vals2.FlatData()))
 
 	ret := [4]float32{}
 
-	vdivss128(&floats1, &floats2, &ret)
+	vdivss128(&vals1, &vals2, &ret)
 
-	log.Printf("VDIVSS128 input %v %v output %v", floats1, floats2, ret)
+	log.Printf("VDIVSS128 input %v %v output %v", vals1, vals2, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VDIVSS128) Supported() bool {

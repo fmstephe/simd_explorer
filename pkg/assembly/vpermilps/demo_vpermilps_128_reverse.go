@@ -15,16 +15,23 @@ var assemblyVpermilps128Reverse string
 var stubVpermilps128Reverse string
 
 type VPERMILPS128REVERSE struct {
+	vals *number.Parameter
+	ret  *number.Parameter
 }
 
-func (v *VPERMILPS128REVERSE) Inputs() []*number.Parameter {
-	return []*number.Parameter{
-		number.NewFloatParameter(128, 32),
+func NewVPERMILPS128REVERSE() *VPERMILPS128REVERSE {
+	return &VPERMILPS128REVERSE{
+		vals: number.NewNamedFloatParameter("vals", 128, 32),
+		ret:  number.NewNamedFloatParameter("ret", 128, 32),
 	}
 }
 
+func (v *VPERMILPS128REVERSE) Inputs() []*number.Parameter {
+	return []*number.Parameter{v.vals}
+}
+
 func (v *VPERMILPS128REVERSE) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 32)
+	return v.ret
 }
 
 func (v *VPERMILPS128REVERSE) Name() string {
@@ -32,7 +39,7 @@ func (v *VPERMILPS128REVERSE) Name() string {
 }
 
 func (v *VPERMILPS128REVERSE) Description() string {
-	return "Permute with imm8=0x1B: reverse lane order [a3 a2 a1 a0]."
+	return "Permute single-precision floats with imm8=0x1B per 128-bit lane: reverse order."
 }
 
 func (v *VPERMILPS128REVERSE) Stub() string {
@@ -43,17 +50,18 @@ func (v *VPERMILPS128REVERSE) Assembly() string {
 	return assemblyVpermilps128Reverse
 }
 
-func (v *VPERMILPS128REVERSE) Run(inputs [][]byte) (output []byte) {
+func (v *VPERMILPS128REVERSE) Run(_ [][]byte) (output []byte) {
 	vals := [4]float32{}
-	copy(vals[:], number.ToFloat32Slice(inputs[0]))
-
+	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	ret := [4]float32{}
 
 	vpermilps128Reverse(&vals, &ret)
 
 	log.Printf("VPERMILPS128REVERSE vals %v ret %v", vals, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPERMILPS128REVERSE) Supported() bool {

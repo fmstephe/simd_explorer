@@ -15,17 +15,28 @@ var assemblyVmaxps256 string
 var stubVmaxps256 string
 
 type VMAXPS256 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVMAXPS256() *VMAXPS256 {
+	return &VMAXPS256{
+		vals1: number.NewNamedFloatParameter("vals1", 256, 32),
+		vals2: number.NewNamedFloatParameter("vals2", 256, 32),
+		ret:   number.NewNamedFloatParameter("ret", 256, 32),
+	}
 }
 
 func (v *VMAXPS256) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(256, 32),
-		number.NewFloatParameter(256, 32),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *VMAXPS256) Output() *number.Parameter {
-	return number.NewFloatParameter(256, 32)
+	return v.ret
 }
 
 func (v *VMAXPS256) Name() string {
@@ -44,19 +55,21 @@ func (v *VMAXPS256) Assembly() string {
 	return assemblyVmaxps256
 }
 
-func (v *VMAXPS256) Run(inputs [][]byte) (output []byte) {
-	floats1 := [8]float32{}
-	copy(floats1[:], number.ToFloat32Slice(inputs[0]))
-	floats2 := [8]float32{}
-	copy(floats2[:], number.ToFloat32Slice(inputs[1]))
+func (v *VMAXPS256) Run(_ [][]byte) (output []byte) {
+	vals1 := [8]float32{}
+	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
+	vals2 := [8]float32{}
+	copy(vals2[:], number.ToFloat32Slice(v.vals2.FlatData()))
 
 	ret := [8]float32{}
 
-	vmaxps256(&floats1, &floats2, &ret)
+	vmaxps256(&vals1, &vals2, &ret)
 
-	log.Printf("VMAXPS256 input %v %v output %v", floats1, floats2, ret)
+	log.Printf("VMAXPS256 input %v %v output %v", vals1, vals2, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VMAXPS256) Supported() bool {

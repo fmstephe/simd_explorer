@@ -15,17 +15,28 @@ var assemblyVshufps128Zeros string
 var stubVshufps128Zeros string
 
 type VSHUFPS128ZEROS struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVSHUFPS128ZEROS() *VSHUFPS128ZEROS {
+	return &VSHUFPS128ZEROS{
+		vals1: number.NewNamedFloatParameter("vals1", 128, 32),
+		vals2: number.NewNamedFloatParameter("vals2", 128, 32),
+		ret:   number.NewNamedFloatParameter("ret", 128, 32),
+	}
 }
 
 func (v *VSHUFPS128ZEROS) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(128, 32),
-		number.NewFloatParameter(128, 32),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *VSHUFPS128ZEROS) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 32)
+	return v.ret
 }
 
 func (v *VSHUFPS128ZEROS) Name() string {
@@ -44,19 +55,21 @@ func (v *VSHUFPS128ZEROS) Assembly() string {
 	return assemblyVshufps128Zeros
 }
 
-func (v *VSHUFPS128ZEROS) Run(inputs [][]byte) (output []byte) {
-	floats1 := [4]float32{}
-	copy(floats1[:], number.ToFloat32Slice(inputs[0]))
-	floats2 := [4]float32{}
-	copy(floats2[:], number.ToFloat32Slice(inputs[1]))
+func (v *VSHUFPS128ZEROS) Run(_ [][]byte) (output []byte) {
+	vals1 := [4]float32{}
+	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
+	vals2 := [4]float32{}
+	copy(vals2[:], number.ToFloat32Slice(v.vals2.FlatData()))
 
 	ret := [4]float32{}
 
-	vshufps128Zeros(&floats1, &floats2, &ret)
+	vshufps128Zeros(&vals1, &vals2, &ret)
 
-	log.Printf("VSHUFPS128ZEROS input %v %v output %v", floats1, floats2, ret)
+	log.Printf("VSHUFPS128ZEROS input %v %v output %v", vals1, vals2, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VSHUFPS128ZEROS) Supported() bool {

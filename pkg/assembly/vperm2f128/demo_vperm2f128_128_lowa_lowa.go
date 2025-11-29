@@ -15,17 +15,25 @@ var assemblyVperm2f128128Lowa_lowa string
 var stubVperm2f128128Lowa_lowa string
 
 type VPERM2F128128LOWA_LOWA struct {
+	valsA *number.Parameter
+	valsB *number.Parameter
+	ret   *number.Parameter
 }
 
-func (v *VPERM2F128128LOWA_LOWA) Inputs() []*number.Parameter {
-	return []*number.Parameter{
-		number.NewFloatParameter(256, 32),
-		number.NewFloatParameter(256, 32),
+func NewVPERM2F128128LOWA_LOWA() *VPERM2F128128LOWA_LOWA {
+	return &VPERM2F128128LOWA_LOWA{
+		valsA: number.NewNamedFloatParameter("valsA", 256, 32),
+		valsB: number.NewNamedFloatParameter("valsB", 256, 32),
+		ret:   number.NewNamedFloatParameter("ret", 256, 32),
 	}
 }
 
+func (v *VPERM2F128128LOWA_LOWA) Inputs() []*number.Parameter {
+	return []*number.Parameter{v.valsA, v.valsB}
+}
+
 func (v *VPERM2F128128LOWA_LOWA) Output() *number.Parameter {
-	return number.NewFloatParameter(256, 32)
+	return v.ret
 }
 
 func (v *VPERM2F128128LOWA_LOWA) Name() string {
@@ -44,19 +52,20 @@ func (v *VPERM2F128128LOWA_LOWA) Assembly() string {
 	return assemblyVperm2f128128Lowa_lowa
 }
 
-func (v *VPERM2F128128LOWA_LOWA) Run(inputs [][]byte) (output []byte) {
-	a := [8]float32{}
-	copy(a[:], number.ToFloat32Slice(inputs[0]))
-	b := [8]float32{}
-	copy(b[:], number.ToFloat32Slice(inputs[1]))
-
+func (v *VPERM2F128128LOWA_LOWA) Run(_ [][]byte) (output []byte) {
+	valsA := [8]float32{}
+	copy(valsA[:], number.ToFloat32Slice(v.valsA.FlatData()))
+	valsB := [8]float32{}
+	copy(valsB[:], number.ToFloat32Slice(v.valsB.FlatData()))
 	ret := [8]float32{}
 
-	vperm2f128128Lowa_lowa(&a, &b, &ret)
+	vperm2f128128Lowa_lowa(&valsA, &valsB, &ret)
 
-	log.Printf("VPERM2F128128LOWA_LOWA A %v B %v output %v", a, b, ret)
+	log.Printf("VPERM2F128128LOWA_LOWA A %v B %v output %v", valsA, valsB, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPERM2F128128LOWA_LOWA) Supported() bool {

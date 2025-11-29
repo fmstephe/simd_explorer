@@ -15,17 +15,25 @@ var assemblyVtestps128 string
 var stubVtestps128 string
 
 type VTESTPS128 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
 }
 
-func (v *VTESTPS128) Inputs() []*number.Parameter {
-	return []*number.Parameter{
-		number.NewFloatParameter(128, 32),
-		number.NewFloatParameter(128, 32),
+func NewVTESTPS128() *VTESTPS128 {
+	return &VTESTPS128{
+		vals1: number.NewNamedFloatParameter("vals1", 128, 32),
+		vals2: number.NewNamedFloatParameter("vals2", 128, 32),
+		ret:   number.NewNamedUintParameter("ret", 32, 32, 16),
 	}
 }
 
+func (v *VTESTPS128) Inputs() []*number.Parameter {
+	return []*number.Parameter{v.vals1, v.vals2}
+}
+
 func (v *VTESTPS128) Output() *number.Parameter {
-	return number.NewUintParameter(32, 32, 16) // bit0=ZF, bit1=CF (hex)
+	return v.ret
 }
 
 func (v *VTESTPS128) Name() string {
@@ -44,19 +52,20 @@ func (v *VTESTPS128) Assembly() string {
 	return assemblyVtestps128
 }
 
-func (v *VTESTPS128) Run(inputs [][]byte) (output []byte) {
-	a := [4]float32{}
-	copy(a[:], number.ToFloat32Slice(inputs[0]))
-	b := [4]float32{}
-	copy(b[:], number.ToFloat32Slice(inputs[1]))
+func (v *VTESTPS128) Run(_ [][]byte) (output []byte) {
+	vals1 := [4]float32{}
+	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
+	vals2 := [4]float32{}
+	copy(vals2[:], number.ToFloat32Slice(v.vals2.FlatData()))
 
 	var flags uint32
+	vtestps128(&vals1, &vals2, &flags)
 
-	vtestps128(&a, &b, &flags)
+	log.Printf("VTESTPS128 vals1 %v vals2 %v flags 0x%X", vals1, vals2, flags)
 
-	log.Printf("VTESTPS128 A %v B %v flags 0x%X", a, b, flags)
-
-	return number.Uint32ToBytes(flags)
+	out := number.Uint32ToBytes(flags)
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VTESTPS128) Supported() bool {

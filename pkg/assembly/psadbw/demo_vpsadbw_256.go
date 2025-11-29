@@ -15,17 +15,28 @@ var assemblyVpsadbw256 string
 var stubVpsadbw256 string
 
 type VPSADBW256 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVPSADBW256() *VPSADBW256 {
+	return &VPSADBW256{
+		vals1: number.NewNamedUintParameter("vals1", 256, 8, 10),
+		vals2: number.NewNamedUintParameter("vals2", 256, 8, 10),
+		ret:   number.NewNamedUintParameter("ret", 256, 16, 10),
+	}
 }
 
 func (v *VPSADBW256) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(256, 8, 10),
-		number.NewUintParameter(256, 8, 10),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *VPSADBW256) Output() *number.Parameter {
-	return number.NewUintParameter(256, 16, 10)
+	return v.ret
 }
 
 func (v *VPSADBW256) Name() string {
@@ -44,23 +55,21 @@ func (v *VPSADBW256) Assembly() string {
 	return assemblyVpsadbw256
 }
 
-func (v *VPSADBW256) Run(inputs [][]byte) (output []byte) {
-	b1 := [32]uint8{}
-	copy(b1[:], inputs[0])
-	b2 := [32]uint8{}
-	copy(b2[:], inputs[1])
+func (v *VPSADBW256) Run(_ [][]byte) (output []byte) {
+	vals1 := [32]uint8{}
+	copy(vals1[:], v.vals1.FlatData())
+	vals2 := [32]uint8{}
+	copy(vals2[:], v.vals2.FlatData())
 
 	ret := [16]uint16{}
 
-	vpsadbw256(&b1, &b2, &ret)
+	vpsadbw256(&vals1, &vals2, &ret)
 
-	log.Printf("VPSADBW256 input %v %v output %v", b1, b2, ret)
+	log.Printf("VPSADBW256 input %v %v output %v", vals1, vals2, ret)
 
-	bytes := []byte{}
-	for _, v := range ret {
-		bytes = append(bytes, number.Uint16ToBytes(v)...)
-	}
-	return bytes
+	out := number.Uint16SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPSADBW256) Supported() bool {

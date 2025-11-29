@@ -15,16 +15,25 @@ var assemblyVrsqrtps256 string
 var stubVrsqrtps256 string
 
 type VRSQRTPS256 struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVRSQRTPS256() *VRSQRTPS256 {
+	return &VRSQRTPS256{
+		vals: number.NewNamedFloatParameter("vals", 256, 32),
+		ret:  number.NewNamedFloatParameter("ret", 256, 32),
+	}
 }
 
 func (v *VRSQRTPS256) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(256, 32),
+		v.vals,
 	}
 }
 
 func (v *VRSQRTPS256) Output() *number.Parameter {
-	return number.NewFloatParameter(256, 32)
+	return v.ret
 }
 
 func (v *VRSQRTPS256) Name() string {
@@ -43,17 +52,19 @@ func (v *VRSQRTPS256) Assembly() string {
 	return assemblyVrsqrtps256
 }
 
-func (v *VRSQRTPS256) Run(inputs [][]byte) (output []byte) {
-	floats := [8]float32{}
-	copy(floats[:], number.ToFloat32Slice(inputs[0]))
+func (v *VRSQRTPS256) Run(_ [][]byte) (output []byte) {
+	vals := [8]float32{}
+	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 
 	ret := [8]float32{}
 
-	vrsqrtps256(&floats, &ret)
+	vrsqrtps256(&vals, &ret)
 
-	log.Printf("VRSQRTPS256 input %v output %v", floats, ret)
+	log.Printf("VRSQRTPS256 input %v output %v", vals, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VRSQRTPS256) Supported() bool {

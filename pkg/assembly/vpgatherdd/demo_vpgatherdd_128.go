@@ -15,19 +15,34 @@ var assemblyVpgatherdd128 string
 var stubVpgatherdd128 string
 
 type VPGATHERDD128 struct {
+	base  *number.Parameter
+	index *number.Parameter
+	mask  *number.Parameter
+	src   *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVPGATHERDD128() *VPGATHERDD128 {
+	return &VPGATHERDD128{
+		base:  number.NewNamedUintParameter("base", 256, 32, 16), // base memory (8 x u32)
+		index: number.NewNamedIntParameter("index", 128, 32, 10), // indices (i32; lower 4 used)
+		mask:  number.NewNamedUintParameter("mask", 128, 32, 16), // mask (MSB of each dword lane)
+		src:   number.NewNamedUintParameter("src", 128, 32, 16),  // src (merge for masked-off lanes)
+		ret:   number.NewNamedUintParameter("ret", 128, 32, 16),
+	}
 }
 
 func (v *VPGATHERDD128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(256, 32, 16), // base memory (8 x u32)
-		number.NewIntParameter(128, 32, 10),  // indices (i32; lower 4 used)
-		number.NewUintParameter(128, 32, 16), // mask (MSB of each dword lane)
-		number.NewUintParameter(128, 32, 16), // src/dst (merge for masked-off lanes)
+		v.base,
+		v.index,
+		v.mask,
+		v.src,
 	}
 }
 
 func (v *VPGATHERDD128) Output() *number.Parameter {
-	return number.NewUintParameter(128, 32, 16) // gathered vector
+	return v.ret
 }
 
 func (v *VPGATHERDD128) Name() string {
@@ -46,21 +61,23 @@ func (v *VPGATHERDD128) Assembly() string {
 	return assemblyVpgatherdd128
 }
 
-func (v *VPGATHERDD128) Run(inputs [][]byte) (output []byte) {
+func (v *VPGATHERDD128) Run(_ [][]byte) (output []byte) {
 	base := [8]uint32{}
-	copy(base[:], number.ToUint32Slice(inputs[0]))
+	copy(base[:], number.ToUint32Slice(v.base.FlatData()))
 	index := [4]uint32{}
-	copy(index[:], number.ToUint32Slice(inputs[1])) // UI uses base-10; we read bits
+	copy(index[:], number.ToUint32Slice(v.index.FlatData()))
 	mask := [4]uint32{}
-	copy(mask[:], number.ToUint32Slice(inputs[2])) // hex mask; MSB per dword
+	copy(mask[:], number.ToUint32Slice(v.mask.FlatData()))
 	ret := [4]uint32{}
-	copy(ret[:], number.ToUint32Slice(inputs[3])) // src/dst seed
+	copy(ret[:], number.ToUint32Slice(v.src.FlatData()))
 
 	vpgatherdd128(&base, &index, &mask, &ret)
 
 	log.Printf("VPGATHERDD128 base %v index %v mask %v ret %v", base, index, mask, ret)
 
-	return number.Uint32SliceToBytes(ret[:])
+	retSlc := number.Uint32SliceToBytes(ret[:])
+	v.ret.SetData(retSlc)
+	return retSlc
 }
 
 func (v *VPGATHERDD128) Supported() bool {

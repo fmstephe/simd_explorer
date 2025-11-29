@@ -15,19 +15,34 @@ var assemblyVgatherdpd128 string
 var stubVgatherdpd128 string
 
 type VGATHERDPD128 struct {
+	base  *number.Parameter
+	index *number.Parameter
+	mask  *number.Parameter
+	src   *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVGATHERDPD128() *VGATHERDPD128 {
+	return &VGATHERDPD128{
+		base:  number.NewNamedFloatParameter("base", 512, 64),
+		index: number.NewNamedIntParameter("index", 128, 32, 10),
+		mask:  number.NewNamedUintParameter("mask", 128, 64, 16),
+		src:   number.NewNamedFloatParameter("src", 128, 64),
+		ret:   number.NewNamedFloatParameter("ret", 128, 64),
+	}
 }
 
 func (v *VGATHERDPD128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(512, 64),    // base memory (8 x f64)
-		number.NewUintParameter(128, 32, 10), // indices (i32; lower 2 used)
-		number.NewUintParameter(128, 64, 16), // mask (MSB of each f64 lane)
-		number.NewFloatParameter(128, 64),    // src/dst (merge for masked-off lanes)
+		v.base,
+		v.index,
+		v.mask,
+		v.src,
 	}
 }
 
 func (v *VGATHERDPD128) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 64) // gathered vector
+	return v.ret
 }
 
 func (v *VGATHERDPD128) Name() string {
@@ -46,23 +61,25 @@ func (v *VGATHERDPD128) Assembly() string {
 	return assemblyVgatherdpd128
 }
 
-func (v *VGATHERDPD128) Run(inputs [][]byte) (output []byte) {
+func (v *VGATHERDPD128) Run(_ [][]byte) (output []byte) {
 	base := [8]float64{}
-	copy(base[:], number.ToFloat64Slice(inputs[0]))
+	copy(base[:], number.ToFloat64Slice(v.base.FlatData()))
 	index := [4]uint32{}
-	copy(index[:], number.ToUint32Slice(inputs[1]))
+	copy(index[:], number.ToUint32Slice(v.index.FlatData()))
 	mask := [2]float64{}
-	copy(mask[:], number.ToFloat64Slice(inputs[2]))
+	copy(mask[:], number.ToFloat64Slice(v.mask.FlatData()))
 
 	ret := [2]float64{}
 	// seed destination with src for masked merge behaviour
-	copy(ret[:], number.ToFloat64Slice(inputs[3]))
+	copy(ret[:], number.ToFloat64Slice(v.src.FlatData()))
 
 	vgatherdpd128(&base, &index, &mask, &ret)
 
 	log.Printf("VGATHERDPD128 base %v index %v mask %v ret %v", base, index, mask, ret)
 
-	return number.Float64SliceToBytes(ret[:])
+	out := number.Float64SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VGATHERDPD128) Supported() bool {

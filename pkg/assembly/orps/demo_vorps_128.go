@@ -15,17 +15,28 @@ var assemblyVorps128 string
 var stubVorps128 string
 
 type VORPS128 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVORPS128() *VORPS128 {
+	return &VORPS128{
+		vals1: number.NewNamedFloatParameter("vals1", 128, 32),
+		vals2: number.NewNamedFloatParameter("vals2", 128, 32),
+		ret:   number.NewNamedUintParameter("ret", 128, 32, 16),
+	}
 }
 
 func (v *VORPS128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(128, 32),
-		number.NewFloatParameter(128, 32),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *VORPS128) Output() *number.Parameter {
-	return number.NewUintParameter(128, 32, 16)
+	return v.ret
 }
 
 func (v *VORPS128) Name() string {
@@ -44,11 +55,11 @@ func (v *VORPS128) Assembly() string {
 	return assemblyVorps128
 }
 
-func (v *VORPS128) Run(inputs [][]byte) (output []byte) {
+func (v *VORPS128) Run(_ [][]byte) (output []byte) {
 	vals1 := [4]float32{}
-	copy(vals1[:], number.ToFloat32Slice(inputs[0]))
+	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
-	copy(vals2[:], number.ToFloat32Slice(inputs[1]))
+	copy(vals2[:], number.ToFloat32Slice(v.vals2.FlatData()))
 
 	ret := [4]float32{}
 
@@ -56,7 +67,9 @@ func (v *VORPS128) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("VORPS128 input %v %v output %v", vals1, vals2, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VORPS128) Supported() bool {

@@ -15,16 +15,25 @@ var assemblyVmovdqu128 string
 var stubVmovdqu128 string
 
 type VMOVDQU128 struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVMOVDQU128() *VMOVDQU128 {
+	return &VMOVDQU128{
+		vals: number.NewNamedUintParameter("vals", 128, 32, 10),
+		ret:  number.NewNamedUintParameter("ret", 128, 32, 10),
+	}
 }
 
 func (v *VMOVDQU128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(128, 32, 10),
+		v.vals,
 	}
 }
 
 func (v *VMOVDQU128) Output() *number.Parameter {
-	return number.NewUintParameter(128, 32, 10)
+	return v.ret
 }
 
 func (v *VMOVDQU128) Name() string {
@@ -43,9 +52,9 @@ func (v *VMOVDQU128) Assembly() string {
 	return assemblyVmovdqu128
 }
 
-func (v *VMOVDQU128) Run(inputs [][]byte) (output []byte) {
+func (v *VMOVDQU128) Run(_ [][]byte) (output []byte) {
 	uints := [4]uint32{}
-	copy(uints[:], number.ToUint32Slice(inputs[0]))
+	copy(uints[:], number.ToUint32Slice(v.vals.FlatData()))
 
 	ret := [4]uint32{}
 
@@ -53,7 +62,9 @@ func (v *VMOVDQU128) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("VMOVDQU128 input %v output %v", uints, ret)
 
-	return number.Uint32SliceToBytes(ret[:])
+	out := number.Uint32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VMOVDQU128) Supported() bool {

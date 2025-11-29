@@ -15,17 +15,25 @@ var assemblyVxorps256 string
 var stubVxorps256 string
 
 type VXORPS256 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
 }
 
-func (v *VXORPS256) Inputs() []*number.Parameter {
-	return []*number.Parameter{
-		number.NewFloatParameter(256, 32),
-		number.NewFloatParameter(256, 32),
+func NewVXORPS256() *VXORPS256 {
+	return &VXORPS256{
+		vals1: number.NewNamedFloatParameter("vals1", 256, 32),
+		vals2: number.NewNamedFloatParameter("vals2", 256, 32),
+		ret:   number.NewNamedUintParameter("ret", 256, 32, 16),
 	}
 }
 
+func (v *VXORPS256) Inputs() []*number.Parameter {
+	return []*number.Parameter{v.vals1, v.vals2}
+}
+
 func (v *VXORPS256) Output() *number.Parameter {
-	return number.NewUintParameter(256, 32, 16)
+	return v.ret
 }
 
 func (v *VXORPS256) Name() string {
@@ -44,19 +52,20 @@ func (v *VXORPS256) Assembly() string {
 	return assemblyVxorps256
 }
 
-func (v *VXORPS256) Run(inputs [][]byte) (output []byte) {
+func (v *VXORPS256) Run(_ [][]byte) (output []byte) {
 	vals1 := [8]float32{}
-	copy(vals1[:], number.ToFloat32Slice(inputs[0]))
+	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [8]float32{}
-	copy(vals2[:], number.ToFloat32Slice(inputs[1]))
-
+	copy(vals2[:], number.ToFloat32Slice(v.vals2.FlatData()))
 	ret := [8]float32{}
 
 	vxorps256(&vals1, &vals2, &ret)
 
 	log.Printf("VXORPS256 input %v %v output %v", vals1, vals2, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VXORPS256) Supported() bool {

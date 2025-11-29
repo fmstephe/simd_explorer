@@ -15,17 +15,28 @@ var assemblyPminub128 string
 var stubPminub128 string
 
 type PMINUB128 struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewPMINUB128() *PMINUB128 {
+	return &PMINUB128{
+		vals1: number.NewNamedUintParameter("vals1", 128, 8, 10),
+		vals2: number.NewNamedUintParameter("vals2", 128, 8, 10),
+		ret:   number.NewNamedUintParameter("ret", 128, 8, 10),
+	}
 }
 
 func (v *PMINUB128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(128, 8, 10),
-		number.NewUintParameter(128, 8, 10),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *PMINUB128) Output() *number.Parameter {
-	return number.NewUintParameter(128, 8, 10)
+	return v.ret
 }
 
 func (v *PMINUB128) Name() string {
@@ -44,19 +55,21 @@ func (v *PMINUB128) Assembly() string {
 	return assemblyPminub128
 }
 
-func (v *PMINUB128) Run(inputs [][]byte) (output []byte) {
-	b1 := [16]uint8{}
-	copy(b1[:], inputs[0])
-	b2 := [16]uint8{}
-	copy(b2[:], inputs[1])
+func (v *PMINUB128) Run(_ [][]byte) (output []byte) {
+	vals1 := [16]uint8{}
+	copy(vals1[:], v.vals1.FlatData())
+	vals2 := [16]uint8{}
+	copy(vals2[:], v.vals2.FlatData())
 
 	ret := [16]uint8{}
 
-	pminub128(&b1, &b2, &ret)
+	pminub128(&vals1, &vals2, &ret)
 
-	log.Printf("PMINUB128 input %v %v output %v", b1, b2, ret)
+	log.Printf("PMINUB128 input %v %v output %v", vals1, vals2, ret)
 
-	return ret[:]
+	out := ret[:]
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *PMINUB128) Supported() bool {

@@ -15,16 +15,25 @@ var assemblySqrtps128 string
 var stubSqrtps128 string
 
 type SQRTPS128 struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewSQRTPS128() *SQRTPS128 {
+	return &SQRTPS128{
+		vals: number.NewNamedFloatParameter("vals", 128, 32),
+		ret:  number.NewNamedFloatParameter("ret", 128, 32),
+	}
 }
 
 func (v *SQRTPS128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(128, 32),
+		v.vals,
 	}
 }
 
 func (v *SQRTPS128) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 32)
+	return v.ret
 }
 
 func (v *SQRTPS128) Name() string {
@@ -43,17 +52,19 @@ func (v *SQRTPS128) Assembly() string {
 	return assemblySqrtps128
 }
 
-func (v *SQRTPS128) Run(inputs [][]byte) (output []byte) {
-	floats := [4]float32{}
-	copy(floats[:], number.ToFloat32Slice(inputs[0]))
+func (v *SQRTPS128) Run(_ [][]byte) (output []byte) {
+	vals := [4]float32{}
+	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 
 	ret := [4]float32{}
 
-	sqrtps128(&floats, &ret)
+	sqrtps128(&vals, &ret)
 
-	log.Printf("SQRTPS128 input %v output %v", floats, ret)
+	log.Printf("SQRTPS128 input %v output %v", vals, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *SQRTPS128) Supported() bool {

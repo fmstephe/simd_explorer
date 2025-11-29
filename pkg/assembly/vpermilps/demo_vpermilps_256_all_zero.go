@@ -15,16 +15,23 @@ var assemblyVpermilps256All_zero string
 var stubVpermilps256All_zero string
 
 type VPERMILPS256ALL_ZERO struct {
+	vals *number.Parameter
+	ret  *number.Parameter
 }
 
-func (v *VPERMILPS256ALL_ZERO) Inputs() []*number.Parameter {
-	return []*number.Parameter{
-		number.NewFloatParameter(256, 32),
+func NewVPERMILPS256ALL_ZERO() *VPERMILPS256ALL_ZERO {
+	return &VPERMILPS256ALL_ZERO{
+		vals: number.NewNamedFloatParameter("vals", 256, 32),
+		ret:  number.NewNamedFloatParameter("ret", 256, 32),
 	}
 }
 
+func (v *VPERMILPS256ALL_ZERO) Inputs() []*number.Parameter {
+	return []*number.Parameter{v.vals}
+}
+
 func (v *VPERMILPS256ALL_ZERO) Output() *number.Parameter {
-	return number.NewFloatParameter(256, 32)
+	return v.ret
 }
 
 func (v *VPERMILPS256ALL_ZERO) Name() string {
@@ -32,7 +39,7 @@ func (v *VPERMILPS256ALL_ZERO) Name() string {
 }
 
 func (v *VPERMILPS256ALL_ZERO) Description() string {
-	return "Permute with imm8=0x00 per 128-bit lane: broadcast lane0 element."
+	return "Permute single-precision floats with imm8=0x00 per 128-bit lane: all lanes select element 0."
 }
 
 func (v *VPERMILPS256ALL_ZERO) Stub() string {
@@ -43,17 +50,18 @@ func (v *VPERMILPS256ALL_ZERO) Assembly() string {
 	return assemblyVpermilps256All_zero
 }
 
-func (v *VPERMILPS256ALL_ZERO) Run(inputs [][]byte) (output []byte) {
+func (v *VPERMILPS256ALL_ZERO) Run(_ [][]byte) (output []byte) {
 	vals := [8]float32{}
-	copy(vals[:], number.ToFloat32Slice(inputs[0]))
-
+	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	ret := [8]float32{}
 
 	vpermilps256All_zero(&vals, &ret)
 
 	log.Printf("VPERMILPS256ALL_ZERO vals %v ret %v", vals, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPERMILPS256ALL_ZERO) Supported() bool {

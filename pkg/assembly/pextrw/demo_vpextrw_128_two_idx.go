@@ -15,16 +15,25 @@ var assemblyVpextrw128Two_idx string
 var stubVpextrw128Two_idx string
 
 type VPEXTRW128TWO_IDX struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVPEXTRW128TWO_IDX() *VPEXTRW128TWO_IDX {
+	return &VPEXTRW128TWO_IDX{
+		vals: number.NewNamedUintParameter("vals", 128, 16, 10),
+		ret:  number.NewNamedUintParameter("ret", 32, 32, 10),
+	}
 }
 
 func (v *VPEXTRW128TWO_IDX) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(128, 16, 10),
+		v.vals,
 	}
 }
 
 func (v *VPEXTRW128TWO_IDX) Output() *number.Parameter {
-	return number.NewUintParameter(32, 32, 10)
+	return v.ret
 }
 
 func (v *VPEXTRW128TWO_IDX) Name() string {
@@ -43,9 +52,9 @@ func (v *VPEXTRW128TWO_IDX) Assembly() string {
 	return assemblyVpextrw128Two_idx
 }
 
-func (v *VPEXTRW128TWO_IDX) Run(inputs [][]byte) (output []byte) {
+func (v *VPEXTRW128TWO_IDX) Run(_ [][]byte) (output []byte) {
 	vals := [8]uint16{}
-	copy(vals[:], number.ToUint16Slice(inputs[0]))
+	copy(vals[:], number.ToUint16Slice(v.vals.FlatData()))
 
 	var ret uint32
 
@@ -53,7 +62,9 @@ func (v *VPEXTRW128TWO_IDX) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("VPEXTRW128TWO_IDX input %v output %v", vals, ret)
 
-	return number.Uint32ToBytes(ret)
+	out := number.Uint32ToBytes(ret)
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPEXTRW128TWO_IDX) Supported() bool {

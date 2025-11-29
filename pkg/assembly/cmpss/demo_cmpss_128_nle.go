@@ -15,17 +15,28 @@ var assemblyCmpss128Nle string
 var stubCmpss128Nle string
 
 type CMPSS128NLE struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewCMPSS128NLE() *CMPSS128NLE {
+	return &CMPSS128NLE{
+		vals1: number.NewNamedFloatParameter("vals1", 128, 32),
+		vals2: number.NewNamedFloatParameter("vals2", 128, 32),
+		ret:   number.NewNamedUintParameter("ret", 128, 32, 16),
+	}
 }
 
 func (v *CMPSS128NLE) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(128, 32),
-		number.NewFloatParameter(128, 32),
+		v.vals1,
+		v.vals2,
 	}
 }
 
 func (v *CMPSS128NLE) Output() *number.Parameter {
-	return number.NewUintParameter(128, 32, 16)
+	return v.ret
 }
 
 func (v *CMPSS128NLE) Name() string {
@@ -44,19 +55,21 @@ func (v *CMPSS128NLE) Assembly() string {
 	return assemblyCmpss128Nle
 }
 
-func (v *CMPSS128NLE) Run(inputs [][]byte) (output []byte) {
-	floats1 := [4]float32{}
-	copy(floats1[:], number.ToFloat32Slice(inputs[0]))
-	floats2 := [4]float32{}
-	copy(floats2[:], number.ToFloat32Slice(inputs[1]))
+func (v *CMPSS128NLE) Run(_ [][]byte) (output []byte) {
+	vals1 := [4]float32{}
+	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
+	vals2 := [4]float32{}
+	copy(vals2[:], number.ToFloat32Slice(v.vals2.FlatData()))
 
 	ret := [4]float32{}
 
-	cmpss128Nle(&floats1, &floats2, &ret)
+	cmpss128Nle(&vals1, &vals2, &ret)
 
-	log.Printf("CMPSS128NLE input %v %v output %v", floats1, floats2, ret)
+	log.Printf("CMPSS128NLE input %v %v output %v", vals1, vals2, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	retSlc := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(retSlc)
+	return retSlc
 }
 
 func (v *CMPSS128NLE) Supported() bool {

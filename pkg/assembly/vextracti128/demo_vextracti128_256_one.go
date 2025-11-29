@@ -15,16 +15,25 @@ var assemblyVextracti128256One string
 var stubVextracti128256One string
 
 type VEXTRACTI128256ONE struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVEXTRACTI128256ONE() *VEXTRACTI128256ONE {
+	return &VEXTRACTI128256ONE{
+		vals: number.NewNamedUintParameter("vals", 256, 32, 16),
+		ret:  number.NewNamedUintParameter("ret", 128, 32, 16),
+	}
 }
 
 func (v *VEXTRACTI128256ONE) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(256, 32, 10), // vals256 (8x u32)
+		v.vals,
 	}
 }
 
 func (v *VEXTRACTI128256ONE) Output() *number.Parameter {
-	return number.NewUintParameter(128, 32, 10)
+	return v.ret
 }
 
 func (v *VEXTRACTI128256ONE) Name() string {
@@ -43,13 +52,15 @@ func (v *VEXTRACTI128256ONE) Assembly() string {
 	return assemblyVextracti128256One
 }
 
-func (v *VEXTRACTI128256ONE) Run(inputs [][]byte) (output []byte) {
+func (v *VEXTRACTI128256ONE) Run(_ [][]byte) (output []byte) {
 	var vals256 [8]uint32
-	copy(vals256[:], number.ToUint32Slice(inputs[0]))
+	copy(vals256[:], number.ToUint32Slice(v.vals.FlatData()))
 	var ret [4]uint32
 	vextracti128256One(&vals256, &ret)
 	log.Printf("VEXTRACTI128256ONE vals256 %v output %v", vals256, ret)
-	return number.Uint32SliceToBytes(ret[:])
+	out := number.Uint32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VEXTRACTI128256ONE) Supported() bool {

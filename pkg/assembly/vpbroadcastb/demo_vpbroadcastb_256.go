@@ -14,14 +14,18 @@ var assemblyVpbroadcastb256 string
 var stubVpbroadcastb256 string
 
 type VPBROADCASTB256 struct {
+	scalar *number.Parameter
+	ret    *number.Parameter
 }
 
+// constructor defined at bottom
+
 func (v *VPBROADCASTB256) Inputs() []*number.Parameter {
-	return []*number.Parameter{number.NewUintParameter(8, 8, 16)}
+	return []*number.Parameter{v.scalar}
 }
 
 func (v *VPBROADCASTB256) Output() *number.Parameter {
-	return number.NewUintParameter(256, 64, 16)
+	return v.ret
 }
 
 func (v *VPBROADCASTB256) Name() string {
@@ -40,12 +44,23 @@ func (v *VPBROADCASTB256) Assembly() string {
 	return assemblyVpbroadcastb256
 }
 
-func (v *VPBROADCASTB256) Run(inputs [][]byte) (output []byte) {
+func (v *VPBROADCASTB256) Run(_ [][]byte) (output []byte) {
 	ret := [32]byte{}
-	vpbroadcastb256(inputs[0][0], &ret)
-	return ret[:]
+	b := number.ToUint8(v.scalar.FlatData())
+	vpbroadcastb256(b, &ret)
+	out := ret[:]
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPBROADCASTB256) Supported() bool {
 	return asmutil.IsSupported(v.Assembly())
+}
+
+func NewVPBROADCASTB256() *VPBROADCASTB256 {
+	v := &VPBROADCASTB256{
+		scalar: number.NewNamedUintParameter("scalar", 8, 8, 16),
+		ret:    number.NewNamedUintParameter("ret", 256, 64, 16),
+	}
+	return v
 }

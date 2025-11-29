@@ -15,19 +15,34 @@ var assemblyVgatherqpd128 string
 var stubVgatherqpd128 string
 
 type VGATHERQPD128 struct {
+	base  *number.Parameter
+	index *number.Parameter
+	mask  *number.Parameter
+	src   *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVGATHERQPD128() *VGATHERQPD128 {
+	return &VGATHERQPD128{
+		base:  number.NewNamedFloatParameter("base", 512, 64),
+		index: number.NewNamedIntParameter("index", 128, 64, 10),
+		mask:  number.NewNamedUintParameter("mask", 128, 64, 16),
+		src:   number.NewNamedFloatParameter("src", 128, 64),
+		ret:   number.NewNamedFloatParameter("ret", 128, 64),
+	}
 }
 
 func (v *VGATHERQPD128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(512, 64),    // base memory (8 x f64)
-		number.NewIntParameter(128, 64, 10),  // indices (i64; lower 2 used)
-		number.NewUintParameter(128, 64, 16), // mask (MSB of each f64 lane)
-		number.NewFloatParameter(128, 64),    // src/dst (merge for masked-off lanes)
+		v.base,
+		v.index,
+		v.mask,
+		v.src,
 	}
 }
 
 func (v *VGATHERQPD128) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 64) // gathered vector
+	return v.ret
 }
 
 func (v *VGATHERQPD128) Name() string {
@@ -46,22 +61,24 @@ func (v *VGATHERQPD128) Assembly() string {
 	return assemblyVgatherqpd128
 }
 
-func (v *VGATHERQPD128) Run(inputs [][]byte) (output []byte) {
+func (v *VGATHERQPD128) Run(_ [][]byte) (output []byte) {
 	base := [8]float64{}
-	copy(base[:], number.ToFloat64Slice(inputs[0]))
+	copy(base[:], number.ToFloat64Slice(v.base.FlatData()))
 	index := [2]uint64{}
-	copy(index[:], number.ToUint64Slice(inputs[1]))
+	copy(index[:], number.ToUint64Slice(v.index.FlatData()))
 	mask := [2]float64{}
-	copy(mask[:], number.ToFloat64Slice(inputs[2]))
+	copy(mask[:], number.ToFloat64Slice(v.mask.FlatData()))
 
 	ret := [2]float64{}
-	copy(ret[:], number.ToFloat64Slice(inputs[3]))
+	copy(ret[:], number.ToFloat64Slice(v.src.FlatData()))
 
 	vgatherqpd128(&base, &index, &mask, &ret)
 
 	log.Printf("VGATHERQPD128 base %v index %v mask %v ret %v", base, index, mask, ret)
 
-	return number.Float64SliceToBytes(ret[:])
+	out := number.Float64SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VGATHERQPD128) Supported() bool {

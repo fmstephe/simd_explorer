@@ -14,14 +14,23 @@ var assemblyVpbroadcastb128 string
 var stubVpbroadcastb128 string
 
 type VPBROADCASTB128 struct {
+	scalar *number.Parameter
+	ret    *number.Parameter
+}
+
+func NewVPBROADCASTB128() *VPBROADCASTB128 {
+	return &VPBROADCASTB128{
+		scalar: number.NewNamedUintParameter("scalar", 8, 8, 16),
+		ret:    number.NewNamedUintParameter("ret", 128, 64, 16),
+	}
 }
 
 func (v *VPBROADCASTB128) Inputs() []*number.Parameter {
-	return []*number.Parameter{number.NewUintParameter(8, 8, 16)}
+	return []*number.Parameter{v.scalar}
 }
 
 func (v *VPBROADCASTB128) Output() *number.Parameter {
-	return number.NewUintParameter(128, 64, 16)
+	return v.ret
 }
 
 func (v *VPBROADCASTB128) Name() string {
@@ -40,10 +49,13 @@ func (v *VPBROADCASTB128) Assembly() string {
 	return assemblyVpbroadcastb128
 }
 
-func (v *VPBROADCASTB128) Run(inputs [][]byte) (output []byte) {
+func (v *VPBROADCASTB128) Run(_ [][]byte) (output []byte) {
 	ret := [16]byte{}
-	vpbroadcastb128(inputs[0][0], &ret)
-	return ret[:]
+	b := number.ToUint8(v.scalar.FlatData())
+	vpbroadcastb128(b, &ret)
+	out := ret[:]
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPBROADCASTB128) Supported() bool {

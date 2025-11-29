@@ -15,16 +15,25 @@ var assemblyVmovups128 string
 var stubVmovups128 string
 
 type VMOVUPS128 struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewVMOVUPS128() *VMOVUPS128 {
+	return &VMOVUPS128{
+		vals: number.NewNamedFloatParameter("vals", 128, 32),
+		ret:  number.NewNamedFloatParameter("ret", 128, 32),
+	}
 }
 
 func (v *VMOVUPS128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(128, 32),
+		v.vals,
 	}
 }
 
 func (v *VMOVUPS128) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 32)
+	return v.ret
 }
 
 func (v *VMOVUPS128) Name() string {
@@ -43,17 +52,19 @@ func (v *VMOVUPS128) Assembly() string {
 	return assemblyVmovups128
 }
 
-func (v *VMOVUPS128) Run(inputs [][]byte) (output []byte) {
-	floats := [4]float32{}
-	copy(floats[:], number.ToFloat32Slice(inputs[0]))
+func (v *VMOVUPS128) Run(_ [][]byte) (output []byte) {
+	vals := [4]float32{}
+	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 
 	ret := [4]float32{}
 
-	vmovups128(&floats, &ret)
+	vmovups128(&vals, &ret)
 
-	log.Printf("VMOVUPS128 input %v output %v", floats, ret)
+	log.Printf("VMOVUPS128 input %v output %v", vals, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VMOVUPS128) Supported() bool {

@@ -15,16 +15,25 @@ var assemblyMovlhps64 string
 var stubMovlhps64 string
 
 type MOVLHPS64 struct {
+	vals *number.Parameter
+	ret  *number.Parameter
+}
+
+func NewMOVLHPS64() *MOVLHPS64 {
+	return &MOVLHPS64{
+		vals: number.NewNamedFloatParameter("vals", 64, 32),
+		ret:  number.NewNamedFloatParameter("ret", 64, 32),
+	}
 }
 
 func (v *MOVLHPS64) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(64, 32),
+		v.vals,
 	}
 }
 
 func (v *MOVLHPS64) Output() *number.Parameter {
-	return number.NewFloatParameter(64, 32)
+	return v.ret
 }
 
 func (v *MOVLHPS64) Name() string {
@@ -43,18 +52,19 @@ func (v *MOVLHPS64) Assembly() string {
 	return assemblyMovlhps64
 }
 
-func (v *MOVLHPS64) Run(inputs [][]byte) (output []byte) {
-	// Example arguments processing
-	floats := [2]float32{}
-	copy(floats[:], number.ToFloat32Slice(inputs[0]))
+func (v *MOVLHPS64) Run(_ [][]byte) (output []byte) {
+	vals := [2]float32{}
+	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 
 	ret := [2]float32{}
 
-	movlhps64(&floats, &ret)
+	movlhps64(&vals, &ret)
 
-	log.Printf("MOVLHPS64 input %v output %v", floats, ret)
+	log.Printf("MOVLHPS64 input %v output %v", vals, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *MOVLHPS64) Supported() bool {

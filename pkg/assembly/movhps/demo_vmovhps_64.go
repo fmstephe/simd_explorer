@@ -15,17 +15,28 @@ var assemblyVmovhps64 string
 var stubVmovhps64 string
 
 type VMOVHPS64 struct {
+	lower *number.Parameter
+	upper *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVMOVHPS64() *VMOVHPS64 {
+	return &VMOVHPS64{
+		lower: number.NewNamedFloatParameter("lower", 64, 32),
+		upper: number.NewNamedFloatParameter("upper", 64, 32),
+		ret:   number.NewNamedFloatParameter("ret", 128, 32),
+	}
 }
 
 func (v *VMOVHPS64) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewFloatParameter(64, 32),
-		number.NewFloatParameter(64, 32),
+		v.lower,
+		v.upper,
 	}
 }
 
 func (v *VMOVHPS64) Output() *number.Parameter {
-	return number.NewFloatParameter(128, 32)
+	return v.ret
 }
 
 func (v *VMOVHPS64) Name() string {
@@ -44,12 +55,12 @@ func (v *VMOVHPS64) Assembly() string {
 	return assemblyVmovhps64
 }
 
-func (v *VMOVHPS64) Run(inputs [][]byte) (output []byte) {
+func (v *VMOVHPS64) Run(_ [][]byte) (output []byte) {
 	lower := [2]float32{}
-	copy(lower[:], number.ToFloat32Slice(inputs[0]))
+	copy(lower[:], number.ToFloat32Slice(v.lower.FlatData()))
 
 	upper := [2]float32{}
-	copy(upper[:], number.ToFloat32Slice(inputs[1]))
+	copy(upper[:], number.ToFloat32Slice(v.upper.FlatData()))
 
 	ret := [4]float32{}
 
@@ -57,7 +68,9 @@ func (v *VMOVHPS64) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("VMOVHPS64 input lower %v upper %v output %v", lower, upper, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VMOVHPS64) Supported() bool {

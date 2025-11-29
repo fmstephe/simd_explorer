@@ -119,6 +119,8 @@ func (in *UIParameterParts) getData() []byte {
 }
 
 func (in *UIParameterParts) setData(bytes []byte) {
+	// FIXME test only
+	// Commenting the line below disables setting output values for any instructions which haven't migrated to parameter state
 	in.parameter.SetData(bytes)
 	log.Printf("%s received data change %0.8b", in.describe(), bytes)
 

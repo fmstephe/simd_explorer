@@ -15,17 +15,25 @@ var assemblyVpermilps256 string
 var stubVpermilps256 string
 
 type VPERMILPS256 struct {
+	vals    *number.Parameter
+	control *number.Parameter
+	ret     *number.Parameter
 }
 
-func (v *VPERMILPS256) Inputs() []*number.Parameter {
-	return []*number.Parameter{
-		number.NewFloatParameter(256, 32),    // vals
-		number.NewUintParameter(256, 32, 16), // control
+func NewVPERMILPS256() *VPERMILPS256 {
+	return &VPERMILPS256{
+		vals:    number.NewNamedFloatParameter("vals", 256, 32),
+		control: number.NewNamedUintParameter("control", 256, 32, 16),
+		ret:     number.NewNamedFloatParameter("ret", 256, 32),
 	}
 }
 
+func (v *VPERMILPS256) Inputs() []*number.Parameter {
+	return []*number.Parameter{v.vals, v.control}
+}
+
 func (v *VPERMILPS256) Output() *number.Parameter {
-	return number.NewFloatParameter(256, 32)
+	return v.ret
 }
 
 func (v *VPERMILPS256) Name() string {
@@ -33,7 +41,7 @@ func (v *VPERMILPS256) Name() string {
 }
 
 func (v *VPERMILPS256) Description() string {
-	return "Permute single-precision floats using per-lane 2-bit selectors from control register (per 128-bit lane)."
+	return "Permute single-precision floats using per-lane 2-bit selectors from control register."
 }
 
 func (v *VPERMILPS256) Stub() string {
@@ -44,19 +52,20 @@ func (v *VPERMILPS256) Assembly() string {
 	return assemblyVpermilps256
 }
 
-func (v *VPERMILPS256) Run(inputs [][]byte) (output []byte) {
+func (v *VPERMILPS256) Run(_ [][]byte) (output []byte) {
 	vals := [8]float32{}
-	copy(vals[:], number.ToFloat32Slice(inputs[0]))
+	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	control := [8]float32{}
-	copy(control[:], number.ToFloat32Slice(inputs[1]))
-
+	copy(control[:], number.ToFloat32Slice(v.control.FlatData()))
 	ret := [8]float32{}
 
 	vpermilps256(&vals, &control, &ret)
 
 	log.Printf("VPERMILPS256 vals %v control %v ret %v", vals, control, ret)
 
-	return number.Float32SliceToBytes(ret[:])
+	out := number.Float32SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPERMILPS256) Supported() bool {

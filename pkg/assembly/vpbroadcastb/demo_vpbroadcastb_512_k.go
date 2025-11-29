@@ -14,17 +14,25 @@ var assemblyVpbroadcastb512K string
 var stubVpbroadcastb512K string
 
 type VPBROADCASTB512K struct {
+	scalar *number.Parameter
+	pred   *number.Parameter
+	ret    *number.Parameter
 }
 
-func (v *VPBROADCASTB512K) Inputs() []*number.Parameter {
-	return []*number.Parameter{
-		number.NewUintParameter(8, 8, 16),
-		number.NewUintParameter(64, 64, 16),
+func NewVPBROADCASTB512K() *VPBROADCASTB512K {
+	return &VPBROADCASTB512K{
+		scalar: number.NewNamedUintParameter("scalar", 8, 8, 16),
+		pred:   number.NewNamedUintParameter("pred", 64, 64, 16),
+		ret:    number.NewNamedUintParameter("ret", 512, 64, 16),
 	}
 }
 
+func (v *VPBROADCASTB512K) Inputs() []*number.Parameter {
+	return []*number.Parameter{v.scalar, v.pred}
+}
+
 func (v *VPBROADCASTB512K) Output() *number.Parameter {
-	return number.NewUintParameter(512, 64, 16)
+	return v.ret
 }
 
 func (v *VPBROADCASTB512K) Name() string {
@@ -43,10 +51,15 @@ func (v *VPBROADCASTB512K) Assembly() string {
 	return assemblyVpbroadcastb512K
 }
 
-func (v *VPBROADCASTB512K) Run(inputs [][]byte) (output []byte) {
+func (v *VPBROADCASTB512K) Run(_ [][]byte) (output []byte) {
+	// fields are initialized in constructor
 	ret := [64]byte{}
-	vpbroadcastb512K(inputs[0][0], number.ToUint64(inputs[1]), &ret)
-	return ret[:]
+	b := number.ToUint8(v.scalar.FlatData())
+	k := number.ToUint64(v.pred.FlatData())
+	vpbroadcastb512K(b, k, &ret)
+	out := ret[:]
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPBROADCASTB512K) Supported() bool {

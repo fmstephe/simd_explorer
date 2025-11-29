@@ -15,17 +15,28 @@ var assemblyVpinsrw128Three_idx string
 var stubVpinsrw128Three_idx string
 
 type VPINSRW128THREE_IDX struct {
+	base   *number.Parameter
+	scalar *number.Parameter
+	ret    *number.Parameter
+}
+
+func NewVPINSRW128THREE_IDX() *VPINSRW128THREE_IDX {
+	return &VPINSRW128THREE_IDX{
+		base:   number.NewNamedUintParameter("base", 128, 16, 10),
+		scalar: number.NewNamedUintParameter("scalar", 16, 16, 10),
+		ret:    number.NewNamedUintParameter("ret", 128, 16, 10),
+	}
 }
 
 func (v *VPINSRW128THREE_IDX) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		number.NewUintParameter(128, 16, 10),
-		number.NewUintParameter(16, 16, 10),
+		v.base,
+		v.scalar,
 	}
 }
 
 func (v *VPINSRW128THREE_IDX) Output() *number.Parameter {
-	return number.NewUintParameter(128, 16, 10)
+	return v.ret
 }
 
 func (v *VPINSRW128THREE_IDX) Name() string {
@@ -44,10 +55,10 @@ func (v *VPINSRW128THREE_IDX) Assembly() string {
 	return assemblyVpinsrw128Three_idx
 }
 
-func (v *VPINSRW128THREE_IDX) Run(inputs [][]byte) (output []byte) {
+func (v *VPINSRW128THREE_IDX) Run(_ [][]byte) (output []byte) {
 	base := [8]uint16{}
-	copy(base[:], number.ToUint16Slice(inputs[0]))
-	scalar := number.ToUint16(inputs[1])
+	copy(base[:], number.ToUint16Slice(v.base.FlatData()))
+	scalar := number.ToUint16(v.scalar.FlatData())
 
 	ret := [8]uint16{}
 
@@ -55,11 +66,9 @@ func (v *VPINSRW128THREE_IDX) Run(inputs [][]byte) (output []byte) {
 
 	log.Printf("VPINSRW128THREE_IDX input base=%v scalar=%v output %v", base, scalar, ret)
 
-	bytes := []byte{}
-	for _, v := range ret {
-		bytes = append(bytes, number.Uint16ToBytes(v)...)
-	}
-	return bytes
+	out := number.Uint16SliceToBytes(ret[:])
+	v.ret.SetData(out)
+	return out
 }
 
 func (v *VPINSRW128THREE_IDX) Supported() bool {
