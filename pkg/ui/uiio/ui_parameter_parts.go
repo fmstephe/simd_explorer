@@ -55,7 +55,6 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 	parts := parameter.Parts()
 	partBitWidth := parameter.PartBitWidth()
 	partsPerLine := calcPartsPerLine(parameter)
-	partConverter := parameter.Converter()
 
 	// TODO we are going to have to build more consideration into this for 512 bit registers
 	// on my monitor right now I can't display the 64 bit parts of the 512 bit register on a single line.
@@ -63,8 +62,9 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 		part := partsBuilder.build()
 		part.setTitle(fmt.Sprintf("%d:%d", i*partBitWidth, (i+1)*partBitWidth))
 		part.setBorder(true)
-		part.setFieldWidth(partConverter.GetTextWidth())
-		part.setAcceptanceFunc(partConverter.InputAcceptor())
+		part.setFieldWidth(parameter.GetTextWidth())
+		part.setFieldWidth(parameter.Base())
+		part.setAcceptanceFunc(parameter.InputAcceptor())
 
 		pParts.allParts[i] = part
 
@@ -77,7 +77,7 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 	// the logs
 	for _, part := range pParts.allParts {
 		part.setChangedFunc(func(txt string) {
-			if normalised, changed := partConverter.Normalised(txt); changed {
+			if normalised, changed := parameter.Normalised(txt); changed {
 				// If normalisation changed the text value -
 				// set it again with the normalised value.
 				// Carefully avoid any of the other processing
@@ -87,7 +87,7 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 			}
 			// If the part's txt is an unstable value, then warn the user by setting background to yellow.
 			// This won't help colourblind users, but we can resolve that later if needed.
-			if !partConverter.IsStable(txt) {
+			if !parameter.IsStable(txt) {
 				part.setBackgroundColor(tcell.ColorRed)
 			} else {
 				part.setBackgroundColor(tview.Styles.ContrastBackgroundColor)
@@ -109,7 +109,7 @@ func (in *UIParameterParts) getData() []byte {
 
 	for _, part := range in.allParts {
 		txt := part.getText()
-		bytes = append(bytes, in.parameter.Converter().StringToBytes(txt)...)
+		bytes = append(bytes, in.parameter.StringToBytes(txt)...)
 	}
 
 	log.Printf("%s broadcasting data change %0.8b", in.describe(), bytes)
@@ -132,7 +132,7 @@ func (in *UIParameterParts) setData(bytes []byte) {
 	for i, part := range in.allParts {
 		idx := i * bytesPer
 		chunk := bytes[idx : idx+bytesPer]
-		txt := in.parameter.Converter().BytesToString(chunk)
+		txt := in.parameter.BytesToString(chunk)
 		if part.getText() != txt {
 			// Only set the output text if the new value is
 			// different from the old, this reduces noise in the logs
@@ -167,7 +167,7 @@ func calcPartsPerLine(parameter *number.Parameter) int {
 	// We subtract 4 here to heuristically account for the input/output borders
 	half := (width - 4) / 2
 	// NB: The +2 heuristally allows for a border
-	partWidth := parameter.Converter().GetTextWidth() + 2
+	partWidth := parameter.GetTextWidth() + 2
 	// For parts which are smaller than 10, we force the size to 10 to
 	// allow the title to display correctly
 	partWidth = max(partWidth, 10)

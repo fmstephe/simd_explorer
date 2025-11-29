@@ -72,12 +72,36 @@ func (p *Parameter) Parts() int {
 	return p.parts
 }
 
+func (p *Parameter) GetTextWidth() int {
+	return p.converter.GetTextWidth()
+}
+
+func (p *Parameter) GetBitWidth() int {
+	return p.converter.GetBitWidth()
+}
+
 func (p *Parameter) Base() int {
 	return p.converter.GetBase()
 }
 
-func (p *Parameter) Converter() Converter {
-	return p.converter
+func (p *Parameter) StringToBytes(txt string) []byte {
+	return p.converter.StringToBytes(txt)
+}
+
+func (p *Parameter) BytesToString(bytes []byte) string {
+	return p.converter.BytesToString(bytes)
+}
+
+func (p *Parameter) Normalised(txt string) (string, bool) {
+	return p.converter.Normalised(txt)
+}
+
+func (p *Parameter) IsStable(txt string) bool {
+	return p.converter.IsStable(txt)
+}
+
+func (p *Parameter) InputAcceptor() func(string, rune) bool {
+	return p.converter.InputAcceptor()
 }
 
 func partsCount(partBitWidth, totalBitWidth int) int {
