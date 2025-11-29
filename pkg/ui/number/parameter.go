@@ -1,15 +1,16 @@
 package number
 
-import "fmt"
+import (
+	"fmt"
+)
 
 type Parameter struct {
 	// Immutable
 	name          string
 	totalBitWidth int
-	parts         int
 	converter     Converter
 	// Mutable
-	data []byte
+	partData [][]byte
 }
 
 func NewUintParameter(totalBitWidth, partBitWidth, base int) *Parameter {
@@ -17,15 +18,9 @@ func NewUintParameter(totalBitWidth, partBitWidth, base int) *Parameter {
 }
 
 func NewNamedUintParameter(name string, totalBitWidth, partBitWidth, base int) *Parameter {
-	parts := partsCount(partBitWidth, totalBitWidth)
 	converter := NewUintConverter(partBitWidth, base)
 
-	return &Parameter{
-		name:          name,
-		totalBitWidth: totalBitWidth,
-		parts:         parts,
-		converter:     converter,
-	}
+	return newParameter(name, totalBitWidth, partBitWidth, converter)
 }
 
 func NewIntParameter(totalBitWidth, partBitWidth, base int) *Parameter {
@@ -33,15 +28,9 @@ func NewIntParameter(totalBitWidth, partBitWidth, base int) *Parameter {
 }
 
 func NewNamedIntParameter(name string, totalBitWidth, partBitWidth, base int) *Parameter {
-	parts := partsCount(partBitWidth, totalBitWidth)
 	converter := NewIntConverter(partBitWidth, base)
 
-	return &Parameter{
-		name:          name,
-		totalBitWidth: totalBitWidth,
-		parts:         parts,
-		converter:     converter,
-	}
+	return newParameter(name, totalBitWidth, partBitWidth, converter)
 }
 
 func NewFloatParameter(totalBitWidth, partBitWidth int) *Parameter {
@@ -49,13 +38,21 @@ func NewFloatParameter(totalBitWidth, partBitWidth int) *Parameter {
 }
 
 func NewNamedFloatParameter(name string, totalBitWidth, partBitWidth int) *Parameter {
-	parts := partsCount(partBitWidth, totalBitWidth)
 	converter := NewFloatConverter(partBitWidth)
 
+	return newParameter(name, totalBitWidth, partBitWidth, converter)
+}
+
+func newParameter(name string, totalBitWidth, partBitWidth int, converter Converter) *Parameter {
+	parts := partsCount(partBitWidth, totalBitWidth)
+
 	return &Parameter{
+		// Immutable
+		name:          name,
 		totalBitWidth: totalBitWidth,
-		parts:         parts,
 		converter:     converter,
+		// Mutable
+		partData: make([][]byte, parts),
 	}
 }
 
@@ -72,7 +69,7 @@ func (p *Parameter) PartBitWidth() int {
 }
 
 func (p *Parameter) Parts() int {
-	return p.parts
+	return len(p.partData)
 }
 
 func (p *Parameter) GetTextWidth() int {
@@ -88,11 +85,46 @@ func (p *Parameter) Base() int {
 }
 
 func (p *Parameter) SetData(bytes []byte) {
-	p.data = bytes
+	if (len(bytes) * 8) != p.totalBitWidth {
+		panic(fmt.Errorf("bad data update, received %d bits, but need %d", len(bytes)*8, p.totalBitWidth))
+	}
+
+	if len(bytes)%len(p.partData) != 0 {
+		panic(fmt.Errorf("set data with %d bytes, not cleanly divisible by %d parts", len(bytes), len(p.partData)))
+	}
+
+	bytesPer := len(bytes) / len(p.partData)
+	for i := range p.partData {
+		idx := i * bytesPer
+		chunk := bytes[idx : idx+bytesPer]
+		p.partData[i] = chunk
+	}
 }
 
-func (p *Parameter) DataAsString() string {
-	return p.converter.BytesToString(p.data)
+func (p *Parameter) DataFromStrings(txts []string) {
+	for i, txt := range txts {
+		p.partData[i] = p.converter.StringToBytes(txt)
+	}
+}
+
+func (p *Parameter) DataToStrings() []string {
+	strs := make([]string, len(p.partData))
+
+	for i, part := range p.partData {
+		strs[i] = p.converter.BytesToString(part)
+	}
+
+	return strs
+}
+
+// TODO this is temporary and should be deleted shortly
+func (p *Parameter) FlatData() []byte {
+	flatData := []byte{}
+	for _, part := range p.partData {
+		flatData = append(flatData, part...)
+	}
+
+	return flatData
 }
 
 // This method is stateless and will be removed shortly

@@ -105,38 +105,30 @@ func (in *UIParameterParts) GetBox() *tview.Grid {
 }
 
 func (in *UIParameterParts) getData() []byte {
-	bytes := make([]byte, 0, in.parameter.TotalBitWidth())
+	strParts := make([]string, len(in.allParts))
 
-	for _, part := range in.allParts {
+	for i, part := range in.allParts {
 		txt := part.getText()
-		bytes = append(bytes, in.parameter.StringToBytes(txt)...)
+		strParts[i] = txt
 	}
 
-	log.Printf("%s broadcasting data change %0.8b", in.describe(), bytes)
+	in.parameter.DataFromStrings(strParts)
+	log.Printf("%s broadcasting data change %s", in.describe(), strParts)
 
-	return bytes
+	return in.parameter.FlatData()
 }
 
 func (in *UIParameterParts) setData(bytes []byte) {
-	if (len(bytes) * 8) != in.parameter.TotalBitWidth() {
-		panic(fmt.Errorf("Bad data update, received %d bits, but need %d", len(bytes)*8, in.parameter.TotalBitWidth()))
-	}
-	partsCount := len(in.allParts)
+	in.parameter.SetData(bytes)
 	log.Printf("%s received data change %0.8b", in.describe(), bytes)
 
-	if len(bytes)%partsCount != 0 {
-		panic(fmt.Errorf("%s update with %d bytes, not cleanly divisible by %d parts", in.describe(), len(bytes), partsCount))
-	}
-
-	bytesPer := len(bytes) / partsCount
-	for i, part := range in.allParts {
-		idx := i * bytesPer
-		chunk := bytes[idx : idx+bytesPer]
-		txt := in.parameter.BytesToString(chunk)
+	txts := in.parameter.DataToStrings()
+	for i, txt := range txts {
+		part := in.allParts[i]
 		if part.getText() != txt {
 			// Only set the output text if the new value is
 			// different from the old, this reduces noise in the logs
-			log.Printf("%s[%d] changing text from %q to %q using %0.8b", in.describe(), i, part.getText(), txt, chunk)
+			log.Printf("%s[%d] changing text from %q to %q", in.describe(), i, part.getText(), txt)
 			part.setText(txt)
 		}
 	}
