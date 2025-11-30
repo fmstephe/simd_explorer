@@ -19,13 +19,6 @@ type UIInstruction struct {
 }
 
 func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) *UIInstruction {
-	// UIRegister is required for callbacks in register input components.
-	// When the input components are changed they callback into the
-	// UIRegister to indicate that a value has been changed and
-	// inputs/outputs reprocessed and broadcast.
-	//
-	// TODO this design _feels_ awkward, so we should have a think about
-	// this in the future
 	uiInst := &UIInstruction{
 		instruction: instruction,
 		focus:       0,
@@ -48,7 +41,7 @@ func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) 
 
 	gridRight := tview.NewGrid()
 	gridRight.SetBorder(true)
-	gridRight.SetTitle("Outputs Base %d")
+	gridRight.SetTitle("Output")
 
 	for i, input := range inputs {
 		gridLeft.AddItem(input.GetBox(), i, 0, 1, 1, 0, 0, true)

@@ -17,6 +17,10 @@ func NewFloatConverter(bitWidth int) *FloatConverter {
 	}
 }
 
+func (c *FloatConverter) Kind() string {
+	return "float" + strconv.Itoa(c.bitWidth)
+}
+
 func (c *FloatConverter) GetBitWidth() int {
 	return c.bitWidth
 }

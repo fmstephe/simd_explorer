@@ -38,7 +38,7 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 	// We always have a maximum of 8 columns per row
 	grid.SetRows(3, 3, 3, 3, 3, 3, 3, 3)
 	grid.SetBorder(true)
-	grid.SetTitle(fmt.Sprintf("%d Bit %s In %d Bit Parts", parameter.TotalBitWidth(), partsBuilder.kind(), parameter.PartBitWidth()))
+	grid.SetTitle(fmt.Sprintf(" '%s' %s (%d bits) ", parameter.Name(), parameter.Kind(), parameter.TotalBitWidth()))
 
 	pParts := &UIParameterParts{
 		id:   uuid.New(),

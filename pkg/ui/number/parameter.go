@@ -65,6 +65,10 @@ func (p *Parameter) Name() string {
 	return p.name
 }
 
+func (p *Parameter) Kind() string {
+	return p.converter.Kind()
+}
+
 func (p *Parameter) TotalBitWidth() int {
 	return p.totalBitWidth
 }
