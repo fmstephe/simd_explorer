@@ -49,7 +49,7 @@ func (v *VPBROADCASTQ256) Assembly() string {
 	return assemblyVpbroadcastq256
 }
 
-func (v *VPBROADCASTQ256) Run(_ [][]byte) (output []byte) {
+func (v *VPBROADCASTQ256) Run() (output []byte) {
 	q := number.ToUint64(v.scalar.FlatData())
 	ret := [4]uint64{}
 	vpbroadcastq256(q, &ret)

@@ -55,7 +55,7 @@ func (v *PMINUB128) Assembly() string {
 	return assemblyPminub128
 }
 
-func (v *PMINUB128) Run(_ [][]byte) (output []byte) {
+func (v *PMINUB128) Run() (output []byte) {
 	vals1 := [16]uint8{}
 	copy(vals1[:], v.vals1.FlatData())
 	vals2 := [16]uint8{}

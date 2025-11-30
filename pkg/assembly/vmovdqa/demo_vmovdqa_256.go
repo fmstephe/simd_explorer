@@ -52,7 +52,7 @@ func (v *VMOVDQA256) Assembly() string {
 	return assemblyVmovdqa256
 }
 
-func (v *VMOVDQA256) Run(_ [][]byte) (output []byte) {
+func (v *VMOVDQA256) Run() (output []byte) {
 	uints := [8]uint32{}
 	copy(uints[:], number.ToUint32Slice(v.vals.FlatData()))
 

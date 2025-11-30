@@ -50,7 +50,7 @@ func (v *VPERMILPS256REVERSE) Assembly() string {
 	return assemblyVpermilps256Reverse
 }
 
-func (v *VPERMILPS256REVERSE) Run(inputs [][]byte) (output []byte) {
+func (v *VPERMILPS256REVERSE) Run() (output []byte) {
 	vals := [8]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	ret := [8]float32{}

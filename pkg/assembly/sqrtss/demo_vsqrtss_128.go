@@ -52,7 +52,7 @@ func (v *VSQRTSS128) Assembly() string {
 	return assemblyVsqrtss128
 }
 
-func (v *VSQRTSS128) Run(_ [][]byte) (output []byte) {
+func (v *VSQRTSS128) Run() (output []byte) {
 	vals := [4]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 

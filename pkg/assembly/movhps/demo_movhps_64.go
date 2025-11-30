@@ -55,7 +55,7 @@ func (v *MOVHPS64) Assembly() string {
 	return assemblyMovhps64
 }
 
-func (v *MOVHPS64) Run(_ [][]byte) (output []byte) {
+func (v *MOVHPS64) Run() (output []byte) {
 	lower := [2]float32{}
 	copy(lower[:], number.ToFloat32Slice(v.lower.FlatData()))
 

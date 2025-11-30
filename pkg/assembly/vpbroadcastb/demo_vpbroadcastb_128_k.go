@@ -51,7 +51,7 @@ func (v *VPBROADCASTB128K) Assembly() string {
 	return assemblyVpbroadcastb128K
 }
 
-func (v *VPBROADCASTB128K) Run(_ [][]byte) (output []byte) {
+func (v *VPBROADCASTB128K) Run() (output []byte) {
 	ret := [16]byte{}
 	b := number.ToUint8(v.scalar.FlatData())
 	k := number.ToUint64(v.pred.FlatData())

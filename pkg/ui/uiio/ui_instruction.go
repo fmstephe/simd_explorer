@@ -80,11 +80,13 @@ func (r *UIInstruction) GetPrimitive() tview.Primitive {
 }
 
 func (r *UIInstruction) inputsChanged() {
-	inputs := [][]byte{}
-	for _, input := range r.inputUIParameters {
-		inputs = append(inputs, input.getData())
-	}
-	output := r.instruction.Run(inputs)
+	/*
+		inputs := [][]byte{}
+		for _, input := range r.inputUIParameters {
+			inputs = append(inputs, input.getData())
+		}
+	*/
+	output := r.instruction.Run()
 	r.outputUIParameter.setData(output)
 }
 

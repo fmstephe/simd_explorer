@@ -52,7 +52,7 @@ func (v *MOVMSKPD128) Assembly() string {
 	return assemblyMovmskpd128
 }
 
-func (v *MOVMSKPD128) Run(_ [][]byte) (output []byte) {
+func (v *MOVMSKPD128) Run() (output []byte) {
 	vals := [2]float64{}
 	copy(vals[:], number.ToFloat64Slice(v.vals.FlatData()))
 

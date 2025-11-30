@@ -52,7 +52,7 @@ func (v *VMOVMSKPD256) Assembly() string {
 	return assemblyVmovmskpd256
 }
 
-func (v *VMOVMSKPD256) Run(_ [][]byte) (output []byte) {
+func (v *VMOVMSKPD256) Run() (output []byte) {
 	vals := [4]float64{}
 	copy(vals[:], number.ToFloat64Slice(v.vals.FlatData()))
 

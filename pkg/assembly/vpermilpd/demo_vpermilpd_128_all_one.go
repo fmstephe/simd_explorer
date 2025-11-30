@@ -52,7 +52,7 @@ func (v *VPERMILPD128ALL_ONE) Assembly() string {
 	return assemblyVpermilpd128All_one
 }
 
-func (v *VPERMILPD128ALL_ONE) Run(_ [][]byte) (output []byte) {
+func (v *VPERMILPD128ALL_ONE) Run() (output []byte) {
 	vals := [2]float64{}
 	copy(vals[:], number.ToFloat64Slice(v.vals.FlatData()))
 

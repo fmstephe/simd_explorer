@@ -52,7 +52,7 @@ func (v *VPEXTRW128TWO_IDX) Assembly() string {
 	return assemblyVpextrw128Two_idx
 }
 
-func (v *VPEXTRW128TWO_IDX) Run(_ [][]byte) (output []byte) {
+func (v *VPEXTRW128TWO_IDX) Run() (output []byte) {
 	vals := [8]uint16{}
 	copy(vals[:], number.ToUint16Slice(v.vals.FlatData()))
 

@@ -52,7 +52,7 @@ func (v *VRCPPS256) Assembly() string {
 	return assemblyVrcpps256
 }
 
-func (v *VRCPPS256) Run(_ [][]byte) (output []byte) {
+func (v *VRCPPS256) Run() (output []byte) {
 	vals := [8]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 

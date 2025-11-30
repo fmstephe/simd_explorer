@@ -52,7 +52,7 @@ func (v *VTESTPS256) Assembly() string {
 	return assemblyVtestps256
 }
 
-func (v *VTESTPS256) Run(_ [][]byte) (output []byte) {
+func (v *VTESTPS256) Run() (output []byte) {
 	vals1 := [8]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [8]float32{}

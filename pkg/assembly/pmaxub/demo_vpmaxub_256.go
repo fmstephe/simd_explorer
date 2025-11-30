@@ -55,7 +55,7 @@ func (v *VPMAXUB256) Assembly() string {
 	return assemblyVpmaxub256
 }
 
-func (v *VPMAXUB256) Run(_ [][]byte) (output []byte) {
+func (v *VPMAXUB256) Run() (output []byte) {
 	vals1 := [32]uint8{}
 	copy(vals1[:], v.vals1.FlatData())
 	vals2 := [32]uint8{}

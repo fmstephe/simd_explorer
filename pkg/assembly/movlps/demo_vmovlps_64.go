@@ -55,7 +55,7 @@ func (v *VMOVLPS64) Assembly() string {
 	return assemblyVmovlps64
 }
 
-func (v *VMOVLPS64) Run(_ [][]byte) (output []byte) {
+func (v *VMOVLPS64) Run() (output []byte) {
 	lower := [2]float32{}
 	copy(lower[:], number.ToFloat32Slice(v.lower.FlatData()))
 

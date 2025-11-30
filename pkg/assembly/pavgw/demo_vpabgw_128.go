@@ -55,7 +55,7 @@ func (v *VPAVGW128) Assembly() string {
 	return assemblyVpabgw128
 }
 
-func (v *VPAVGW128) Run(_ [][]byte) (output []byte) {
+func (v *VPAVGW128) Run() (output []byte) {
 	vals1 := [8]uint16{}
 	copy(vals1[:], number.ToUint16Slice(v.vals1.FlatData()))
 	vals2 := [8]uint16{}

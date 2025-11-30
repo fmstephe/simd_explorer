@@ -55,7 +55,7 @@ func (v *VPMAXSW256) Assembly() string {
 	return assemblyVpmaxsw256
 }
 
-func (v *VPMAXSW256) Run(_ [][]byte) (output []byte) {
+func (v *VPMAXSW256) Run() (output []byte) {
 	vals1 := [16]int16{}
 	copy(vals1[:], number.ToInt16Slice(v.vals1.FlatData()))
 	vals2 := [16]int16{}

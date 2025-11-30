@@ -52,7 +52,7 @@ func (v *VBROADCASTI128256) Assembly() string {
 	return assemblyVbroadcasti128256
 }
 
-func (v *VBROADCASTI128256) Run(_ [][]byte) (output []byte) {
+func (v *VBROADCASTI128256) Run() (output []byte) {
 	var val [2]uint64
 	copy(val[:], number.ToUint64Slice(v.block.FlatData()))
 	var ret [4]uint64

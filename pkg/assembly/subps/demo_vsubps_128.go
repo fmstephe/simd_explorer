@@ -55,7 +55,7 @@ func (v *VSUBPS128) Assembly() string {
 	return assemblyVsubps128
 }
 
-func (v *VSUBPS128) Run(_ [][]byte) (output []byte) {
+func (v *VSUBPS128) Run() (output []byte) {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}

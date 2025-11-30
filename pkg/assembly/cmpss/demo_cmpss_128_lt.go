@@ -55,7 +55,7 @@ func (v *CMPSS128LT) Assembly() string {
 	return assemblyCmpss128Lt
 }
 
-func (v *CMPSS128LT) Run(_ [][]byte) (output []byte) {
+func (v *CMPSS128LT) Run() (output []byte) {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}

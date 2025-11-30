@@ -61,7 +61,7 @@ func (v *VGATHERQPD128) Assembly() string {
 	return assemblyVgatherqpd128
 }
 
-func (v *VGATHERQPD128) Run(_ [][]byte) (output []byte) {
+func (v *VGATHERQPD128) Run() (output []byte) {
 	base := [8]float64{}
 	copy(base[:], number.ToFloat64Slice(v.base.FlatData()))
 	index := [2]uint64{}

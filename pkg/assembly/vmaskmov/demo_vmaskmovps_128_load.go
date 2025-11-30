@@ -55,7 +55,7 @@ func (v *VMASKMOVPS128LOAD) Assembly() string {
 	return assemblyVmaskmovps128Load
 }
 
-func (v *VMASKMOVPS128LOAD) Run(_ [][]byte) (output []byte) {
+func (v *VMASKMOVPS128LOAD) Run() (output []byte) {
 	vals := [4]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	mask := [4]float32{}

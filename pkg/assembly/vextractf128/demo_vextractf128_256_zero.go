@@ -52,7 +52,7 @@ func (v *VEXTRACTF128256ZERO) Assembly() string {
 	return assemblyVextractf128256Zero
 }
 
-func (v *VEXTRACTF128256ZERO) Run(_ [][]byte) (output []byte) {
+func (v *VEXTRACTF128256ZERO) Run() (output []byte) {
 	base := [8]float32{}
 	copy(base[:], number.ToFloat32Slice(v.vals.FlatData()))
 

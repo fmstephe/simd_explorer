@@ -50,7 +50,7 @@ func (v *VPERMILPS256IDENTITY) Assembly() string {
 	return assemblyVpermilps256Identity
 }
 
-func (v *VPERMILPS256IDENTITY) Run(_ [][]byte) (output []byte) {
+func (v *VPERMILPS256IDENTITY) Run() (output []byte) {
 	vals := [8]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	ret := [8]float32{}

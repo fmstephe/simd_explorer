@@ -52,7 +52,7 @@ func (v *VBROADCASTSS128M32) Assembly() string {
 	return assemblyVbroadcastss128M32
 }
 
-func (v *VBROADCASTSS128M32) Run(_ [][]byte) (output []byte) {
+func (v *VBROADCASTSS128M32) Run() (output []byte) {
 	scalar := number.ToFloat32(v.scalar.FlatData())
 
 	ret := [4]float32{}

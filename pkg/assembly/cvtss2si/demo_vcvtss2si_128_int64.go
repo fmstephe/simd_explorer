@@ -52,7 +52,7 @@ func (v *VCVTSS2SI128INT64) Assembly() string {
 	return assemblyVcvtss2si128Int64
 }
 
-func (v *VCVTSS2SI128INT64) Run(_ [][]byte) (output []byte) {
+func (v *VCVTSS2SI128INT64) Run() (output []byte) {
 	vals := [4]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 

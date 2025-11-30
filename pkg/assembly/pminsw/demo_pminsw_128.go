@@ -55,7 +55,7 @@ func (v *PMINSW128) Assembly() string {
 	return assemblyPminsw128
 }
 
-func (v *PMINSW128) Run(_ [][]byte) (output []byte) {
+func (v *PMINSW128) Run() (output []byte) {
 	vals1 := [8]int16{}
 	copy(vals1[:], number.ToInt16Slice(v.vals1.FlatData()))
 	vals2 := [8]int16{}

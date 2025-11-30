@@ -55,7 +55,7 @@ func (v *VINSERTF128256ZERO) Assembly() string {
 	return assemblyVinsertf128256Zero
 }
 
-func (v *VINSERTF128256ZERO) Run(_ [][]byte) (output []byte) {
+func (v *VINSERTF128256ZERO) Run() (output []byte) {
 	vals := [8]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	block := [4]float32{}

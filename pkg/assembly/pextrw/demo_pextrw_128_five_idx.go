@@ -52,7 +52,7 @@ func (v *PEXTRW128FIVE_IDX) Assembly() string {
 	return assemblyPextrw128Five_idx
 }
 
-func (v *PEXTRW128FIVE_IDX) Run(_ [][]byte) (output []byte) {
+func (v *PEXTRW128FIVE_IDX) Run() (output []byte) {
 	vals := [8]uint16{}
 	copy(vals[:], number.ToUint16Slice(v.vals.FlatData()))
 

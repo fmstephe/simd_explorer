@@ -55,7 +55,7 @@ func (v *UNPCKHPS128) Assembly() string {
 	return assemblyUnpckhps128
 }
 
-func (v *UNPCKHPS128) Run(_ [][]byte) (output []byte) {
+func (v *UNPCKHPS128) Run() (output []byte) {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}

@@ -52,7 +52,7 @@ func (v *VPERM2F128128HIGHB_HIGHB) Assembly() string {
 	return assemblyVperm2f128128Highb_highb
 }
 
-func (v *VPERM2F128128HIGHB_HIGHB) Run(_ [][]byte) (output []byte) {
+func (v *VPERM2F128128HIGHB_HIGHB) Run() (output []byte) {
 	valsA := [8]float32{}
 	copy(valsA[:], number.ToFloat32Slice(v.valsA.FlatData()))
 	valsB := [8]float32{}

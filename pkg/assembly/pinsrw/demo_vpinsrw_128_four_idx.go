@@ -55,7 +55,7 @@ func (v *VPINSRW128FOUR_IDX) Assembly() string {
 	return assemblyVpinsrw128Four_idx
 }
 
-func (v *VPINSRW128FOUR_IDX) Run(_ [][]byte) (output []byte) {
+func (v *VPINSRW128FOUR_IDX) Run() (output []byte) {
 	base := [8]uint16{}
 	copy(base[:], number.ToUint16Slice(v.base.FlatData()))
 	scalar := number.ToUint16(v.scalar.FlatData())

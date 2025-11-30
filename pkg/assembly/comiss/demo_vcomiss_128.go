@@ -55,7 +55,7 @@ func (v *VCOMISS128) Assembly() string {
 	return assemblyVcomiss128
 }
 
-func (v *VCOMISS128) Run(_ [][]byte) (output []byte) {
+func (v *VCOMISS128) Run() (output []byte) {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}

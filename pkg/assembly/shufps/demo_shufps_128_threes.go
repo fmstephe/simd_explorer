@@ -55,7 +55,7 @@ func (v *SHUFPS128THREES) Assembly() string {
 	return assemblyShufps128Threes
 }
 
-func (v *SHUFPS128THREES) Run(_ [][]byte) (output []byte) {
+func (v *SHUFPS128THREES) Run() (output []byte) {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}

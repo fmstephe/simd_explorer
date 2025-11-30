@@ -55,7 +55,7 @@ func (v *VPSADBW256) Assembly() string {
 	return assemblyVpsadbw256
 }
 
-func (v *VPSADBW256) Run(_ [][]byte) (output []byte) {
+func (v *VPSADBW256) Run() (output []byte) {
 	vals1 := [32]uint8{}
 	copy(vals1[:], v.vals1.FlatData())
 	vals2 := [32]uint8{}

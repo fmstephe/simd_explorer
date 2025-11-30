@@ -52,7 +52,7 @@ func (v *VEXTRACTI128256ZERO) Assembly() string {
 	return assemblyVextracti128256Zero
 }
 
-func (v *VEXTRACTI128256ZERO) Run(_ [][]byte) (output []byte) {
+func (v *VEXTRACTI128256ZERO) Run() (output []byte) {
 	var vals256 [8]uint32
 	copy(vals256[:], number.ToUint32Slice(v.vals.FlatData()))
 	var ret [4]uint32

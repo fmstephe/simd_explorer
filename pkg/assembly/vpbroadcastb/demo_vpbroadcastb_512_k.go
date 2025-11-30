@@ -51,7 +51,7 @@ func (v *VPBROADCASTB512K) Assembly() string {
 	return assemblyVpbroadcastb512K
 }
 
-func (v *VPBROADCASTB512K) Run(_ [][]byte) (output []byte) {
+func (v *VPBROADCASTB512K) Run() (output []byte) {
 	// fields are initialized in constructor
 	ret := [64]byte{}
 	b := number.ToUint8(v.scalar.FlatData())

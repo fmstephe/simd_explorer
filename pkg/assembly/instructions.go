@@ -9,6 +9,6 @@ type Instruction interface {
 	Description() string
 	Stub() string
 	Assembly() string
-	Run([][]byte) []byte
+	Run() []byte
 	Supported() bool
 }

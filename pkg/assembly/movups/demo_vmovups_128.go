@@ -52,7 +52,7 @@ func (v *VMOVUPS128) Assembly() string {
 	return assemblyVmovups128
 }
 
-func (v *VMOVUPS128) Run(_ [][]byte) (output []byte) {
+func (v *VMOVUPS128) Run() (output []byte) {
 	vals := [4]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 

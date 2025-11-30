@@ -55,7 +55,7 @@ func (v *VSHUFPS256TWOS) Assembly() string {
 	return assemblyVshufps256Twos
 }
 
-func (v *VSHUFPS256TWOS) Run(_ [][]byte) (output []byte) {
+func (v *VSHUFPS256TWOS) Run() (output []byte) {
 	vals1 := [8]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [8]float32{}

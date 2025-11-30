@@ -52,7 +52,7 @@ func (v *VPERMILPS256) Assembly() string {
 	return assemblyVpermilps256
 }
 
-func (v *VPERMILPS256) Run(_ [][]byte) (output []byte) {
+func (v *VPERMILPS256) Run() (output []byte) {
 	vals := [8]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	control := [8]float32{}

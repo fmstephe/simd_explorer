@@ -52,7 +52,7 @@ func (v *VBROADCASTSD256M64) Assembly() string {
 	return assemblyVbroadcastsd256M64
 }
 
-func (v *VBROADCASTSD256M64) Run(_ [][]byte) (output []byte) {
+func (v *VBROADCASTSD256M64) Run() (output []byte) {
 	scalar := number.ToFloat64(v.scalar.FlatData())
 
 	ret := [4]float64{}

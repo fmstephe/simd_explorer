@@ -55,7 +55,7 @@ func (v *VINSERTI128256ZERO) Assembly() string {
 	return assemblyVinserti128256Zero
 }
 
-func (v *VINSERTI128256ZERO) Run(_ [][]byte) (output []byte) {
+func (v *VINSERTI128256ZERO) Run() (output []byte) {
 	var vals128 [4]uint32
 	copy(vals128[:], number.ToUint32Slice(v.vals128.FlatData()))
 	var vals256 [8]uint32

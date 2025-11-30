@@ -55,7 +55,7 @@ func (v *VCVTSI2SS128INT32) Assembly() string {
 	return assemblyVcvtsi2ss128Int32
 }
 
-func (v *VCVTSI2SS128INT32) Run(_ [][]byte) (output []byte) {
+func (v *VCVTSI2SS128INT32) Run() (output []byte) {
 	vals := [4]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	ival := number.ToInt32(v.ival.FlatData())
