@@ -2,6 +2,7 @@ package vpbroadcastb
 
 import (
 	_ "embed"
+	"log"
 
 	"github.com/fmstephe/simd_explorer/pkg/assembly/asmutil"
 	"github.com/fmstephe/simd_explorer/pkg/ui/number"
@@ -54,6 +55,7 @@ func (v *VPBROADCASTB512) Run() {
 	b := number.ToUint8(v.scalar.FlatData())
 	vpbroadcastb512(b, &ret)
 	out := ret[:]
+	log.Printf("VPBROADCASTB512 b %v ret %v", b, ret)
 	v.ret.SetData(out)
 
 }

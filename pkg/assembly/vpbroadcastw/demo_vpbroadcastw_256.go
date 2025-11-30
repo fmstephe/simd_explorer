@@ -2,6 +2,7 @@ package vpbroadcastw
 
 import (
 	_ "embed"
+	"log"
 
 	"github.com/fmstephe/simd_explorer/pkg/assembly/asmutil"
 	"github.com/fmstephe/simd_explorer/pkg/ui/number"
@@ -54,6 +55,7 @@ func (v *VPBROADCASTW256) Run() {
 	ret := [16]uint16{}
 	vpbroadcastw256(w, &ret)
 	out := number.Uint16SliceToBytes(ret[:])
+	log.Printf("VPBROADCASTW256 w 0x%X ret %v", w, ret)
 	v.ret.SetData(out)
 
 }
