@@ -55,7 +55,7 @@ func (v *VPAVGB128) Assembly() string {
 	return assemblyVpavgb128
 }
 
-func (v *VPAVGB128) Run() (output []byte) {
+func (v *VPAVGB128) Run() {
 	vals1 := [16]uint8{}
 	copy(vals1[:], v.vals1.FlatData())
 	vals2 := [16]uint8{}
@@ -69,7 +69,7 @@ func (v *VPAVGB128) Run() (output []byte) {
 
 	out := ret[:]
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPAVGB128) Supported() bool {

@@ -52,7 +52,7 @@ func (v *VEXTRACTI128256ONE) Assembly() string {
 	return assemblyVextracti128256One
 }
 
-func (v *VEXTRACTI128256ONE) Run() (output []byte) {
+func (v *VEXTRACTI128256ONE) Run() {
 	var vals256 [8]uint32
 	copy(vals256[:], number.ToUint32Slice(v.vals.FlatData()))
 	var ret [4]uint32
@@ -60,7 +60,7 @@ func (v *VEXTRACTI128256ONE) Run() (output []byte) {
 	log.Printf("VEXTRACTI128256ONE vals256 %v output %v", vals256, ret)
 	out := number.Uint32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VEXTRACTI128256ONE) Supported() bool {

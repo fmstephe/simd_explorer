@@ -104,27 +104,22 @@ func (in *UIParameterParts) GetBox() *tview.Grid {
 	return in.box
 }
 
-func (in *UIParameterParts) getData() []byte {
-	strParts := make([]string, len(in.allParts))
+func (in *UIParameterParts) syncToParameter() {
+	txts := make([]string, len(in.allParts))
 
 	for i, part := range in.allParts {
 		txt := part.getText()
-		strParts[i] = txt
+		txts[i] = txt
 	}
+	log.Printf("%s synced to parameter: %v", in.describe(), txts)
 
-	in.parameter.DataFromStrings(strParts)
-	log.Printf("%s broadcasting data change %s", in.describe(), strParts)
-
-	return in.parameter.FlatData()
+	in.parameter.DataFromStrings(txts)
 }
 
-func (in *UIParameterParts) setData(bytes []byte) {
-	// FIXME test only
-	// Commenting the line below disables setting output values for any instructions which haven't migrated to parameter state
-	in.parameter.SetData(bytes)
-	log.Printf("%s received data change %0.8b", in.describe(), bytes)
-
+func (in *UIParameterParts) syncFromParameter() {
 	txts := in.parameter.DataToStrings()
+	log.Printf("%s sync from parameter: %v", in.describe(), txts)
+
 	for i, txt := range txts {
 		part := in.allParts[i]
 		if part.getText() != txt {

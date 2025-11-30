@@ -52,7 +52,7 @@ func (v *VBROADCASTSF128256M128) Assembly() string {
 	return assemblyVbroadcastsf128256M128
 }
 
-func (v *VBROADCASTSF128256M128) Run() (output []byte) {
+func (v *VBROADCASTSF128256M128) Run() {
 	block := [4]float32{}
 	copy(block[:], number.ToFloat32Slice(v.vals.FlatData()))
 
@@ -64,7 +64,7 @@ func (v *VBROADCASTSF128256M128) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VBROADCASTSF128256M128) Supported() bool {

@@ -55,7 +55,7 @@ func (v *VMULPS256) Assembly() string {
 	return assemblyVmulps256
 }
 
-func (v *VMULPS256) Run() (output []byte) {
+func (v *VMULPS256) Run() {
 	vals1 := [8]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [8]float32{}
@@ -69,7 +69,7 @@ func (v *VMULPS256) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VMULPS256) Supported() bool {

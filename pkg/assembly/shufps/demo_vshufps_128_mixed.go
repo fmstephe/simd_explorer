@@ -55,7 +55,7 @@ func (v *VSHUFPS128MIXED) Assembly() string {
 	return assemblyVshufps128Mixed
 }
 
-func (v *VSHUFPS128MIXED) Run() (output []byte) {
+func (v *VSHUFPS128MIXED) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -69,7 +69,7 @@ func (v *VSHUFPS128MIXED) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VSHUFPS128MIXED) Supported() bool {

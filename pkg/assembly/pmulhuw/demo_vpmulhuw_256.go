@@ -55,7 +55,7 @@ func (v *VPMULHUW256) Assembly() string {
 	return assemblyVpmulhuw256
 }
 
-func (v *VPMULHUW256) Run() (output []byte) {
+func (v *VPMULHUW256) Run() {
 	vals1 := [16]uint16{}
 	copy(vals1[:], number.ToUint16Slice(v.vals1.FlatData()))
 	vals2 := [16]uint16{}
@@ -69,7 +69,7 @@ func (v *VPMULHUW256) Run() (output []byte) {
 
 	out := number.Uint16SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPMULHUW256) Supported() bool {

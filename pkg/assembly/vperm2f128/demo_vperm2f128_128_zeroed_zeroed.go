@@ -52,7 +52,7 @@ func (v *VPERM2F128128ZEROED_ZEROED) Assembly() string {
 	return assemblyVperm2f128128Zeroed_zeroed
 }
 
-func (v *VPERM2F128128ZEROED_ZEROED) Run() (output []byte) {
+func (v *VPERM2F128128ZEROED_ZEROED) Run() {
 	valsA := [8]float32{}
 	copy(valsA[:], number.ToFloat32Slice(v.valsA.FlatData()))
 	valsB := [8]float32{}
@@ -65,7 +65,7 @@ func (v *VPERM2F128128ZEROED_ZEROED) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPERM2F128128ZEROED_ZEROED) Supported() bool {

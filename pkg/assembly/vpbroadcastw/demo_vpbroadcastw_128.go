@@ -49,13 +49,13 @@ func (v *VPBROADCASTW128) Assembly() string {
 	return assemblyVpbroadcastw128
 }
 
-func (v *VPBROADCASTW128) Run() (output []byte) {
+func (v *VPBROADCASTW128) Run() {
 	w := number.ToUint16(v.scalar.FlatData())
 	ret := [8]uint16{}
 	vpbroadcastw128(w, &ret)
 	out := number.Uint16SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPBROADCASTW128) Supported() bool {

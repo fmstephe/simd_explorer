@@ -80,14 +80,16 @@ func (r *UIInstruction) GetPrimitive() tview.Primitive {
 }
 
 func (r *UIInstruction) inputsChanged() {
-	/*
-		inputs := [][]byte{}
-		for _, input := range r.inputUIParameters {
-			inputs = append(inputs, input.getData())
-		}
-	*/
-	output := r.instruction.Run()
-	r.outputUIParameter.setData(output)
+	// Sync all ui input fields to the instruction Input() parameters
+	for _, input := range r.inputUIParameters {
+		input.syncToParameter()
+	}
+
+	// NB: Running the instruction syncs the Output() parameter
+	r.instruction.Run()
+
+	// Sync ui output fields from instruction Output() parameter
+	r.outputUIParameter.syncFromParameter()
 }
 
 func (r *UIInstruction) initFocusCycling() {

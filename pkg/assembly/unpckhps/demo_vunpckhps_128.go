@@ -55,7 +55,7 @@ func (v *VUNPCKHPS128) Assembly() string {
 	return assemblyVunpckhps128
 }
 
-func (v *VUNPCKHPS128) Run() (output []byte) {
+func (v *VUNPCKHPS128) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -69,7 +69,7 @@ func (v *VUNPCKHPS128) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VUNPCKHPS128) Supported() bool {

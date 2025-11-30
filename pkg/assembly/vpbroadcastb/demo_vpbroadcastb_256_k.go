@@ -51,14 +51,14 @@ func (v *VPBROADCASTB256K) Assembly() string {
 	return assemblyVpbroadcastb256K
 }
 
-func (v *VPBROADCASTB256K) Run() (output []byte) {
+func (v *VPBROADCASTB256K) Run() {
 	ret := [32]byte{}
 	b := number.ToUint8(v.scalar.FlatData())
 	k := number.ToUint64(v.pred.FlatData())
 	vpbroadcastb256K(b, k, &ret)
 	out := ret[:]
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPBROADCASTB256K) Supported() bool {

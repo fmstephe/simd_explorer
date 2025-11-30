@@ -52,7 +52,7 @@ func (v *VPMOVMSKB128) Assembly() string {
 	return assemblyVpmovmskb128
 }
 
-func (v *VPMOVMSKB128) Run() (output []byte) {
+func (v *VPMOVMSKB128) Run() {
 	vals := [16]uint8{}
 	copy(vals[:], v.vals.FlatData())
 
@@ -64,7 +64,7 @@ func (v *VPMOVMSKB128) Run() (output []byte) {
 
 	out := number.Uint32ToBytes(ret)
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPMOVMSKB128) Supported() bool {

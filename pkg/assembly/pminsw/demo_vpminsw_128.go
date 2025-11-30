@@ -55,7 +55,7 @@ func (v *VPMINSW128) Assembly() string {
 	return assemblyVpminsw128
 }
 
-func (v *VPMINSW128) Run() (output []byte) {
+func (v *VPMINSW128) Run() {
 	vals1 := [8]int16{}
 	copy(vals1[:], number.ToInt16Slice(v.vals1.FlatData()))
 	vals2 := [8]int16{}
@@ -69,7 +69,7 @@ func (v *VPMINSW128) Run() (output []byte) {
 
 	out := number.Int16SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPMINSW128) Supported() bool {

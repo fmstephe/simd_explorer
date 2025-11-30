@@ -2,6 +2,7 @@ package vpbroadcastb
 
 import (
 	_ "embed"
+	"log"
 
 	"github.com/fmstephe/simd_explorer/pkg/assembly/asmutil"
 	"github.com/fmstephe/simd_explorer/pkg/ui/number"
@@ -49,13 +50,18 @@ func (v *VPBROADCASTB128) Assembly() string {
 	return assemblyVpbroadcastb128
 }
 
-func (v *VPBROADCASTB128) Run() (output []byte) {
+func (v *VPBROADCASTB128) Run() {
 	ret := [16]byte{}
 	b := number.ToUint8(v.scalar.FlatData())
+
 	vpbroadcastb128(b, &ret)
+
 	out := ret[:]
+
+	log.Printf("VPBROADCASTB128 b %v ret %v", b, ret)
+
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPBROADCASTB128) Supported() bool {

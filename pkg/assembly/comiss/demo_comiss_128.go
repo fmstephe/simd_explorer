@@ -55,7 +55,7 @@ func (v *COMISS128) Assembly() string {
 	return assemblyComiss128
 }
 
-func (v *COMISS128) Run() (output []byte) {
+func (v *COMISS128) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -73,7 +73,7 @@ func (v *COMISS128) Run() (output []byte) {
 		byte(flags >> 24),
 	}
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *COMISS128) Supported() bool {

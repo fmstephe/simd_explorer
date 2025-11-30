@@ -55,7 +55,7 @@ func (v *VCVTSI2SS128INT32) Assembly() string {
 	return assemblyVcvtsi2ss128Int32
 }
 
-func (v *VCVTSI2SS128INT32) Run() (output []byte) {
+func (v *VCVTSI2SS128INT32) Run() {
 	vals := [4]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	ival := number.ToInt32(v.ival.FlatData())
@@ -68,7 +68,7 @@ func (v *VCVTSI2SS128INT32) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VCVTSI2SS128INT32) Supported() bool {

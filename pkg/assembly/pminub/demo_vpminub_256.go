@@ -55,7 +55,7 @@ func (v *VPMINUB256) Assembly() string {
 	return assemblyVpminub256
 }
 
-func (v *VPMINUB256) Run() (output []byte) {
+func (v *VPMINUB256) Run() {
 	vals1 := [32]uint8{}
 	copy(vals1[:], v.vals1.FlatData())
 	vals2 := [32]uint8{}
@@ -69,7 +69,7 @@ func (v *VPMINUB256) Run() (output []byte) {
 
 	out := ret[:]
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPMINUB256) Supported() bool {

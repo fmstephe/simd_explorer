@@ -55,7 +55,7 @@ func (v *VINSERTI128256ONE) Assembly() string {
 	return assemblyVinserti128256One
 }
 
-func (v *VINSERTI128256ONE) Run() (output []byte) {
+func (v *VINSERTI128256ONE) Run() {
 	var vals128 [4]uint32
 	copy(vals128[:], number.ToUint32Slice(v.vals128.FlatData()))
 	var vals256 [8]uint32
@@ -65,7 +65,7 @@ func (v *VINSERTI128256ONE) Run() (output []byte) {
 	log.Printf("VINSERTI128256 one vals128 %v vals256 %v output %v", vals128, vals256, ret)
 	out := number.Uint32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VINSERTI128256ONE) Supported() bool {

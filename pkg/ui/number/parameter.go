@@ -46,13 +46,18 @@ func NewNamedFloatParameter(name string, totalBitWidth, partBitWidth int) *Param
 func newParameter(name string, totalBitWidth, partBitWidth int, converter Converter) *Parameter {
 	parts := partsCount(partBitWidth, totalBitWidth)
 
+	partData := make([][]byte, parts)
+	for i := range partData {
+		partData[i] = make([]byte, partBitWidth/8)
+	}
+
 	return &Parameter{
 		// Immutable
 		name:          name,
 		totalBitWidth: totalBitWidth,
 		converter:     converter,
 		// Mutable
-		partData: make([][]byte, parts),
+		partData: partData,
 	}
 }
 

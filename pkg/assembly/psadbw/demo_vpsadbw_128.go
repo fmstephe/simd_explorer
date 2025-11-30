@@ -55,7 +55,7 @@ func (v *VPSADBW128) Assembly() string {
 	return assemblyVpsadbw128
 }
 
-func (v *VPSADBW128) Run() (output []byte) {
+func (v *VPSADBW128) Run() {
 	vals1 := [16]uint8{}
 	copy(vals1[:], v.vals1.FlatData())
 	vals2 := [16]uint8{}
@@ -69,7 +69,7 @@ func (v *VPSADBW128) Run() (output []byte) {
 
 	out := number.Uint16SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPSADBW128) Supported() bool {

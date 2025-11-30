@@ -55,7 +55,7 @@ func (v *MAXSS128) Assembly() string {
 	return assemblyMaxss128
 }
 
-func (v *MAXSS128) Run() (output []byte) {
+func (v *MAXSS128) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -69,7 +69,7 @@ func (v *MAXSS128) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *MAXSS128) Supported() bool {

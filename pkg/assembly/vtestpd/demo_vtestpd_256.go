@@ -55,7 +55,7 @@ func (v *VTESTPD256) Assembly() string {
 	return assemblyVtestpd256
 }
 
-func (v *VTESTPD256) Run() (output []byte) {
+func (v *VTESTPD256) Run() {
 	vals1 := [4]float64{}
 	copy(vals1[:], number.ToFloat64Slice(v.vals1.FlatData()))
 	vals2 := [4]float64{}
@@ -69,7 +69,7 @@ func (v *VTESTPD256) Run() (output []byte) {
 
 	out := number.Uint32ToBytes(flags)
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VTESTPD256) Supported() bool {

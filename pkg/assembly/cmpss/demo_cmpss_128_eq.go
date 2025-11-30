@@ -55,7 +55,7 @@ func (v *CMPSS128EQ) Assembly() string {
 	return assemblyCmpss128Eq
 }
 
-func (v *CMPSS128EQ) Run() (output []byte) {
+func (v *CMPSS128EQ) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -69,7 +69,7 @@ func (v *CMPSS128EQ) Run() (output []byte) {
 
 	retSlc := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(retSlc)
-	return retSlc
+
 }
 
 func (v *CMPSS128EQ) Supported() bool {

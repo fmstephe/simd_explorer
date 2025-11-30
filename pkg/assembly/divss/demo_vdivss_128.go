@@ -55,7 +55,7 @@ func (v *VDIVSS128) Assembly() string {
 	return assemblyVdivss128
 }
 
-func (v *VDIVSS128) Run() (output []byte) {
+func (v *VDIVSS128) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -69,7 +69,7 @@ func (v *VDIVSS128) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VDIVSS128) Supported() bool {

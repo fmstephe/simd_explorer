@@ -52,7 +52,7 @@ func (v *VBROADCASTSS128M32) Assembly() string {
 	return assemblyVbroadcastss128M32
 }
 
-func (v *VBROADCASTSS128M32) Run() (output []byte) {
+func (v *VBROADCASTSS128M32) Run() {
 	scalar := number.ToFloat32(v.scalar.FlatData())
 
 	ret := [4]float32{}
@@ -63,7 +63,7 @@ func (v *VBROADCASTSS128M32) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VBROADCASTSS128M32) Supported() bool {

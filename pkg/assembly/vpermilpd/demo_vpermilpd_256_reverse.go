@@ -52,7 +52,7 @@ func (v *VPERMILPD256REVERSE) Assembly() string {
 	return assemblyVpermilpd256Reverse
 }
 
-func (v *VPERMILPD256REVERSE) Run() (output []byte) {
+func (v *VPERMILPD256REVERSE) Run() {
 	vals := [4]float64{}
 	copy(vals[:], number.ToFloat64Slice(v.vals.FlatData()))
 
@@ -64,7 +64,7 @@ func (v *VPERMILPD256REVERSE) Run() (output []byte) {
 
 	out := number.Float64SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPERMILPD256REVERSE) Supported() bool {

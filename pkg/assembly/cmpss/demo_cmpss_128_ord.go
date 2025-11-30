@@ -55,7 +55,7 @@ func (v *CMPSS128ORD) Assembly() string {
 	return assemblyCmpss128Ord
 }
 
-func (v *CMPSS128ORD) Run() (output []byte) {
+func (v *CMPSS128ORD) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -69,7 +69,7 @@ func (v *CMPSS128ORD) Run() (output []byte) {
 
 	retSlc := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(retSlc)
-	return retSlc
+
 }
 
 func (v *CMPSS128ORD) Supported() bool {

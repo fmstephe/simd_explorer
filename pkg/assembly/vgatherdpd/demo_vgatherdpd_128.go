@@ -61,7 +61,7 @@ func (v *VGATHERDPD128) Assembly() string {
 	return assemblyVgatherdpd128
 }
 
-func (v *VGATHERDPD128) Run() (output []byte) {
+func (v *VGATHERDPD128) Run() {
 	base := [8]float64{}
 	copy(base[:], number.ToFloat64Slice(v.base.FlatData()))
 	index := [4]uint32{}
@@ -79,7 +79,7 @@ func (v *VGATHERDPD128) Run() (output []byte) {
 
 	out := number.Float64SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VGATHERDPD128) Supported() bool {

@@ -51,7 +51,7 @@ func (v *VPBROADCASTB512K) Assembly() string {
 	return assemblyVpbroadcastb512K
 }
 
-func (v *VPBROADCASTB512K) Run() (output []byte) {
+func (v *VPBROADCASTB512K) Run() {
 	// fields are initialized in constructor
 	ret := [64]byte{}
 	b := number.ToUint8(v.scalar.FlatData())
@@ -59,7 +59,7 @@ func (v *VPBROADCASTB512K) Run() (output []byte) {
 	vpbroadcastb512K(b, k, &ret)
 	out := ret[:]
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPBROADCASTB512K) Supported() bool {

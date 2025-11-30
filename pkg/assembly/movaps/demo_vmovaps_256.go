@@ -52,7 +52,7 @@ func (v *VMOVAPS256) Assembly() string {
 	return assemblyVmovaps256
 }
 
-func (v *VMOVAPS256) Run() (output []byte) {
+func (v *VMOVAPS256) Run() {
 	vals := [8]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 
@@ -64,7 +64,7 @@ func (v *VMOVAPS256) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VMOVAPS256) Supported() bool {

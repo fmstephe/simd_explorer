@@ -61,7 +61,7 @@ func (v *VPGATHERDD256) Assembly() string {
 	return assemblyVpgatherdd256
 }
 
-func (v *VPGATHERDD256) Run() (output []byte) {
+func (v *VPGATHERDD256) Run() {
 	base := [16]uint32{}
 	copy(base[:], number.ToUint32Slice(v.base.FlatData()))
 	index := [8]uint32{}
@@ -77,7 +77,7 @@ func (v *VPGATHERDD256) Run() (output []byte) {
 
 	retSlc := number.Uint32SliceToBytes(ret[:])
 	v.ret.SetData(retSlc)
-	return retSlc
+
 }
 
 func (v *VPGATHERDD256) Supported() bool {

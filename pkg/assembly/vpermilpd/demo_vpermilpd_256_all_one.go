@@ -52,7 +52,7 @@ func (v *VPERMILPD256ALL_ONE) Assembly() string {
 	return assemblyVpermilpd256All_one
 }
 
-func (v *VPERMILPD256ALL_ONE) Run() (output []byte) {
+func (v *VPERMILPD256ALL_ONE) Run() {
 	vals := [4]float64{}
 	copy(vals[:], number.ToFloat64Slice(v.vals.FlatData()))
 
@@ -64,7 +64,7 @@ func (v *VPERMILPD256ALL_ONE) Run() (output []byte) {
 
 	out := number.Float64SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPERMILPD256ALL_ONE) Supported() bool {

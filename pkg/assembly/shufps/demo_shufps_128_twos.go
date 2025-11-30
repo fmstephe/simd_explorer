@@ -55,7 +55,7 @@ func (v *SHUFPS128TWOS) Assembly() string {
 	return assemblyShufps128Twos
 }
 
-func (v *SHUFPS128TWOS) Run() (output []byte) {
+func (v *SHUFPS128TWOS) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -69,7 +69,7 @@ func (v *SHUFPS128TWOS) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *SHUFPS128TWOS) Supported() bool {

@@ -52,7 +52,7 @@ func (v *VTESTPS128) Assembly() string {
 	return assemblyVtestps128
 }
 
-func (v *VTESTPS128) Run() (output []byte) {
+func (v *VTESTPS128) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -65,7 +65,7 @@ func (v *VTESTPS128) Run() (output []byte) {
 
 	out := number.Uint32ToBytes(flags)
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VTESTPS128) Supported() bool {

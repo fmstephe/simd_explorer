@@ -52,7 +52,7 @@ func (v *VEXTRACTF128256ZERO) Assembly() string {
 	return assemblyVextractf128256Zero
 }
 
-func (v *VEXTRACTF128256ZERO) Run() (output []byte) {
+func (v *VEXTRACTF128256ZERO) Run() {
 	base := [8]float32{}
 	copy(base[:], number.ToFloat32Slice(v.vals.FlatData()))
 
@@ -64,7 +64,7 @@ func (v *VEXTRACTF128256ZERO) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VEXTRACTF128256ZERO) Supported() bool {

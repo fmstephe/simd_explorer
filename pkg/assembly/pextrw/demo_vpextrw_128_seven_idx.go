@@ -52,7 +52,7 @@ func (v *VPEXTRW128SEVEN_IDX) Assembly() string {
 	return assemblyVpextrw128Seven_idx
 }
 
-func (v *VPEXTRW128SEVEN_IDX) Run() (output []byte) {
+func (v *VPEXTRW128SEVEN_IDX) Run() {
 	vals := [8]uint16{}
 	copy(vals[:], number.ToUint16Slice(v.vals.FlatData()))
 
@@ -64,7 +64,7 @@ func (v *VPEXTRW128SEVEN_IDX) Run() (output []byte) {
 
 	out := number.Uint32ToBytes(ret)
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPEXTRW128SEVEN_IDX) Supported() bool {

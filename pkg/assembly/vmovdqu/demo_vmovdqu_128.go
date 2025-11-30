@@ -52,7 +52,7 @@ func (v *VMOVDQU128) Assembly() string {
 	return assemblyVmovdqu128
 }
 
-func (v *VMOVDQU128) Run() (output []byte) {
+func (v *VMOVDQU128) Run() {
 	uints := [4]uint32{}
 	copy(uints[:], number.ToUint32Slice(v.vals.FlatData()))
 
@@ -64,7 +64,7 @@ func (v *VMOVDQU128) Run() (output []byte) {
 
 	out := number.Uint32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VMOVDQU128) Supported() bool {

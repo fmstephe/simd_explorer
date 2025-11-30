@@ -55,7 +55,7 @@ func (v *VANDPS256) Assembly() string {
 	return assemblyVandps256
 }
 
-func (v *VANDPS256) Run() (output []byte) {
+func (v *VANDPS256) Run() {
 	vals1 := [8]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [8]float32{}
@@ -69,7 +69,7 @@ func (v *VANDPS256) Run() (output []byte) {
 
 	retSlc := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(retSlc)
-	return retSlc
+
 }
 
 func (v *VANDPS256) Supported() bool {

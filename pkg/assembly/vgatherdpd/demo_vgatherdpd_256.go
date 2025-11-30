@@ -61,7 +61,7 @@ func (v *VGATHERDPD256) Assembly() string {
 	return assemblyVgatherdpd256
 }
 
-func (v *VGATHERDPD256) Run() (output []byte) {
+func (v *VGATHERDPD256) Run() {
 	base := [8]float64{}
 	copy(base[:], number.ToFloat64Slice(v.base.FlatData()))
 	// indices are provided as signed i32 in base 10; we read bits from Parameter storage
@@ -81,7 +81,7 @@ func (v *VGATHERDPD256) Run() (output []byte) {
 
 	out := number.Float64SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VGATHERDPD256) Supported() bool {

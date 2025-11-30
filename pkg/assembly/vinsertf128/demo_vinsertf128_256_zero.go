@@ -55,7 +55,7 @@ func (v *VINSERTF128256ZERO) Assembly() string {
 	return assemblyVinsertf128256Zero
 }
 
-func (v *VINSERTF128256ZERO) Run() (output []byte) {
+func (v *VINSERTF128256ZERO) Run() {
 	vals := [8]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	block := [4]float32{}
@@ -69,7 +69,7 @@ func (v *VINSERTF128256ZERO) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VINSERTF128256ZERO) Supported() bool {

@@ -55,7 +55,7 @@ func (v *VSHUFPS128REVERSE) Assembly() string {
 	return assemblyVshufps128Reverse
 }
 
-func (v *VSHUFPS128REVERSE) Run() (output []byte) {
+func (v *VSHUFPS128REVERSE) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -69,7 +69,7 @@ func (v *VSHUFPS128REVERSE) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VSHUFPS128REVERSE) Supported() bool {

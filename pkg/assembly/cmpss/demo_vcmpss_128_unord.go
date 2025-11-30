@@ -55,7 +55,7 @@ func (v *VCMPSS128UNORD) Assembly() string {
 	return assemblyVcmpss128Unord
 }
 
-func (v *VCMPSS128UNORD) Run() (output []byte) {
+func (v *VCMPSS128UNORD) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -69,7 +69,7 @@ func (v *VCMPSS128UNORD) Run() (output []byte) {
 
 	retSlc := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(retSlc)
-	return retSlc
+
 }
 
 func (v *VCMPSS128UNORD) Supported() bool {

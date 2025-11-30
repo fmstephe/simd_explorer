@@ -55,7 +55,7 @@ func (v *ADDPS128) Assembly() string {
 	return assemblyAddps128
 }
 
-func (v *ADDPS128) Run() (output []byte) {
+func (v *ADDPS128) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -69,7 +69,7 @@ func (v *ADDPS128) Run() (output []byte) {
 
 	retSlc := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(retSlc)
-	return retSlc
+
 }
 
 func (v *ADDPS128) Supported() bool {

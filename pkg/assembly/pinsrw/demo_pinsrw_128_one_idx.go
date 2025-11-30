@@ -55,7 +55,7 @@ func (v *PINSRW128ONE_IDX) Assembly() string {
 	return assemblyPinsrw128One_idx
 }
 
-func (v *PINSRW128ONE_IDX) Run() (output []byte) {
+func (v *PINSRW128ONE_IDX) Run() {
 	base := [8]uint16{}
 	copy(base[:], number.ToUint16Slice(v.base.FlatData()))
 	scalar := number.ToUint16(v.scalar.FlatData())
@@ -68,7 +68,7 @@ func (v *PINSRW128ONE_IDX) Run() (output []byte) {
 
 	out := number.Uint16SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *PINSRW128ONE_IDX) Supported() bool {

@@ -55,7 +55,7 @@ func (v *VCOMISS128) Assembly() string {
 	return assemblyVcomiss128
 }
 
-func (v *VCOMISS128) Run() (output []byte) {
+func (v *VCOMISS128) Run() {
 	vals1 := [4]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [4]float32{}
@@ -73,7 +73,7 @@ func (v *VCOMISS128) Run() (output []byte) {
 		byte(flags >> 24),
 	}
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VCOMISS128) Supported() bool {

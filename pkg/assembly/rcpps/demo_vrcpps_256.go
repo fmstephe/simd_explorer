@@ -52,7 +52,7 @@ func (v *VRCPPS256) Assembly() string {
 	return assemblyVrcpps256
 }
 
-func (v *VRCPPS256) Run() (output []byte) {
+func (v *VRCPPS256) Run() {
 	vals := [8]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 
@@ -64,7 +64,7 @@ func (v *VRCPPS256) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VRCPPS256) Supported() bool {

@@ -55,7 +55,7 @@ func (v *VTESTPD128) Assembly() string {
 	return assemblyVtestpd128
 }
 
-func (v *VTESTPD128) Run() (output []byte) {
+func (v *VTESTPD128) Run() {
 	vals1 := [2]float64{}
 	copy(vals1[:], number.ToFloat64Slice(v.vals1.FlatData()))
 	vals2 := [2]float64{}
@@ -69,7 +69,7 @@ func (v *VTESTPD128) Run() (output []byte) {
 
 	out := number.Uint32ToBytes(flags)
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VTESTPD128) Supported() bool {

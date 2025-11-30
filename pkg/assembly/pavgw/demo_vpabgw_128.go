@@ -55,7 +55,7 @@ func (v *VPAVGW128) Assembly() string {
 	return assemblyVpabgw128
 }
 
-func (v *VPAVGW128) Run() (output []byte) {
+func (v *VPAVGW128) Run() {
 	vals1 := [8]uint16{}
 	copy(vals1[:], number.ToUint16Slice(v.vals1.FlatData()))
 	vals2 := [8]uint16{}
@@ -69,7 +69,7 @@ func (v *VPAVGW128) Run() (output []byte) {
 
 	out := number.Uint16SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPAVGW128) Supported() bool {

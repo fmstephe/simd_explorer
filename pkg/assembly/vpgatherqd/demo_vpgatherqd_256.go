@@ -54,7 +54,7 @@ func (v *VPGATHERQD256) Assembly() string {
 	return assemblyVpgatherqd256
 }
 
-func (v *VPGATHERQD256) Run() (output []byte) {
+func (v *VPGATHERQD256) Run() {
 	base := [16]uint32{}
 	copy(base[:], number.ToUint32Slice(v.base.FlatData()))
 	index := [4]uint64{}
@@ -70,7 +70,7 @@ func (v *VPGATHERQD256) Run() (output []byte) {
 
 	out := number.Uint32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPGATHERQD256) Supported() bool {

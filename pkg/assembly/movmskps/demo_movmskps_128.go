@@ -52,7 +52,7 @@ func (v *MOVMSKPS128) Assembly() string {
 	return assemblyMovmskps128
 }
 
-func (v *MOVMSKPS128) Run() (output []byte) {
+func (v *MOVMSKPS128) Run() {
 	vals := [4]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 
@@ -64,7 +64,7 @@ func (v *MOVMSKPS128) Run() (output []byte) {
 
 	out := ret[:]
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *MOVMSKPS128) Supported() bool {

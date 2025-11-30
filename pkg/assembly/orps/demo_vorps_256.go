@@ -55,7 +55,7 @@ func (v *VORPS256) Assembly() string {
 	return assemblyVorps256
 }
 
-func (v *VORPS256) Run() (output []byte) {
+func (v *VORPS256) Run() {
 	vals1 := [8]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [8]float32{}
@@ -69,7 +69,7 @@ func (v *VORPS256) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VORPS256) Supported() bool {

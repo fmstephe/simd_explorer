@@ -52,7 +52,7 @@ func (v *VPERMILPS128) Assembly() string {
 	return assemblyVpermilps128
 }
 
-func (v *VPERMILPS128) Run() (output []byte) {
+func (v *VPERMILPS128) Run() {
 	vals := [4]float32{}
 	copy(vals[:], number.ToFloat32Slice(v.vals.FlatData()))
 	control := [4]float32{}
@@ -65,7 +65,7 @@ func (v *VPERMILPS128) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VPERMILPS128) Supported() bool {

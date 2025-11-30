@@ -52,7 +52,7 @@ func (v *VBROADCASTSD256M64) Assembly() string {
 	return assemblyVbroadcastsd256M64
 }
 
-func (v *VBROADCASTSD256M64) Run() (output []byte) {
+func (v *VBROADCASTSD256M64) Run() {
 	scalar := number.ToFloat64(v.scalar.FlatData())
 
 	ret := [4]float64{}
@@ -63,7 +63,7 @@ func (v *VBROADCASTSD256M64) Run() (output []byte) {
 
 	out := number.Float64SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VBROADCASTSD256M64) Supported() bool {

@@ -55,7 +55,7 @@ func (v *VMINPS256) Assembly() string {
 	return assemblyVminps256
 }
 
-func (v *VMINPS256) Run() (output []byte) {
+func (v *VMINPS256) Run() {
 	vals1 := [8]float32{}
 	copy(vals1[:], number.ToFloat32Slice(v.vals1.FlatData()))
 	vals2 := [8]float32{}
@@ -69,7 +69,7 @@ func (v *VMINPS256) Run() (output []byte) {
 
 	out := number.Float32SliceToBytes(ret[:])
 	v.ret.SetData(out)
-	return out
+
 }
 
 func (v *VMINPS256) Supported() bool {
