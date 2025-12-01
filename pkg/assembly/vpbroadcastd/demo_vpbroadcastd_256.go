@@ -27,7 +27,9 @@ func NewVPBROADCASTD256() *VPBROADCASTD256 {
 }
 
 func (v *VPBROADCASTD256) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.scalar}
+	return []*number.Parameter{
+		v.scalar,
+	}
 }
 
 func (v *VPBROADCASTD256) Output() *number.Parameter {

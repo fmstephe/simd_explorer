@@ -31,7 +31,11 @@ func NewVPGATHERDQ128() *VPGATHERDQ128 {
 }
 
 func (v *VPGATHERDQ128) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.base, v.index, v.mask}
+	return []*number.Parameter{
+		v.base,
+		v.index,
+		v.mask,
+	}
 }
 
 func (v *VPGATHERDQ128) Output() *number.Parameter {

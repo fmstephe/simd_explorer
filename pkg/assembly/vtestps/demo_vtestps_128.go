@@ -29,7 +29,10 @@ func NewVTESTPS128() *VTESTPS128 {
 }
 
 func (v *VTESTPS128) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.vals1, v.vals2}
+	return []*number.Parameter{
+		v.vals1,
+		v.vals2,
+	}
 }
 
 func (v *VTESTPS128) Output() *number.Parameter {

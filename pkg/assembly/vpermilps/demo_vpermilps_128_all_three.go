@@ -27,7 +27,9 @@ func NewVPERMILPS128ALL_THREE() *VPERMILPS128ALL_THREE {
 }
 
 func (v *VPERMILPS128ALL_THREE) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.vals}
+	return []*number.Parameter{
+		v.vals,
+	}
 }
 
 func (v *VPERMILPS128ALL_THREE) Output() *number.Parameter {

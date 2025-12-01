@@ -29,7 +29,10 @@ func NewVPBROADCASTB512K() *VPBROADCASTB512K {
 }
 
 func (v *VPBROADCASTB512K) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.scalar, v.pred}
+	return []*number.Parameter{
+		v.scalar,
+		v.pred,
+	}
 }
 
 func (v *VPBROADCASTB512K) Output() *number.Parameter {

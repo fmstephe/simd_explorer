@@ -27,7 +27,9 @@ func NewVPERMILPS256IDENTITY() *VPERMILPS256IDENTITY {
 }
 
 func (v *VPERMILPS256IDENTITY) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.vals}
+	return []*number.Parameter{
+		v.vals,
+	}
 }
 
 func (v *VPERMILPS256IDENTITY) Output() *number.Parameter {

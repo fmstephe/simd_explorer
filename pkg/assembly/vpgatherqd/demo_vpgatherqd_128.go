@@ -31,7 +31,11 @@ func NewVPGATHERQD128() *VPGATHERQD128 {
 }
 
 func (v *VPGATHERQD128) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.base, v.index, v.mask}
+	return []*number.Parameter{
+		v.base,
+		v.index,
+		v.mask,
+	}
 }
 
 func (v *VPGATHERQD128) Output() *number.Parameter {

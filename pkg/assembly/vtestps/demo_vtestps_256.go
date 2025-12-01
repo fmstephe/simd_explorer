@@ -29,7 +29,10 @@ func NewVTESTPS256() *VTESTPS256 {
 }
 
 func (v *VTESTPS256) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.vals1, v.vals2}
+	return []*number.Parameter{
+		v.vals1,
+		v.vals2,
+	}
 }
 
 func (v *VTESTPS256) Output() *number.Parameter {

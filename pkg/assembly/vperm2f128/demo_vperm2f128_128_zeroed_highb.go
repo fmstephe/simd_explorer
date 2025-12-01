@@ -29,7 +29,10 @@ func NewVPERM2F128128ZEROED_HIGHB() *VPERM2F128128ZEROED_HIGHB {
 }
 
 func (v *VPERM2F128128ZEROED_HIGHB) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.valsA, v.valsB}
+	return []*number.Parameter{
+		v.valsA,
+		v.valsB,
+	}
 }
 
 func (v *VPERM2F128128ZEROED_HIGHB) Output() *number.Parameter {

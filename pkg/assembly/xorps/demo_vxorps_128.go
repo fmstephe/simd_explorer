@@ -29,7 +29,10 @@ func NewVXORPS128() *VXORPS128 {
 }
 
 func (v *VXORPS128) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.vals1, v.vals2}
+	return []*number.Parameter{
+		v.vals1,
+		v.vals2,
+	}
 }
 
 func (v *VXORPS128) Output() *number.Parameter {

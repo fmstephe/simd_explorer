@@ -27,7 +27,9 @@ func NewVPBROADCASTB128() *VPBROADCASTB128 {
 }
 
 func (v *VPBROADCASTB128) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.scalar}
+	return []*number.Parameter{
+		v.scalar,
+	}
 }
 
 func (v *VPBROADCASTB128) Output() *number.Parameter {

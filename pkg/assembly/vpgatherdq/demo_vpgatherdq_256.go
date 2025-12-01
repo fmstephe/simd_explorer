@@ -31,7 +31,11 @@ func NewVPGATHERDQ256() *VPGATHERDQ256 {
 }
 
 func (v *VPGATHERDQ256) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.base, v.index, v.mask}
+	return []*number.Parameter{
+		v.base,
+		v.index,
+		v.mask,
+	}
 }
 
 func (v *VPGATHERDQ256) Output() *number.Parameter {

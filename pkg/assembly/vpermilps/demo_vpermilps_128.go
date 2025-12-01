@@ -29,7 +29,10 @@ func NewVPERMILPS128() *VPERMILPS128 {
 }
 
 func (v *VPERMILPS128) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.vals, v.control}
+	return []*number.Parameter{
+		v.vals,
+		v.control,
+	}
 }
 
 func (v *VPERMILPS128) Output() *number.Parameter {

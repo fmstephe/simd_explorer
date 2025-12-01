@@ -29,7 +29,10 @@ func NewVPERM2F128128LOWA_LOWA() *VPERM2F128128LOWA_LOWA {
 }
 
 func (v *VPERM2F128128LOWA_LOWA) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.valsA, v.valsB}
+	return []*number.Parameter{
+		v.valsA,
+		v.valsB,
+	}
 }
 
 func (v *VPERM2F128128LOWA_LOWA) Output() *number.Parameter {

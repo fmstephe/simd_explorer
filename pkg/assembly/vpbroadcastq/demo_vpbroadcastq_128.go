@@ -26,9 +26,15 @@ func NewVPBROADCASTQ128() *VPBROADCASTQ128 {
 	}
 }
 
-func (v *VPBROADCASTQ128) Inputs() []*number.Parameter { return []*number.Parameter{v.scalar} }
+func (v *VPBROADCASTQ128) Inputs() []*number.Parameter {
+	return []*number.Parameter{
+		v.scalar,
+	}
+}
 
-func (v *VPBROADCASTQ128) Output() *number.Parameter { return v.ret }
+func (v *VPBROADCASTQ128) Output() *number.Parameter {
+	return v.ret
+}
 
 func (v *VPBROADCASTQ128) Name() string {
 	return "VPBROADCASTQ XMM (128 bit)"

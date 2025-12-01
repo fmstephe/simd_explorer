@@ -29,7 +29,10 @@ func NewVPERMILPD256() *VPERMILPD256 {
 }
 
 func (v *VPERMILPD256) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.vals, v.control}
+	return []*number.Parameter{
+		v.vals,
+		v.control,
+	}
 }
 
 func (v *VPERMILPD256) Output() *number.Parameter {

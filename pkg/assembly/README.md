@@ -45,9 +45,30 @@ We then declare a type named '{instruction_name}{size_class}[{discriminator}]?'.
 type VMOVHPS64 struct {
 }
 
-The type has no fields and is completely stateless. The declared type implements the assembly.Instruction interface using pointer receivers.
+The struct contains all of the *number.Parameter fields needed to provide arguments to its assembly function. The fields must be declared in the same order as they are passed into the assembly function e.g.
 
-The types of the parameters (defined in the Inputs() and Output() methods) generally have obvious types. But any input which is used as a mask, control vector, predicate, or any non-numeric data, should be type uint with base 16 'number.NewUintParameter(fullWidth, partWidth, 16)'.
+type VMOVHPS64 struct {
+	lower *number.Parameter
+	upper *number.Parameter
+	ret   *number.Parameter
+}
+
+The declared type implements the assembly.Instruction interface using pointer receivers.
+
+The types of the parameters (defined in the Inputs() and Output() methods) generally have obvious types. But any input which is used as a mask, predicate, bitfields, or any non-numeric data, should be type uint with base 16 'number.NewUintParameter(fullWidth, partWidth, 16)'. Control inputs, a register packed with indices, should always be base 10.
+
+The values returned by Inputs() and Output() must reference the fields declared in the struct. The methods must always be formatted over multiple lines, no single line methods. The slice returned by the Inputs() method should declare each element on a separate line e.g.
+
+func (v *VMOVHPS64) Inputs() []*number.Parameter {
+	return []*number.Parameter{
+		v.lower,
+		v.upper,
+	}
+}
+
+func (v *VMOVHPS64) Output() *number.Parameter {
+	return v.ret
+}
 
 ## Register Usage Conventions
 

@@ -22,7 +22,9 @@ type VPBROADCASTB256 struct {
 // constructor defined at bottom
 
 func (v *VPBROADCASTB256) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.scalar}
+	return []*number.Parameter{
+		v.scalar,
+	}
 }
 
 func (v *VPBROADCASTB256) Output() *number.Parameter {

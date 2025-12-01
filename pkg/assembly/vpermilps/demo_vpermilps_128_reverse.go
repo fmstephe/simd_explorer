@@ -27,7 +27,9 @@ func NewVPERMILPS128REVERSE() *VPERMILPS128REVERSE {
 }
 
 func (v *VPERMILPS128REVERSE) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.vals}
+	return []*number.Parameter{
+		v.vals,
+	}
 }
 
 func (v *VPERMILPS128REVERSE) Output() *number.Parameter {

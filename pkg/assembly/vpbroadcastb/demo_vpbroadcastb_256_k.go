@@ -29,7 +29,10 @@ func NewVPBROADCASTB256K() *VPBROADCASTB256K {
 }
 
 func (v *VPBROADCASTB256K) Inputs() []*number.Parameter {
-	return []*number.Parameter{v.scalar, v.pred}
+	return []*number.Parameter{
+		v.scalar,
+		v.pred,
+	}
 }
 
 func (v *VPBROADCASTB256K) Output() *number.Parameter {
