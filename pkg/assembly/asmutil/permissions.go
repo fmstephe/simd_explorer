@@ -8,7 +8,7 @@ import (
 	"golang.org/x/sys/cpu"
 )
 
-var requiresRegex = regexp.MustCompile("^// Requires: (.*)$")
+var requiresRegex = regexp.MustCompile("^// Requires: (.*)\r$")
 
 func IsSupported(assembly string) bool {
 	lines := strings.Split(assembly, "\n")
