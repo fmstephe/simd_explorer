@@ -66,6 +66,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vperm2f128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermilpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermilps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherdd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherdq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherqd"
@@ -394,6 +395,8 @@ func Instructions() []assembly.Instruction {
 		vperm2f128.NewVPERM2F128128ZEROED_HIGHB(),
 		vperm2f128.NewVPERM2F128128LOWA_ZEROED(),
 		vperm2f128.NewVPERM2F128128ZEROED_ZEROED(),
+		// vpermps
+		vpermps.NewVPERMPS256(),
 		// vtestps
 		vtestps.NewVTESTPS128(),
 		vtestps.NewVTESTPS256(),
