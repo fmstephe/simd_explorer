@@ -70,6 +70,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherdq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherqd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherqq"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmaskmov"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/xorps"
@@ -417,6 +418,11 @@ func Instructions() []assembly.Instruction {
 		// vpgatherqq
 		vpgatherqq.NewVPGATHERQQ128(),
 		vpgatherqq.NewVPGATHERQQ256(),
+		// vpmaskmovd/q
+		vpmaskmov.NewVPMASKMOVD128(),
+		vpmaskmov.NewVPMASKMOVD256(),
+		vpmaskmov.NewVPMASKMOVQ128(),
+		vpmaskmov.NewVPMASKMOVQ256(),
 	}
 }
 
