@@ -59,6 +59,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmaskmov"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpblendd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastq"
@@ -398,6 +399,13 @@ func Instructions() []assembly.Instruction {
 		vperm2f128.NewVPERM2F128256ZEROED_HIGHB(),
 		vperm2f128.NewVPERM2F128256LOWA_ZEROED(),
 		vperm2f128.NewVPERM2F128256ZEROED_ZEROED(),
+		// vpblendd (128-bit)
+		vpblendd.NewVPBLENDD128NONE(),
+		vpblendd.NewVPBLENDD128ALL(),
+		vpblendd.NewVPBLENDD128LOW_HALF(),
+		vpblendd.NewVPBLENDD128HIGH_HALF(),
+		vpblendd.NewVPBLENDD128EVEN(),
+		vpblendd.NewVPBLENDD128ODD(),
 		// vperm2i128
 		vperm2i128.NewVPERM2I128256LOWA_HIGHA(),
 		vperm2i128.NewVPERM2I128256LOWB_HIGHB(),
