@@ -64,6 +64,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vperm2f128"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vperm2i128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermilpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermilps"
@@ -397,6 +398,18 @@ func Instructions() []assembly.Instruction {
 		vperm2f128.NewVPERM2F128256ZEROED_HIGHB(),
 		vperm2f128.NewVPERM2F128256LOWA_ZEROED(),
 		vperm2f128.NewVPERM2F128256ZEROED_ZEROED(),
+		// vperm2i128
+		vperm2i128.NewVPERM2I128256LOWA_HIGHA(),
+		vperm2i128.NewVPERM2I128256LOWB_HIGHB(),
+		vperm2i128.NewVPERM2I128256LOWA_HIGHB(),
+		vperm2i128.NewVPERM2I128256LOWB_HIGHA(),
+		vperm2i128.NewVPERM2I128256LOWA_LOWA(),
+		vperm2i128.NewVPERM2I128256HIGHA_HIGHA(),
+		vperm2i128.NewVPERM2I128256LOWB_LOWB(),
+		vperm2i128.NewVPERM2I128256HIGHB_HIGHB(),
+		vperm2i128.NewVPERM2I128256ZEROED_HIGHB(),
+		vperm2i128.NewVPERM2I128256LOWA_ZEROED(),
+		vperm2i128.NewVPERM2I128256ZEROED_ZEROED(),
 		// vpermps
 		vpermps.NewVPERMPS256(),
 		// vpermd
