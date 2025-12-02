@@ -9,8 +9,8 @@ import (
 
 //go:generate go run {{.AssemblyGeneratorFileName}} -out ../{{.AssemblyFileName}} -stubs ../{{.StubFileName}} -pkg {{.PackageName}}
 func main() {
-	// NOTE: This is a generic template that generates valid assembly for testing purposes.
-	// It does NOT implement the actual {{.InstructionUpper}} instruction.
+	// TODO: 
+	// This code does NOT demonstrate the actual {{.InstructionUpper}} instruction.
 	// Replace this implementation with the correct {{.InstructionUpper}} instruction code.
 	TEXT("{{.FunctionName}}", NOSPLIT, "func(vals1, vals2, ret *[4]float32)")
 	Comment("load params")
