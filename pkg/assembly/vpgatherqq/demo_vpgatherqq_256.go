@@ -24,11 +24,11 @@ type VPGATHERQQ256 struct {
 
 func NewVPGATHERQQ256() *VPGATHERQQ256 {
 	return &VPGATHERQQ256{
-		base:  number.NewNamedUintParameter("base", 512, 64, 16),
+		base:  number.NewNamedUintParameter("base", 512, 64, 10),
 		index: number.NewNamedIntParameter("index", 256, 64, 10),
 		mask:  number.NewNamedUintParameter("mask", 256, 64, 16),
-		src:   number.NewNamedUintParameter("src", 256, 64, 16),
-		ret:   number.NewNamedUintParameter("ret", 256, 64, 16),
+		src:   number.NewNamedUintParameter("src", 256, 64, 10),
+		ret:   number.NewNamedUintParameter("ret", 256, 64, 10),
 	}
 }
 
