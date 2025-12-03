@@ -24,11 +24,11 @@ type VPGATHERDD256 struct {
 
 func NewVPGATHERDD256() *VPGATHERDD256 {
 	return &VPGATHERDD256{
-		base:  number.NewNamedUintParameter("base", 512, 32, 16), // base memory (16 x u32)
+		base:  number.NewNamedUintParameter("base", 512, 32, 10), // base memory (16 x u32)
 		index: number.NewNamedIntParameter("index", 256, 32, 10), // indices (i32; lower 8 used)
 		mask:  number.NewNamedUintParameter("mask", 256, 32, 16), // mask (MSB of each dword lane)
-		src:   number.NewNamedUintParameter("src", 256, 32, 16),  // src (merge for masked-off lanes)
-		ret:   number.NewNamedUintParameter("ret", 256, 32, 16),
+		src:   number.NewNamedUintParameter("src", 256, 32, 10),  // src (merge for masked-off lanes)
+		ret:   number.NewNamedUintParameter("ret", 256, 32, 10),
 	}
 }
 
