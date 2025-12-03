@@ -21,8 +21,8 @@ type VEXTRACTI128256ZERO struct {
 
 func NewVEXTRACTI128256ZERO() *VEXTRACTI128256ZERO {
 	return &VEXTRACTI128256ZERO{
-		vals: number.NewNamedUintParameter("vals", 256, 32, 16),
-		ret:  number.NewNamedUintParameter("ret", 128, 32, 16),
+		vals: number.NewNamedUintParameter("vals", 256, 32, 10),
+		ret:  number.NewNamedUintParameter("ret", 128, 32, 10),
 	}
 }
 

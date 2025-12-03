@@ -21,8 +21,8 @@ type VEXTRACTI128256ONE struct {
 
 func NewVEXTRACTI128256ONE() *VEXTRACTI128256ONE {
 	return &VEXTRACTI128256ONE{
-		vals: number.NewNamedUintParameter("vals", 256, 32, 16),
-		ret:  number.NewNamedUintParameter("ret", 128, 32, 16),
+		vals: number.NewNamedUintParameter("vals", 256, 32, 10),
+		ret:  number.NewNamedUintParameter("ret", 128, 32, 10),
 	}
 }
 
