@@ -22,9 +22,9 @@ type VPBROADCASTB512K struct {
 
 func NewVPBROADCASTB512K() *VPBROADCASTB512K {
 	return &VPBROADCASTB512K{
-		scalar: number.NewNamedUintParameter("scalar", 8, 8, 16),
+		scalar: number.NewNamedUintParameter("scalar", 8, 8, 10),
 		pred:   number.NewNamedUintParameter("pred", 64, 64, 16),
-		ret:    number.NewNamedUintParameter("ret", 512, 64, 16),
+		ret:    number.NewNamedUintParameter("ret", 512, 64, 10),
 	}
 }
 

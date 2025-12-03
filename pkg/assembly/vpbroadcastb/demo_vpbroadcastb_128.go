@@ -21,8 +21,8 @@ type VPBROADCASTB128 struct {
 
 func NewVPBROADCASTB128() *VPBROADCASTB128 {
 	return &VPBROADCASTB128{
-		scalar: number.NewNamedUintParameter("scalar", 8, 8, 16),
-		ret:    number.NewNamedUintParameter("ret", 128, 64, 16),
+		scalar: number.NewNamedUintParameter("scalar", 8, 8, 10),
+		ret:    number.NewNamedUintParameter("ret", 128, 64, 10),
 	}
 }
 

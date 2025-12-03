@@ -19,7 +19,13 @@ type VPBROADCASTB256 struct {
 	ret    *number.Parameter
 }
 
-// constructor defined at bottom
+func NewVPBROADCASTB256() *VPBROADCASTB256 {
+	v := &VPBROADCASTB256{
+		scalar: number.NewNamedUintParameter("scalar", 8, 8, 10),
+		ret:    number.NewNamedUintParameter("ret", 256, 64, 10),
+	}
+	return v
+}
 
 func (v *VPBROADCASTB256) Inputs() []*number.Parameter {
 	return []*number.Parameter{
@@ -59,12 +65,4 @@ func (v *VPBROADCASTB256) Run() {
 
 func (v *VPBROADCASTB256) Supported() bool {
 	return asmutil.IsSupported(v.Assembly())
-}
-
-func NewVPBROADCASTB256() *VPBROADCASTB256 {
-	v := &VPBROADCASTB256{
-		scalar: number.NewNamedUintParameter("scalar", 8, 8, 16),
-		ret:    number.NewNamedUintParameter("ret", 256, 64, 16),
-	}
-	return v
 }
