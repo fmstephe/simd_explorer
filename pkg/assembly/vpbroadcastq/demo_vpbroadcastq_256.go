@@ -21,8 +21,8 @@ type VPBROADCASTQ256 struct {
 
 func NewVPBROADCASTQ256() *VPBROADCASTQ256 {
 	return &VPBROADCASTQ256{
-		scalar: number.NewNamedUintParameter("scalar", 64, 64, 16),
-		ret:    number.NewNamedUintParameter("ret", 256, 64, 16),
+		scalar: number.NewNamedUintParameter("scalar", 64, 64, 10),
+		ret:    number.NewNamedUintParameter("ret", 256, 64, 10),
 	}
 }
 
