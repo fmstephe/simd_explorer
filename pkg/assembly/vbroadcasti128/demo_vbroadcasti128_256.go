@@ -21,8 +21,8 @@ type VBROADCASTI128256 struct {
 
 func NewVBROADCASTI128256() *VBROADCASTI128256 {
 	return &VBROADCASTI128256{
-		block: number.NewNamedUintParameter("block", 128, 64, 16),
-		ret:   number.NewNamedUintParameter("ret", 256, 64, 16),
+		block: number.NewNamedUintParameter("block", 128, 64, 10),
+		ret:   number.NewNamedUintParameter("ret", 256, 64, 10),
 	}
 }
 
