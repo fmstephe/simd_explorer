@@ -22,9 +22,9 @@ type VPERM2I128256HIGHB_HIGHB struct {
 
 func NewVPERM2I128256HIGHB_HIGHB() *VPERM2I128256HIGHB_HIGHB {
 	return &VPERM2I128256HIGHB_HIGHB{
-		valsA: number.NewNamedUintParameter("valsA", 256, 64, 16),
-		valsB: number.NewNamedUintParameter("valsB", 256, 64, 16),
-		ret:   number.NewNamedUintParameter("ret", 256, 64, 16),
+		valsA: number.NewNamedUintParameter("valsA", 256, 64, 10),
+		valsB: number.NewNamedUintParameter("valsB", 256, 64, 10),
+		ret:   number.NewNamedUintParameter("ret", 256, 64, 10),
 	}
 }
 

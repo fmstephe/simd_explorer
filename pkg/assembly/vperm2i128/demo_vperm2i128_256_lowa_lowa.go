@@ -22,9 +22,9 @@ type VPERM2I128256LOWA_LOWA struct {
 
 func NewVPERM2I128256LOWA_LOWA() *VPERM2I128256LOWA_LOWA {
 	return &VPERM2I128256LOWA_LOWA{
-		valsA: number.NewNamedUintParameter("valsA", 256, 64, 16),
-		valsB: number.NewNamedUintParameter("valsB", 256, 64, 16),
-		ret:   number.NewNamedUintParameter("ret", 256, 64, 16),
+		valsA: number.NewNamedUintParameter("valsA", 256, 64, 10),
+		valsB: number.NewNamedUintParameter("valsB", 256, 64, 10),
+		ret:   number.NewNamedUintParameter("ret", 256, 64, 10),
 	}
 }
 
