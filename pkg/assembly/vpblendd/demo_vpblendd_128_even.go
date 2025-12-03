@@ -22,9 +22,9 @@ type VPBLENDD128EVEN struct {
 
 func NewVPBLENDD128EVEN() *VPBLENDD128EVEN {
 	return &VPBLENDD128EVEN{
-		base:  number.NewNamedUintParameter("base", 128, 32, 16),
-		blend: number.NewNamedUintParameter("blend", 128, 32, 16),
-		ret:   number.NewNamedUintParameter("ret", 128, 32, 16),
+		base:  number.NewNamedUintParameter("base", 128, 32, 10),
+		blend: number.NewNamedUintParameter("blend", 128, 32, 10),
+		ret:   number.NewNamedUintParameter("ret", 128, 32, 10),
 	}
 }
 

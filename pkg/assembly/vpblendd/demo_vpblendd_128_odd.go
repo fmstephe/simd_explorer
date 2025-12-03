@@ -22,9 +22,9 @@ type VPBLENDD128ODD struct {
 
 func NewVPBLENDD128ODD() *VPBLENDD128ODD {
 	return &VPBLENDD128ODD{
-		base:  number.NewNamedUintParameter("base", 128, 32, 16),
-		blend: number.NewNamedUintParameter("blend", 128, 32, 16),
-		ret:   number.NewNamedUintParameter("ret", 128, 32, 16),
+		base:  number.NewNamedUintParameter("base", 128, 32, 10),
+		blend: number.NewNamedUintParameter("blend", 128, 32, 10),
+		ret:   number.NewNamedUintParameter("ret", 128, 32, 10),
 	}
 }
 
