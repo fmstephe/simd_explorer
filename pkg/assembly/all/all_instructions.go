@@ -77,6 +77,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherqq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmaskmov"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvd"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/xorps"
@@ -462,6 +463,9 @@ func Instructions() []assembly.Instruction {
 		// vpsllvd
 		vpsllvd.NewVPSLLVD128(),
 		vpsllvd.NewVPSLLVD256(),
+		// vpsllvq
+		vpsllvq.NewVPSLLVQ128(),
+		vpsllvq.NewVPSLLVQ256(),
 	}
 }
 
