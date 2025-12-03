@@ -22,9 +22,9 @@ type VINSERTI128256ZERO struct {
 
 func NewVINSERTI128256ZERO() *VINSERTI128256ZERO {
 	return &VINSERTI128256ZERO{
-		vals128: number.NewNamedUintParameter("vals128", 128, 32, 16),
-		vals256: number.NewNamedUintParameter("vals256", 256, 32, 16),
-		ret:     number.NewNamedUintParameter("ret", 256, 32, 16),
+		vals128: number.NewNamedUintParameter("vals128", 128, 32, 10),
+		vals256: number.NewNamedUintParameter("vals256", 256, 32, 10),
+		ret:     number.NewNamedUintParameter("ret", 256, 32, 10),
 	}
 }
 
