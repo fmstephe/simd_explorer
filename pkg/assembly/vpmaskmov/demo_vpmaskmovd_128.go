@@ -22,9 +22,9 @@ type VPMASKMOVD128 struct {
 
 func NewVPMASKMOVD128() *VPMASKMOVD128 {
 	return &VPMASKMOVD128{
-		vals: number.NewNamedUintParameter("vals", 128, 32, 16),
+		vals: number.NewNamedUintParameter("vals", 128, 32, 10),
 		mask: number.NewNamedUintParameter("mask", 128, 32, 16),
-		ret:  number.NewNamedUintParameter("ret", 128, 32, 16),
+		ret:  number.NewNamedUintParameter("ret", 128, 32, 10),
 	}
 }
 
