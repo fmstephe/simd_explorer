@@ -79,6 +79,14 @@ func ToInt32Slice(bytes []byte) []int32 {
 	return ret
 }
 
+func Int32SliceToBytes(vals []int32) []byte {
+	bytes := []byte{}
+	for _, val := range vals {
+		bytes = endian.AppendUint32(bytes, uint32(val))
+	}
+	return bytes
+}
+
 func ToUint16(bytes []byte) uint16 {
 	return endian.Uint16(bytes)
 }
