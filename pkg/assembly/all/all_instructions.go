@@ -32,6 +32,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/mulps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/mulss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/orps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/padd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pextrw"
@@ -43,6 +44,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmovmskb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhuw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psadbw"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/psub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rsqrtps"
@@ -301,6 +303,24 @@ func Instructions() []assembly.Instruction {
 		pavgw.NewPAVGW128(),
 		pavgw.NewVPAVGW128(),
 		pavgw.NewVPAVGW256(),
+		// padd (AVX/AVX2 integer adds)
+		padd.NewVPADDB128(),
+		padd.NewVPADDB256(),
+		padd.NewVPADDW128(),
+		padd.NewVPADDW256(),
+		padd.NewVPADDD128(),
+		padd.NewVPADDD256(),
+		padd.NewVPADDQ128(),
+		padd.NewVPADDQ256(),
+		// psub (AVX/AVX2 integer subs)
+		psub.NewVPSUBB128(),
+		psub.NewVPSUBB256(),
+		psub.NewVPSUBW128(),
+		psub.NewVPSUBW256(),
+		psub.NewVPSUBD128(),
+		psub.NewVPSUBD256(),
+		psub.NewVPSUBQ128(),
+		psub.NewVPSUBQ256(),
 		// pmaxub
 		pmaxub.NewPMAXUB128(),
 		pmaxub.NewVPMAXUB128(),
