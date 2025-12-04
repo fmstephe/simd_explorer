@@ -8,7 +8,7 @@ import (
 	"golang.org/x/sys/cpu"
 )
 
-var requiresRegex = regexp.MustCompile("^// Requires: (.*)\r$")
+var requiresRegex = regexp.MustCompile("^// Requires: (.*)$")
 
 func IsSupported(assembly string) bool {
 	lines := strings.Split(assembly, "\n")
@@ -52,6 +52,8 @@ func hasFeature(feature string) bool {
 		return cpu.X86.HasAVX512VL
 	case "AVX512BW":
 		return cpu.X86.HasAVX512BW
+	case "AVX512DQ":
+		return cpu.X86.HasAVX512DQ
 	default:
 		panic(fmt.Errorf("unknown feature name %q", feature))
 	}
