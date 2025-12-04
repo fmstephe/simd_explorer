@@ -6,6 +6,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/addss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/andnps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/andps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/blendps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cmpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cmpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/comiss"
@@ -411,6 +412,20 @@ func Instructions() []assembly.Instruction {
 		vpblendd.NewVPBLENDD128HIGH_HALF(),
 		vpblendd.NewVPBLENDD128EVEN(),
 		vpblendd.NewVPBLENDD128ODD(),
+		// vblendps (128-bit)
+		blendps.NewVBLENDPS128NONE(),
+		blendps.NewVBLENDPS128ALL(),
+		blendps.NewVBLENDPS128LOW_HALF(),
+		blendps.NewVBLENDPS128HIGH_HALF(),
+		blendps.NewVBLENDPS128EVEN(),
+		blendps.NewVBLENDPS128ODD(),
+		// vblendps (256-bit)
+		blendps.NewVBLENDPS256NONE(),
+		blendps.NewVBLENDPS256ALL(),
+		blendps.NewVBLENDPS256LOW_HALF(),
+		blendps.NewVBLENDPS256HIGH_HALF(),
+		blendps.NewVBLENDPS256EVEN(),
+		blendps.NewVBLENDPS256ODD(),
 		// vperm2i128
 		vperm2i128.NewVPERM2I128256LOWA_HIGHA(),
 		vperm2i128.NewVPERM2I128256LOWB_HIGHB(),
