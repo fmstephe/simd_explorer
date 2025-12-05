@@ -4,6 +4,7 @@ import (
 	"flag"
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
 	"text/template"
 )
@@ -11,7 +12,7 @@ import (
 var (
 	flagPackage       = flag.String("package", "", "The name of the package")
 	flagInstruction   = flag.String("instruction", "", "The assembly name of the instruction to be demonstrated")
-	flagSizeClass     = flag.Int("size-class", -1, "The size class of the instruction being demonstrated. Many SIMD instructions work across a range of register sizes.")
+	flagSizeClass     = flag.String("size-class", "", "The size class of the instruction being demonstrated. Many SIMD instructions work across a range of register sizes.")
 	flagDiscriminator = flag.String("discriminator", "", "A discriminator (can be empty) useful when to demonstrate two versions of an instruction in the same size class, e.g. 'k' ")
 )
 
@@ -39,16 +40,36 @@ func main() {
 	flag.Parse()
 	validateFlags()
 
-	pkg := strings.ToLower(*flagPackage)
-	instructionLower := strings.ToLower(*flagInstruction)
-	instructionUpper := strings.ToUpper(*flagInstruction)
+	allInstructions := strings.Split(*flagInstruction, ",")
+	allSizeClasses := strings.Split(*flagSizeClass, ",")
+	allDiscriminators := strings.Split(*flagDiscriminator, ",")
+	if len(allDiscriminators) == 0 {
+		allDiscriminators = []string{""}
+	}
+
+	for _, instruction := range allInstructions {
+		for _, sizeClassStr := range allSizeClasses {
+			sizeClass, err := strconv.Atoi(sizeClassStr)
+			if err != nil {
+				panic(err)
+			}
+			for _, discriminator := range allDiscriminators {
+				buildPermutation(*flagPackage, instruction, discriminator, sizeClass)
+			}
+		}
+	}
+}
+
+func buildPermutation(pkg, instruction, disciminator string, sizeClass int) {
+	pkg = strings.ToLower(pkg)
+	instructionLower := strings.ToLower(instruction)
+	instructionUpper := strings.ToUpper(instruction)
 	//lint:ignore SA1019 The strings Title function is good enough for our limited purposes
 	instructionTitle := strings.Title(instructionLower)
-	sizeClass := *flagSizeClass
-	discriminatorLower := strings.ToLower(*flagDiscriminator)
+	discriminatorLower := strings.ToLower(disciminator)
 	//lint:ignore SA1019 The strings Title function is good enough for our limited purposes
 	discriminatorTitle := strings.Title(discriminatorLower)
-	discriminatorUpper := strings.ToUpper(*flagDiscriminator)
+	discriminatorUpper := strings.ToUpper(disciminator)
 	// File names without discriminator unless needed
 	var fileNameSuffix string
 	if discriminatorLower != "" {
@@ -89,7 +110,7 @@ func validateFlags() {
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
-	if *flagSizeClass == -1 {
+	if *flagSizeClass == "" {
 		fmt.Fprintf(os.Stderr, "Missing -size-class flag value\n")
 		flag.PrintDefaults()
 		os.Exit(1)
