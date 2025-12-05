@@ -118,7 +118,7 @@ func ToUint8(bytes []byte) uint8 {
 }
 
 func ToInt8(bytes []byte) int8 {
-	return int8(ToUint64(bytes))
+	return int8(bytes[0])
 }
 
 func Float64ToBytes(val float64) []byte {
@@ -217,6 +217,22 @@ func Uint8ToBytes(val byte) []byte {
 
 func Int8ToBytes(val int8) []byte {
 	return Uint8ToBytes(uint8(val))
+}
+
+func BytesToInt8Slice(bytes []byte) []int8 {
+	vals := []int8{}
+	for _, b := range bytes {
+		vals = append(vals, int8(b))
+	}
+	return vals
+}
+
+func Int8SliceToBytes(vals []int8) []byte {
+	bytes := []byte{}
+	for _, val := range vals {
+		bytes = append(bytes, byte(val))
+	}
+	return bytes
 }
 
 func normaliseNegatives(val string) string {
