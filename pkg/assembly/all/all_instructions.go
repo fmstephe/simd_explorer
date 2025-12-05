@@ -43,6 +43,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pminub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmovmskb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhuw"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmull"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmuludq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psadbw"
@@ -324,6 +325,9 @@ func Instructions() []assembly.Instruction {
 		pmull.NewVPMULLD256(),
 		pmull.NewVPMULLQ128(),
 		pmull.NewVPMULLQ256(),
+		// pmulhw (AVX/AVX2 signed high multiply words)
+		pmulhw.NewVPMULHW128(),
+		pmulhw.NewVPMULHW256(),
 		// psub (AVX/AVX2 integer subs)
 		psub.NewVPSUBB128(),
 		psub.NewVPSUBB256(),
