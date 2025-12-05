@@ -44,7 +44,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaddhw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaddubsw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxs"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxub"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmins"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pminu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmovmskb"
@@ -381,10 +381,6 @@ func Instructions() []assembly.Instruction {
 		psub.NewVPSUBD256(),
 		psub.NewVPSUBQ128(),
 		psub.NewVPSUBQ256(),
-		// pmaxub
-		pmaxub.NewPMAXUB128(),
-		pmaxub.NewVPMAXUB128(),
-		pmaxub.NewVPMAXUB256(),
 		// pminu (unsigned mins)
 		pminu.NewVPMINUB128(),
 		pminu.NewVPMINUB256(),
@@ -406,6 +402,13 @@ func Instructions() []assembly.Instruction {
 		pmaxs.NewVPMAXSW256(),
 		pmaxs.NewVPMAXSD128(),
 		pmaxs.NewVPMAXSD256(),
+		// pmaxu (unsigned maxs)
+		pmaxu.NewVPMAXUB128(),
+		pmaxu.NewVPMAXUB256(),
+		pmaxu.NewVPMAXUW128(),
+		pmaxu.NewVPMAXUW256(),
+		pmaxu.NewVPMAXUD128(),
+		pmaxu.NewVPMAXUD256(),
 		// pextrw
 		pextrw.NewPEXTRW128ZERO_IDX(),
 		pextrw.NewPEXTRW128ONE_IDX(),

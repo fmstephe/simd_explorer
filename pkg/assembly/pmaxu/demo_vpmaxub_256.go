@@ -1,4 +1,4 @@
-package pmaxub
+package pmaxu
 
 import (
 	_ "embed"
@@ -40,11 +40,11 @@ func (v *VPMAXUB256) Output() *number.Parameter {
 }
 
 func (v *VPMAXUB256) Name() string {
-	return "VPMAXUB (256 bit)"
+	return "VPMAXUB (256 bit) "
 }
 
 func (v *VPMAXUB256) Description() string {
-	return "Packed max of unsigned bytes per lane (VEX, per 128-bit lane)."
+	return "Unsigned maximum of packed 8-bit integers."
 }
 
 func (v *VPMAXUB256) Stub() string {
@@ -65,11 +65,9 @@ func (v *VPMAXUB256) Run() {
 
 	vpmaxub256(&vals1, &vals2, &ret)
 
-	log.Printf("VPMAXUB256 input %v %v output %v", vals1, vals2, ret)
+	log.Printf("VPMAXUB256 vals1 %v vals2 %v ret %v", vals1, vals2, ret)
 
-	out := ret[:]
-	v.ret.SetData(out)
-
+	v.ret.SetData(ret[:])
 }
 
 func (v *VPMAXUB256) Supported() bool {
