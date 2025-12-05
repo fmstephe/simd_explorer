@@ -1,0 +1,33 @@
+package main
+
+import (
+	. "github.com/mmcloughlin/avo/build"
+	. "github.com/mmcloughlin/avo/operand"
+)
+
+//go:generate go run asm_vpminsb_128.go -out ../asm_vpminsb_128.s -stubs ../stub_vpminsb_128.go -pkg pmins
+func main() {
+	TEXT("vpminsb128", NOSPLIT, "func(vals1 *[16]int8, vals2 *[16]int8, ret *[16]int8)")
+	Comment("load params")
+	vals1 := Load(Param("vals1"), GP64())
+	vals2 := Load(Param("vals2"), GP64())
+	ret := Load(Param("ret"), GP64())
+
+	Comment("Load into XMM registers")
+	reg1 := XMM()
+	VMOVDQA(Mem{Base: vals1}, reg1)
+	reg2 := XMM()
+	VMOVDQA(Mem{Base: vals2}, reg2)
+
+	Comment("Signed min of packed bytes")
+	VPMINSB(reg2, reg1, reg1)
+
+	Comment("Write results into return memory address")
+	VMOVDQA(reg1, Mem{Base: ret})
+
+	Comment("Return from function")
+	RET()
+
+	// generate!
+	Generate()
+}

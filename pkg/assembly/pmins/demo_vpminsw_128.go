@@ -1,4 +1,4 @@
-package pminsw
+package pmins
 
 import (
 	_ "embed"
@@ -40,11 +40,11 @@ func (v *VPMINSW128) Output() *number.Parameter {
 }
 
 func (v *VPMINSW128) Name() string {
-	return "VPMINSW (128 bit)"
+	return "VPMINSW (128 bit) "
 }
 
 func (v *VPMINSW128) Description() string {
-	return "Packed min of signed 16-bit words per lane (VEX)."
+	return "Signed minimum of packed 16-bit integers."
 }
 
 func (v *VPMINSW128) Stub() string {
@@ -65,11 +65,10 @@ func (v *VPMINSW128) Run() {
 
 	vpminsw128(&vals1, &vals2, &ret)
 
-	log.Printf("VPMINSW128 input %v %v output %v", vals1, vals2, ret)
+	log.Printf("VPMINSW128 vals1 %v vals2 %v ret %v", vals1, vals2, ret)
 
 	out := number.Int16SliceToBytes(ret[:])
 	v.ret.SetData(out)
-
 }
 
 func (v *VPMINSW128) Supported() bool {
