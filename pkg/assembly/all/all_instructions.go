@@ -43,7 +43,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pinsrw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaddhw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaddubsw"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxsw"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxs"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmins"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pminu"
@@ -399,10 +399,13 @@ func Instructions() []assembly.Instruction {
 		pmins.NewVPMINSW256(),
 		pmins.NewVPMINSD128(),
 		pmins.NewVPMINSD256(),
-		// pmaxsw
-		pmaxsw.NewPMAXSW128(),
-		pmaxsw.NewVPMAXSW128(),
-		pmaxsw.NewVPMAXSW256(),
+		// pmaxs (signed maxs)
+		pmaxs.NewVPMAXSB128(),
+		pmaxs.NewVPMAXSB256(),
+		pmaxs.NewVPMAXSW128(),
+		pmaxs.NewVPMAXSW256(),
+		pmaxs.NewVPMAXSD128(),
+		pmaxs.NewVPMAXSD256(),
 		// pextrw
 		pextrw.NewPEXTRW128ZERO_IDX(),
 		pextrw.NewPEXTRW128ONE_IDX(),

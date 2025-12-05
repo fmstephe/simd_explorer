@@ -1,4 +1,4 @@
-package pmaxsw
+package pmaxs
 
 import (
 	_ "embed"
@@ -40,11 +40,11 @@ func (v *VPMAXSW256) Output() *number.Parameter {
 }
 
 func (v *VPMAXSW256) Name() string {
-	return "VPMAXSW (256 bit)"
+	return "VPMAXSW (256 bit) "
 }
 
 func (v *VPMAXSW256) Description() string {
-	return "Packed max of signed 16-bit words per lane (VEX, per 128-bit lane)."
+	return "Signed maximum of packed 16-bit integers."
 }
 
 func (v *VPMAXSW256) Stub() string {
@@ -65,11 +65,10 @@ func (v *VPMAXSW256) Run() {
 
 	vpmaxsw256(&vals1, &vals2, &ret)
 
-	log.Printf("VPMAXSW256 input %v %v output %v", vals1, vals2, ret)
+	log.Printf("VPMAXSW256 vals1 %v vals2 %v ret %v", vals1, vals2, ret)
 
 	out := number.Int16SliceToBytes(ret[:])
 	v.ret.SetData(out)
-
 }
 
 func (v *VPMAXSW256) Supported() bool {
