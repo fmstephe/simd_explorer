@@ -44,6 +44,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmovmskb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhuw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmull"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pmuludq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psadbw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
@@ -304,6 +305,9 @@ func Instructions() []assembly.Instruction {
 		pavgw.NewPAVGW128(),
 		pavgw.NewVPAVGW128(),
 		pavgw.NewVPAVGW256(),
+		// pmuludq (unsigned dword multiply to quadword)
+		pmuludq.NewVPMULUDQ128(),
+		pmuludq.NewVPMULUDQ256(),
 		// padd (AVX/AVX2 integer adds)
 		padd.NewVPADDB128(),
 		padd.NewVPADDB256(),
