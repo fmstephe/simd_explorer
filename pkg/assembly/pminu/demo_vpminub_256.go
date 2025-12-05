@@ -1,4 +1,4 @@
-package pminub
+package pminu
 
 import (
 	_ "embed"
@@ -40,11 +40,11 @@ func (v *VPMINUB256) Output() *number.Parameter {
 }
 
 func (v *VPMINUB256) Name() string {
-	return "VPMINUB (256 bit)"
+	return "VPMINUB (256 bit) "
 }
 
 func (v *VPMINUB256) Description() string {
-	return "Packed min of unsigned bytes per lane (VEX, per 128-bit lane)."
+	return "Unsigned minimum of packed 8-bit integers."
 }
 
 func (v *VPMINUB256) Stub() string {
@@ -65,11 +65,9 @@ func (v *VPMINUB256) Run() {
 
 	vpminub256(&vals1, &vals2, &ret)
 
-	log.Printf("VPMINUB256 input %v %v output %v", vals1, vals2, ret)
+	log.Printf("VPMINUB256 vals1 %v vals2 %v ret %v", vals1, vals2, ret)
 
-	out := ret[:]
-	v.ret.SetData(out)
-
+	v.ret.SetData(ret[:])
 }
 
 func (v *VPMINUB256) Supported() bool {

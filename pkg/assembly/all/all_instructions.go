@@ -46,7 +46,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxsw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pminsw"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/pminub"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pminu"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmovmskb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhuw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhw"
@@ -385,10 +385,13 @@ func Instructions() []assembly.Instruction {
 		pmaxub.NewPMAXUB128(),
 		pmaxub.NewVPMAXUB128(),
 		pmaxub.NewVPMAXUB256(),
-		// pminub
-		pminub.NewPMINUB128(),
-		pminub.NewVPMINUB128(),
-		pminub.NewVPMINUB256(),
+		// pminu (unsigned mins)
+		pminu.NewVPMINUB128(),
+		pminu.NewVPMINUB256(),
+		pminu.NewVPMINUW128(),
+		pminu.NewVPMINUW256(),
+		pminu.NewVPMINUD128(),
+		pminu.NewVPMINUD256(),
 		// pmaxsw
 		pmaxsw.NewPMAXSW128(),
 		pmaxsw.NewVPMAXSW128(),
