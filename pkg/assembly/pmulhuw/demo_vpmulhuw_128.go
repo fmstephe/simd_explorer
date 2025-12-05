@@ -40,11 +40,11 @@ func (v *VPMULHUW128) Output() *number.Parameter {
 }
 
 func (v *VPMULHUW128) Name() string {
-	return "VPMULHUW (128 bit)"
+	return "VPMULHUW (128 bit) "
 }
 
 func (v *VPMULHUW128) Description() string {
-	return "Packed multiply unsigned 16-bit integers (VEX); keep the high 16 bits of each 32-bit product."
+	return "Multiply packed unsigned 16-bit integers; keep the high 16 bits of each 32-bit product."
 }
 
 func (v *VPMULHUW128) Stub() string {
@@ -65,11 +65,10 @@ func (v *VPMULHUW128) Run() {
 
 	vpmulhuw128(&vals1, &vals2, &ret)
 
-	log.Printf("VPMULHUW128 input %v %v output %v", vals1, vals2, ret)
+	log.Printf("VPMULHUW128 vals1 %v vals2 %v ret %v", vals1, vals2, ret)
 
 	out := number.Uint16SliceToBytes(ret[:])
 	v.ret.SetData(out)
-
 }
 
 func (v *VPMULHUW128) Supported() bool {

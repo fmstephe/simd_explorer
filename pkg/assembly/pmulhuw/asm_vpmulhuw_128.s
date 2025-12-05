@@ -10,13 +10,11 @@ TEXT ·vpmulhuw128(SB), NOSPLIT, $0-24
 	MOVQ vals2+8(FP), CX
 	MOVQ ret+16(FP), DX
 
-	// Load vals1 into XMM register
+	// Load vals1 and vals2 into XMM registers
 	VMOVDQA (AX), X0
-
-	// Load vals2 into XMM register
 	VMOVDQA (CX), X1
 
-	// Multiply packed unsigned 16-bit integers with VEX encoding; keep high 16 bits
+	// Multiply packed unsigned 16-bit integers; keep high 16 bits of 32-bit products
 	VPMULHUW X1, X0, X0
 
 	// Write results into return memory address

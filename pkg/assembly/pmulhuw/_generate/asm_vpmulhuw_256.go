@@ -7,17 +7,15 @@ import (
 
 //go:generate go run asm_vpmulhuw_256.go -out ../asm_vpmulhuw_256.s -stubs ../stub_vpmulhuw_256.go -pkg pmulhuw
 func main() {
-	TEXT("vpmulhuw256", NOSPLIT, "func(vals1, vals2, ret *[16]uint16)")
+	TEXT("vpmulhuw256", NOSPLIT, "func(vals1 *[16]uint16, vals2 *[16]uint16, ret *[16]uint16)")
 	Comment("load params")
 	vals1 := Load(Param("vals1"), GP64())
 	vals2 := Load(Param("vals2"), GP64())
 	ret := Load(Param("ret"), GP64())
 
-	Comment("Load vals1 into YMM register")
+	Comment("Load vals1 and vals2 into YMM registers")
 	regY1 := YMM()
 	VMOVDQA(Mem{Base: vals1}, regY1)
-
-	Comment("Load vals2 into YMM register")
 	regY2 := YMM()
 	VMOVDQA(Mem{Base: vals2}, regY2)
 
@@ -26,6 +24,9 @@ func main() {
 
 	Comment("Write results into return memory address")
 	VMOVDQA(regY1, Mem{Base: ret})
+
+	Comment("Clear upper halves after YMM usage")
+	VZEROUPPER()
 
 	Comment("Return from function")
 	RET()

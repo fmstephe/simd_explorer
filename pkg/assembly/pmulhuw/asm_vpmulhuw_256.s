@@ -10,10 +10,8 @@ TEXT ·vpmulhuw256(SB), NOSPLIT, $0-24
 	MOVQ vals2+8(FP), CX
 	MOVQ ret+16(FP), DX
 
-	// Load vals1 into YMM register
+	// Load vals1 and vals2 into YMM registers
 	VMOVDQA (AX), Y0
-
-	// Load vals2 into YMM register
 	VMOVDQA (CX), Y1
 
 	// Multiply packed unsigned 16-bit integers (per 128-bit lane); keep high 16 bits
@@ -21,6 +19,9 @@ TEXT ·vpmulhuw256(SB), NOSPLIT, $0-24
 
 	// Write results into return memory address
 	VMOVDQA Y0, (DX)
+
+	// Clear upper halves after YMM usage
+	VZEROUPPER
 
 	// Return from function
 	RET

@@ -33,10 +33,16 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/mulss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/orps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/padd"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pand"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pandn"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgw"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pcmpeq"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pcmpgt"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pextrw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pinsrw"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaddhw"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaddubsw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxsw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmaxub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pminsw"
@@ -46,8 +52,10 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmulhw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmull"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmuludq"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/por"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psadbw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psub"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pxor"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rsqrtps"
@@ -306,6 +314,39 @@ func Instructions() []assembly.Instruction {
 		pavgw.NewPAVGW128(),
 		pavgw.NewVPAVGW128(),
 		pavgw.NewVPAVGW256(),
+		// vpor
+		por.NewVPOR128(),
+		por.NewVPOR256(),
+		// vpandn
+		pandn.NewVPANDN128(),
+		pandn.NewVPANDN256(),
+		// vpxor
+		pxor.NewVPXOR128(),
+		pxor.NewVPXOR256(),
+		// pcmpeq
+		pcmpeq.NewVPCMPEQB128(),
+		pcmpeq.NewVPCMPEQB256(),
+		pcmpeq.NewVPCMPEQW128(),
+		pcmpeq.NewVPCMPEQW256(),
+		pcmpeq.NewVPCMPEQD128(),
+		pcmpeq.NewVPCMPEQD256(),
+		pcmpeq.NewVPCMPEQQ128(),
+		pcmpeq.NewVPCMPEQQ256(),
+		// pcmpgt
+		pcmpgt.NewVPCMPGTB128(),
+		pcmpgt.NewVPCMPGTB256(),
+		pcmpgt.NewVPCMPGTW128(),
+		pcmpgt.NewVPCMPGTW256(),
+		pcmpgt.NewVPCMPGTD128(),
+		pcmpgt.NewVPCMPGTD256(),
+		pcmpgt.NewVPCMPGTQ128(),
+		pcmpgt.NewVPCMPGTQ256(),
+		// pand (bitwise AND on integers)
+		pand.NewVPAND128(),
+		pand.NewVPAND256(),
+		// pmaddubsw
+		pmaddubsw.NewVPMADDUBSW128(),
+		pmaddubsw.NewVPMADDUBSW256(),
 		// pmuludq (unsigned dword multiply to quadword)
 		pmuludq.NewVPMULUDQ128(),
 		pmuludq.NewVPMULUDQ256(),
@@ -325,6 +366,9 @@ func Instructions() []assembly.Instruction {
 		pmull.NewVPMULLD256(),
 		pmull.NewVPMULLQ128(),
 		pmull.NewVPMULLQ256(),
+		// pmaddhw (AVX/AVX2: pairwise multiply words and add to 32-bit)
+		pmaddhw.NewVPMADDHW128(),
+		pmaddhw.NewVPMADDHW256(),
 		// pmulhw (AVX/AVX2 signed high multiply words)
 		pmulhw.NewVPMULHW128(),
 		pmulhw.NewVPMULHW256(),
