@@ -32,6 +32,8 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/mulps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/mulss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/orps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/packss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/packus"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/padd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pand"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pandn"
@@ -399,6 +401,16 @@ func Instructions() []assembly.Instruction {
 		psll.NewVPSLLD256(),
 		psll.NewVPSLLQ128(),
 		psll.NewVPSLLQ256(),
+		// packss
+		packss.NewVPACKSSWB128(),
+		packss.NewVPACKSSWB256(),
+		packss.NewVPACKSSDW128(),
+		packss.NewVPACKSSDW256(),
+		// packus
+		packus.NewVPACKUSWB128(),
+		packus.NewVPACKUSWB256(),
+		packus.NewVPACKUSDW128(),
+		packus.NewVPACKUSDW256(),
 		// psrl (variable, register-count)
 		psrl.NewVPSRLW128(),
 		psrl.NewVPSRLW256(),
