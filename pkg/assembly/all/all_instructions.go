@@ -55,6 +55,8 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmuludq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/por"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psadbw"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pshufb"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pshufd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psll"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psra"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psrl"
@@ -321,6 +323,18 @@ func Instructions() []assembly.Instruction {
 		pavgw.NewPAVGW128(),
 		pavgw.NewVPAVGW128(),
 		pavgw.NewVPAVGW256(),
+		// pshufb
+		pshufb.NewVPSHUFB128(),
+		pshufb.NewVPSHUFB256(),
+		// pshufd (imm8 variants)
+		pshufd.NewVPSHUFD128IDENTITY(),
+		pshufd.NewVPSHUFD128REVERSE(),
+		pshufd.NewVPSHUFD128EVENS(),
+		pshufd.NewVPSHUFD128ODDS(),
+		pshufd.NewVPSHUFD256IDENTITY(),
+		pshufd.NewVPSHUFD256REVERSE(),
+		pshufd.NewVPSHUFD256EVENS(),
+		pshufd.NewVPSHUFD256ODDS(),
 		// vpor
 		por.NewVPOR128(),
 		por.NewVPOR256(),
