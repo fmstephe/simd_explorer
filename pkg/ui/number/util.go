@@ -53,6 +53,23 @@ func ToInt64(bytes []byte) int64 {
 	return int64(ToUint64(bytes))
 }
 
+func ToInt64Slice(bytes []byte) []int64 {
+	ret := []int64{}
+	for i := 0; i < len(bytes); i += 8 {
+		ret = append(ret, ToInt64(bytes[i:]))
+	}
+
+	return ret
+}
+
+func Int64SliceToBytes(vals []int64) []byte {
+	bytes := []byte{}
+	for _, val := range vals {
+		bytes = endian.AppendUint64(bytes, uint64(val))
+	}
+	return bytes
+}
+
 func ToUint32(bytes []byte) uint32 {
 	return endian.Uint32(bytes)
 }
