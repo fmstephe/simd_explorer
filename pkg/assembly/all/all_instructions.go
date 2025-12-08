@@ -54,6 +54,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pmuludq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/por"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psadbw"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/psll"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psub"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pxor"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
@@ -389,6 +390,13 @@ func Instructions() []assembly.Instruction {
 		pminu.NewVPMINUW256(),
 		pminu.NewVPMINUD128(),
 		pminu.NewVPMINUD256(),
+		// psll (variable, register-count)
+		psll.NewVPSLLW128(),
+		psll.NewVPSLLW256(),
+		psll.NewVPSLLD128(),
+		psll.NewVPSLLD256(),
+		psll.NewVPSLLQ128(),
+		psll.NewVPSLLQ256(),
 		// pmins (signed mins)
 		pmins.NewVPMINSB128(),
 		pmins.NewVPMINSB256(),
