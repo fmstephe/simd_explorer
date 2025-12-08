@@ -33,7 +33,6 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/mulss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/orps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/packss"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/packus"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/padd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pand"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pandn"
@@ -60,6 +59,8 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psra"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psrl"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psub"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/punpckh"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/punpckl"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pxor"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpss"
@@ -406,11 +407,6 @@ func Instructions() []assembly.Instruction {
 		packss.NewVPACKSSWB256(),
 		packss.NewVPACKSSDW128(),
 		packss.NewVPACKSSDW256(),
-		// packus
-		packus.NewVPACKUSWB128(),
-		packus.NewVPACKUSWB256(),
-		packus.NewVPACKUSDW128(),
-		packus.NewVPACKUSDW256(),
 		// psrl (variable, register-count)
 		psrl.NewVPSRLW128(),
 		psrl.NewVPSRLW256(),
@@ -425,6 +421,24 @@ func Instructions() []assembly.Instruction {
 		psra.NewVPSRAD256(),
 		psra.NewVPSRAQ128(),
 		psra.NewVPSRAQ256(),
+		// punpckl (unpack low interleaves)
+		punpckl.NewVPUNPCKLBW128(),
+		punpckl.NewVPUNPCKLBW256(),
+		punpckl.NewVPUNPCKLWD128(),
+		punpckl.NewVPUNPCKLWD256(),
+		punpckl.NewVPUNPCKLDQ128(),
+		punpckl.NewVPUNPCKLDQ256(),
+		punpckl.NewVPUNPCKLQDQ128(),
+		punpckl.NewVPUNPCKLQDQ256(),
+		// punpckh (unpack high interleaves)
+		punpckh.NewVPUNPCKHBW128(),
+		punpckh.NewVPUNPCKHBW256(),
+		punpckh.NewVPUNPCKHWD128(),
+		punpckh.NewVPUNPCKHWD256(),
+		punpckh.NewVPUNPCKHDQ128(),
+		punpckh.NewVPUNPCKHDQ256(),
+		punpckh.NewVPUNPCKHQDQ128(),
+		punpckh.NewVPUNPCKHQDQ256(),
 		// pmins (signed mins)
 		pmins.NewVPMINSB128(),
 		pmins.NewVPMINSB256(),
