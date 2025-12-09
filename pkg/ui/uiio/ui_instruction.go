@@ -62,14 +62,23 @@ func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) 
 	// this?)
 	uiInst.initFocusCycling()
 
-	// Set output fields from zeroed inputs
-	uiInst.inputsChanged()
+	// Set some default values for the inputs Often we don't even need to
+	// set the inputs manually, just having unique values in each input
+	// will often characterise the instruction well enough
+	uiInst.setInputDefaults()
 
 	return uiInst
 }
 
 func (r *UIInstruction) GetPrimitive() tview.Primitive {
 	return r.box
+}
+
+func (r *UIInstruction) setInputDefaults() {
+	val := byte(1)
+	for _, input := range r.inputUIParameters {
+		val = input.SetDefaults(val)
+	}
 }
 
 func (r *UIInstruction) inputsChanged() {

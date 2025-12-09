@@ -3,6 +3,7 @@ package uiio
 import (
 	"fmt"
 	"log"
+	"strconv"
 
 	"github.com/fmstephe/simd_explorer/pkg/ui/number"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
@@ -56,8 +57,6 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 	partBitWidth := parameter.PartBitWidth()
 	partsPerLine := calcPartsPerLine(parameter)
 
-	// TODO we are going to have to build more consideration into this for 512 bit registers
-	// on my monitor right now I can't display the 64 bit parts of the 512 bit register on a single line.
 	for i := range parts {
 		part := partsBuilder.build()
 		part.setTitle(fmt.Sprintf("%d:%d", i*partBitWidth, (i+1)*partBitWidth))
@@ -102,6 +101,18 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 
 func (in *UIParameterParts) GetBox() *tview.Grid {
 	return in.box
+}
+
+func (in *UIParameterParts) SetDefaults(start byte) (end byte) {
+	end = start
+	for _, part := range in.allParts {
+		// This is a bit of a hack to set default values for all inputs
+		// We restrict it to string representation of a single byte value, as this is our smallest representable value.
+		// TODO let's see how this works in practice.
+		part.setText(strconv.FormatInt(int64(end), in.parameter.Base()))
+		end++
+	}
+	return end
 }
 
 func (in *UIParameterParts) syncToParameter() {
@@ -161,5 +172,5 @@ func calcPartsPerLine(parameter *number.Parameter) int {
 	// allow the title to display correctly
 	partWidth = max(partWidth, 10)
 	perLine := half / partWidth
-	return perLine
+	return min(perLine, 8)
 }
