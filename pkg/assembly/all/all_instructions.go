@@ -34,6 +34,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/orps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/packss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/padd"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/palignr"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pand"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pandn"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pavgb"
@@ -355,6 +356,27 @@ func Instructions() []assembly.Instruction {
 		pshuflw.NewVPSHUFLW256REVERSE(),
 		pshuflw.NewVPSHUFLW256EVENS(),
 		pshuflw.NewVPSHUFLW256ODDS(),
+		// palignr imm8=17 examples
+		palignr.NewVPALIGNR128SEVENTEEN(),
+		palignr.NewVPALIGNR256SEVENTEEN(),
+		// palignr
+		palignr.NewVPALIGNR128ZERO(),
+		palignr.NewVPALIGNR128ONE(),
+		palignr.NewVPALIGNR128TWO(),
+		palignr.NewVPALIGNR128THREE(),
+		palignr.NewVPALIGNR128FOUR(),
+		palignr.NewVPALIGNR128SIXTEEN(),
+		palignr.NewVPALIGNR128THIRTYTWO(),
+		palignr.NewVPALIGNR128THIRTYTHREE(),
+		palignr.NewVPALIGNR256ZERO(),
+		palignr.NewVPALIGNR256ONE(),
+		palignr.NewVPALIGNR256TWO(),
+		palignr.NewVPALIGNR256THREE(),
+		palignr.NewVPALIGNR256EIGHT(),
+		palignr.NewVPALIGNR256FOUR(),
+		palignr.NewVPALIGNR256SIXTEEN(),
+		palignr.NewVPALIGNR256THIRTYTWO(),
+		palignr.NewVPALIGNR256THIRTYTHREE(),
 		// vpor
 		por.NewVPOR128(),
 		por.NewVPOR256(),

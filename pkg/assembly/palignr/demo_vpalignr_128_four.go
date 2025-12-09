@@ -1,0 +1,75 @@
+package palignr
+
+import (
+	_ "embed"
+	"log"
+
+	"github.com/fmstephe/simd_explorer/pkg/assembly/asmutil"
+	"github.com/fmstephe/simd_explorer/pkg/ui/number"
+)
+
+//go:embed asm_vpalignr_128_four.s
+var assemblyVpalignr128Four string
+
+//go:embed stub_vpalignr_128_four.go
+var stubVpalignr128Four string
+
+type VPALIGNR128FOUR struct {
+	vals1 *number.Parameter
+	vals2 *number.Parameter
+	ret   *number.Parameter
+}
+
+func NewVPALIGNR128FOUR() *VPALIGNR128FOUR {
+	return &VPALIGNR128FOUR{
+		vals1: number.NewNamedUintParameter("vals1", 128, 8, 10),
+		vals2: number.NewNamedUintParameter("vals2", 128, 8, 10),
+		ret:   number.NewNamedUintParameter("ret", 128, 8, 10),
+	}
+}
+
+func (v *VPALIGNR128FOUR) Inputs() []*number.Parameter {
+	return []*number.Parameter{
+		v.vals1,
+		v.vals2,
+	}
+}
+
+func (v *VPALIGNR128FOUR) Output() *number.Parameter {
+	return v.ret
+}
+
+func (v *VPALIGNR128FOUR) Name() string {
+	return "VPALIGNR (128 bit) four"
+}
+
+func (v *VPALIGNR128FOUR) Description() string {
+	return "Align right by 4 bytes across vals1 and vals2."
+}
+
+func (v *VPALIGNR128FOUR) Stub() string {
+	return stubVpalignr128Four
+}
+
+func (v *VPALIGNR128FOUR) Assembly() string {
+	return assemblyVpalignr128Four
+}
+
+func (v *VPALIGNR128FOUR) Run() {
+	vals1 := [16]uint8{}
+	copy(vals1[:], v.vals1.FlatData())
+	vals2 := [16]uint8{}
+	copy(vals2[:], v.vals2.FlatData())
+
+	ret := [16]uint8{}
+
+	vpalignr128Four(&vals1, &vals2, &ret)
+
+	log.Printf("VPALIGNR128FOUR vals1 %v vals2 %v ret %v", vals1, vals2, ret)
+
+	v.ret.SetData(ret[:])
+}
+
+func (v *VPALIGNR128FOUR) Supported() bool {
+	return asmutil.IsSupported(v.Assembly())
+}
