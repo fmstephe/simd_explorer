@@ -57,6 +57,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psadbw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pshufb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pshufd"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/pshufhw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psll"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psra"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/psrl"
@@ -335,6 +336,15 @@ func Instructions() []assembly.Instruction {
 		pshufd.NewVPSHUFD256REVERSE(),
 		pshufd.NewVPSHUFD256EVENS(),
 		pshufd.NewVPSHUFD256ODDS(),
+		// pshufhw (imm8 variants on high words)
+		pshufhw.NewVPSHUFHW128IDENTITY(),
+		pshufhw.NewVPSHUFHW128REVERSE(),
+		pshufhw.NewVPSHUFHW128EVENS(),
+		pshufhw.NewVPSHUFHW128ODDS(),
+		pshufhw.NewVPSHUFHW256IDENTITY(),
+		pshufhw.NewVPSHUFHW256REVERSE(),
+		pshufhw.NewVPSHUFHW256EVENS(),
+		pshufhw.NewVPSHUFHW256ODDS(),
 		// vpor
 		por.NewVPOR128(),
 		por.NewVPOR256(),
