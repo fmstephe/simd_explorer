@@ -18,6 +18,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/dppd"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/dpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/maxps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/maxss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/minps"
@@ -332,6 +333,11 @@ func Instructions() []assembly.Instruction {
 		dppd.NewVDPPD128LOW_ONLY(),
 		dppd.NewVDPPD128HIGH_ONLY(),
 		dppd.NewVDPPD128ALL(),
+		// dpps (dot product packed singles, imm8 variants)
+		dpps.NewVDPPS128NONE(),
+		dpps.NewVDPPS128LOW_ONLY(),
+		dpps.NewVDPPS128HIGH_ONLY(),
+		dpps.NewVDPPS128ALL(),
 		// pshufb
 		pshufb.NewVPSHUFB128(),
 		pshufb.NewVPSHUFB256(),
