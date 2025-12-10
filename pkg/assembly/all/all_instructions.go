@@ -72,6 +72,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/roundp"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/rounds"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rsqrtps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rsqrtss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/shufps"
@@ -356,6 +357,15 @@ func Instructions() []assembly.Instruction {
 		roundp.NewVROUNDPD256ONE(),
 		roundp.NewVROUNDPD256TWO(),
 		roundp.NewVROUNDPD256THREE(),
+		// rounds (scalar round ss/sd, with base + vals)
+		rounds.NewVROUNDSS128ZERO(),
+		rounds.NewVROUNDSS128ONE(),
+		rounds.NewVROUNDSS128TWO(),
+		rounds.NewVROUNDSS128THREE(),
+		rounds.NewVROUNDSD128ZERO(),
+		rounds.NewVROUNDSD128ONE(),
+		rounds.NewVROUNDSD128TWO(),
+		rounds.NewVROUNDSD128THREE(),
 		// pshufb
 		pshufb.NewVPSHUFB128(),
 		pshufb.NewVPSHUFB256(),
