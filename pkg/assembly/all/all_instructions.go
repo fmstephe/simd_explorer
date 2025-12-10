@@ -71,6 +71,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/pxor"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rcpss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/roundp"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rsqrtps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/rsqrtss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/shufps"
@@ -338,6 +339,23 @@ func Instructions() []assembly.Instruction {
 		dpps.NewVDPPS128LOW_ONLY(),
 		dpps.NewVDPPS128HIGH_ONLY(),
 		dpps.NewVDPPS128ALL(),
+		// roundp (round packed singles/doubles, imm8 variants)
+		roundp.NewVROUNDPS128ZERO(),
+		roundp.NewVROUNDPS128ONE(),
+		roundp.NewVROUNDPS128TWO(),
+		roundp.NewVROUNDPS128THREE(),
+		roundp.NewVROUNDPS256ZERO(),
+		roundp.NewVROUNDPS256ONE(),
+		roundp.NewVROUNDPS256TWO(),
+		roundp.NewVROUNDPS256THREE(),
+		roundp.NewVROUNDPD128ZERO(),
+		roundp.NewVROUNDPD128ONE(),
+		roundp.NewVROUNDPD128TWO(),
+		roundp.NewVROUNDPD128THREE(),
+		roundp.NewVROUNDPD256ZERO(),
+		roundp.NewVROUNDPD256ONE(),
+		roundp.NewVROUNDPD256TWO(),
+		roundp.NewVROUNDPD256THREE(),
 		// pshufb
 		pshufb.NewVPSHUFB128(),
 		pshufb.NewVPSHUFB256(),
