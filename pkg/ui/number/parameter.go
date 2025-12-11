@@ -13,28 +13,16 @@ type Parameter struct {
 	partData [][]byte
 }
 
-func NewUintParameter(totalBitWidth, partBitWidth, base int) *Parameter {
-	return NewNamedUintParameter("", totalBitWidth, partBitWidth, base)
-}
-
 func NewNamedUintParameter(name string, totalBitWidth, partBitWidth, base int) *Parameter {
 	converter := NewUintConverter(partBitWidth, base)
 
 	return newParameter(name, totalBitWidth, partBitWidth, converter)
 }
 
-func NewIntParameter(totalBitWidth, partBitWidth, base int) *Parameter {
-	return NewNamedIntParameter("", totalBitWidth, partBitWidth, base)
-}
-
 func NewNamedIntParameter(name string, totalBitWidth, partBitWidth, base int) *Parameter {
 	converter := NewIntConverter(partBitWidth, base)
 
 	return newParameter(name, totalBitWidth, partBitWidth, converter)
-}
-
-func NewFloatParameter(totalBitWidth, partBitWidth int) *Parameter {
-	return NewNamedFloatParameter("", totalBitWidth, partBitWidth)
 }
 
 func NewNamedFloatParameter(name string, totalBitWidth, partBitWidth int) *Parameter {
