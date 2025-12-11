@@ -24,7 +24,7 @@ func NewUintConverter(bitWidth, base int) *UintConverter {
 	}
 }
 
-func (c *UintConverter) Kind() string {
+func (c *UintConverter) GoType() string {
 	return "uint" + strconv.Itoa(c.bitWidth)
 }
 

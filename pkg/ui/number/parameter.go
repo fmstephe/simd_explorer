@@ -53,8 +53,12 @@ func (p *Parameter) Name() string {
 	return p.name
 }
 
-func (p *Parameter) Kind() string {
-	return p.converter.Kind()
+func (p *Parameter) GoType() string {
+	if p.converter.GetBitWidth() == p.totalBitWidth {
+		return p.converter.GoType()
+	} else {
+		return fmt.Sprintf("*[%d]%s", (p.totalBitWidth / p.converter.GetBitWidth()), p.converter.GoType())
+	}
 }
 
 func (p *Parameter) TotalBitWidth() int {
@@ -79,6 +83,10 @@ func (p *Parameter) GetBitWidth() int {
 
 func (p *Parameter) Base() int {
 	return p.converter.GetBase()
+}
+
+func (p *Parameter) String() string {
+	return fmt.Sprintf("%s %s", p.name, p.GoType())
 }
 
 func (p *Parameter) SetData(bytes []byte) {

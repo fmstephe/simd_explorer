@@ -19,7 +19,7 @@ func NewIntConverter(bitWidth, base int) *IntConverter {
 	}
 }
 
-func (c *IntConverter) Kind() string {
+func (c *IntConverter) GoType() string {
 	return "int" + strconv.Itoa(c.bitWidth)
 }
 

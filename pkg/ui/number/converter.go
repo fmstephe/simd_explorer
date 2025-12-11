@@ -1,7 +1,7 @@
 package number
 
 type Converter interface {
-	Kind() string
+	GoType() string
 	GetTextWidth() int
 	GetBitWidth() int
 	GetBase() int
