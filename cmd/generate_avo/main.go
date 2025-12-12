@@ -31,6 +31,11 @@ type templateValues struct {
 	FunctionNameCamel string
 	DemoTypeName      string
 
+	// Generated Code Lines
+	LoadArgsAvo      string
+	LoadRegistersAvo string
+	WriteReturnAvo   string
+
 	// File Names
 	AssemblyFileName          string
 	StubFileName              string
@@ -68,18 +73,31 @@ func buildAvoGenerator(pkg, instruction, disciminator, args string, sizeClass in
 		fileNameSuffix = fmt.Sprintf("%s_%d", instructionLower, sizeClass)
 	}
 
+	parameters := validateArgs(args)
+	loadRegistersAvo, writeReturnAvo := generateRegisterLoads(parameters)
+
 	tValues := &templateValues{
-		PackageName:               pkg,
-		InstructionUpper:          instructionUpper,
-		SizeClass:                 sizeClass,
-		Discriminator:             discriminatorLower,
-		Args:                      args,
-		DemoTypeName:              fmt.Sprintf("%s%d%s", instructionUpper, sizeClass, discriminatorUpper),
-		FunctionName:              fmt.Sprintf("%s%d%s", instructionLower, sizeClass, discriminatorTitle),
-		FunctionNameCamel:         fmt.Sprintf("%s%d%s", instructionTitle, sizeClass, discriminatorTitle),
-		AssemblyGeneratorFileName: fmt.Sprintf("asm_%s.go", fileNameSuffix),
+		// Basic Data
+		PackageName:      pkg,
+		InstructionUpper: instructionUpper,
+		SizeClass:        sizeClass,
+		Discriminator:    discriminatorLower,
+		Args:             args,
+
+		// Derived Data
+		FunctionName:      fmt.Sprintf("%s%d%s", instructionLower, sizeClass, discriminatorTitle),
+		FunctionNameCamel: fmt.Sprintf("%s%d%s", instructionTitle, sizeClass, discriminatorTitle),
+		DemoTypeName:      fmt.Sprintf("%s%d%s", instructionUpper, sizeClass, discriminatorUpper),
+
+		// Generated Code Lines
+		LoadArgsAvo:      generateParameterLoads(parameters),
+		LoadRegistersAvo: loadRegistersAvo,
+		WriteReturnAvo:   writeReturnAvo,
+
+		// File Names
 		AssemblyFileName:          fmt.Sprintf("asm_%s.s", fileNameSuffix),
 		StubFileName:              fmt.Sprintf("stub_%s.go", fileNameSuffix),
+		AssemblyGeneratorFileName: fmt.Sprintf("asm_%s.go", fileNameSuffix),
 		DemoFileName:              fmt.Sprintf("demo_%s.go", fileNameSuffix),
 	}
 
