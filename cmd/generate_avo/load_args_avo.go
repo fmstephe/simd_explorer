@@ -101,7 +101,7 @@ func generateParamIntoRegister(param *number.Parameter) string {
 
 	regLoadStr := fmt.Sprintf("Comment(\"Load %s into %s register\")\n", param.Name(), registerType)
 	regLoadStr += fmt.Sprintf("%s := %s()\n", regVarName, registerType)
-	regLoadStr += fmt.Sprintf("VMOVDQA(Mem{Base: %s}, %s)\n", param.Name(), regVarName)
+	regLoadStr += fmt.Sprintf("VMOVDQU(Mem{Base: %s}, %s)\n", param.Name(), regVarName)
 
 	return regLoadStr
 }
@@ -132,12 +132,12 @@ func generateStoreToReturn(param *number.Parameter) string {
 	}
 
 	// Comment("Write results into return memory address")
-	// VMOVDQA(retReg, Mem{Base: ret})
+	// VMOVDQU(retReg, Mem{Base: ret})
 
 	suffix, _ := generateRegisterType(param)
 	regLoadStr := "Comment(\"Write results into return memory address\")\n"
 	regVarName := fmt.Sprintf("%s%s", param.Name(), suffix)
-	regLoadStr += fmt.Sprintf("VMOVDQA(%s, Mem{Base: %s})\n", regVarName, param.Name())
+	regLoadStr += fmt.Sprintf("VMOVDQU(%s, Mem{Base: %s})\n", regVarName, param.Name())
 
 	return regLoadStr
 }
