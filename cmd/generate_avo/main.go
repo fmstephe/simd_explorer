@@ -133,8 +133,6 @@ func buildDirectories(tValues *templateValues) {
 }
 
 func buildGenerator(tValues *templateValues) {
-	fmt.Println("Generator", tValues)
-
 	f, err := os.Create(tValues.PackageName + "/_generate/" + tValues.AssemblyGeneratorFileName)
 	if err != nil {
 		panic(err)
