@@ -103,13 +103,6 @@ func buildAvoGenerator(pkg, instruction, disciminator, args string, sizeClass in
 		DemoFileName:              fmt.Sprintf("demo_%s.go", fileNameSuffix),
 	}
 
-	fmt.Printf("%#v\n\n", tValues)
-	fmt.Printf("%#v\n\n", validateArgs(args))
-
-	for _, param := range validateArgs(args) {
-		fmt.Printf("%s\n", param)
-	}
-
 	buildDirectories(tValues)
 	buildGenerator(tValues)
 }
