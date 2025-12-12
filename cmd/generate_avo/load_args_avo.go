@@ -60,11 +60,11 @@ func generateParamForList(param *number.Parameter) string {
 	paramType := param.GoType()
 	switch {
 	case strings.Contains(paramType, "uint"):
-		return fmt.Sprintf("%s: number.NewNamedUintParameter(%q, %d, %d, %d),\n", param.Name(), param.TotalBitWidth(), param.GetBitWidth(), param.Base())
+		return fmt.Sprintf("%s: number.NewNamedUintParameter(%q, %d, %d, %d),\n", param.Name(), param.Name(), param.TotalBitWidth(), param.GetBitWidth(), param.Base())
 	case strings.Contains(paramType, "int"):
-		return fmt.Sprintf("%s: number.NewNamedIntParameter(%q, %d, %d, %d),\n", param.Name(), param.TotalBitWidth(), param.GetBitWidth(), param.Base())
+		return fmt.Sprintf("%s: number.NewNamedIntParameter(%q, %d, %d, %d),\n", param.Name(), param.Name(), param.TotalBitWidth(), param.GetBitWidth(), param.Base())
 	case strings.Contains(paramType, "float"):
-		return fmt.Sprintf("%s: number.NewNamedFloatParameter(%q, %d, %d, %d),\n", param.Name(), param.TotalBitWidth(), param.GetBitWidth(), param.Base())
+		return fmt.Sprintf("%s: number.NewNamedFloatParameter(%q, %d, %d),\n", param.Name(), param.Name(), param.TotalBitWidth(), param.GetBitWidth())
 	default:
 		panic(fmt.Errorf("unrecognised parameter type: %s", paramType))
 	}
