@@ -56,16 +56,16 @@ func main() {
 	buildAvoGenerator(*flagPackage, *flagInstruction, *flagDiscriminator, *flagArgs, sizeClass)
 }
 
-func buildAvoGenerator(pkg, instruction, disciminator, args string, sizeClass int) {
+func buildAvoGenerator(pkg, instruction, discriminator, args string, sizeClass int) {
 	pkg = strings.ToLower(pkg)
 	instructionLower := strings.ToLower(instruction)
 	instructionUpper := strings.ToUpper(instruction)
 	//lint:ignore SA1019 The strings Title function is good enough for our limited purposes
 	instructionTitle := strings.Title(instructionLower)
-	discriminatorLower := strings.ToLower(disciminator)
+	discriminatorLower := strings.ToLower(discriminator)
 	//lint:ignore SA1019 The strings Title function is good enough for our limited purposes
 	discriminatorTitle := strings.Title(discriminatorLower)
-	discriminatorUpper := strings.ToUpper(disciminator)
+	discriminatorUpper := strings.ToUpper(discriminator)
 	// File names without discriminator unless needed
 	var fileNameSuffix string
 	if discriminatorLower != "" {
