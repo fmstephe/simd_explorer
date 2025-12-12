@@ -21,6 +21,8 @@ func main() {
 
 	{{.WriteReturnAvo}}
 
+	{{.VZeroUpperAvo}}
+
 	Comment("Return from function")
 	RET()
 

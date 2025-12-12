@@ -35,6 +35,7 @@ type templateValues struct {
 	LoadArgsAvo      string
 	LoadRegistersAvo string
 	WriteReturnAvo   string
+	VZeroUpperAvo    string
 
 	// File Names
 	AssemblyFileName          string
@@ -93,6 +94,7 @@ func buildAvoGenerator(pkg, instruction, disciminator, args string, sizeClass in
 		LoadArgsAvo:      generateParameterLoads(parameters),
 		LoadRegistersAvo: loadRegistersAvo,
 		WriteReturnAvo:   writeReturnAvo,
+		VZeroUpperAvo:    generateVZeroUpper(parameters),
 
 		// File Names
 		AssemblyFileName:          fmt.Sprintf("asm_%s.s", fileNameSuffix),

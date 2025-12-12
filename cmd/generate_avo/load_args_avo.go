@@ -56,6 +56,15 @@ func generateRetList(parameters []*number.Parameter) string {
 	return listStr
 }
 
+func generateVZeroUpper(parameters []*number.Parameter) string {
+	for _, param := range parameters {
+		if param.TotalBitWidth() >= 256 {
+			return "Comment(\"Clear upper halves after YMM usage\")\nVZEROUPPER()"
+		}
+	}
+	return ""
+}
+
 func generateParamForList(param *number.Parameter) string {
 	paramType := param.GoType()
 	switch {
