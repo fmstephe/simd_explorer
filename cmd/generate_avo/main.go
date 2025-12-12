@@ -4,7 +4,6 @@ import (
 	"flag"
 	"fmt"
 	"os"
-	"strconv"
 	"strings"
 	"text/template"
 )
@@ -12,7 +11,7 @@ import (
 var (
 	flagPackage       = flag.String("package", "", "The name of the package")
 	flagInstruction   = flag.String("instruction", "", "The assembly name of the instruction to be demonstrated")
-	flagSizeClass     = flag.String("size-class", "", "The size class of the instruction being demonstrated. Many SIMD instructions work across a range of register sizes.")
+	flagSizeClass     = flag.Int("size-class", -1, "The size class of the instruction being demonstrated. Many SIMD instructions work across a range of register sizes.")
 	flagDiscriminator = flag.String("discriminator", "", "A discriminator (can be empty) useful when to demonstrate two versions of an instruction in the same size class, e.g. 'k' ")
 	flagArgs          = flag.String("args", "", "The parameters passed into the generated assembly function")
 )
@@ -47,13 +46,7 @@ type templateValues struct {
 func main() {
 	flag.Parse()
 	validateFlags()
-
-	sizeClass, err := strconv.Atoi(*flagSizeClass)
-	if err != nil {
-		panic(err)
-	}
-
-	buildAvoGenerator(*flagPackage, *flagInstruction, *flagDiscriminator, *flagArgs, sizeClass)
+	buildAvoGenerator(*flagPackage, *flagInstruction, *flagDiscriminator, *flagArgs, *flagSizeClass)
 }
 
 func buildAvoGenerator(pkg, instruction, discriminator, args string, sizeClass int) {
@@ -104,7 +97,7 @@ func buildAvoGenerator(pkg, instruction, discriminator, args string, sizeClass i
 	}
 
 	buildDirectories(tValues)
-	buildGenerator(tValues)
+	buildAvoFile(tValues)
 }
 
 func validateFlags() {
@@ -118,7 +111,7 @@ func validateFlags() {
 		flag.PrintDefaults()
 		os.Exit(1)
 	}
-	if *flagSizeClass == "" {
+	if *flagSizeClass == -1 {
 		fmt.Fprintf(os.Stderr, "Missing -size-class flag value\n")
 		flag.PrintDefaults()
 		os.Exit(1)
@@ -132,14 +125,14 @@ func buildDirectories(tValues *templateValues) {
 	}
 }
 
-func buildGenerator(tValues *templateValues) {
+func buildAvoFile(tValues *templateValues) {
 	f, err := os.Create(tValues.PackageName + "/_generate/" + tValues.AssemblyGeneratorFileName)
 	if err != nil {
 		panic(err)
 	}
 	defer f.Close()
 
-	generatorTemplate, err := template.New("generator").Parse(asmTemplate)
+	generatorTemplate, err := template.New("avoTemplate").Parse(avoTemplate)
 	if err != nil {
 		panic(err)
 	}

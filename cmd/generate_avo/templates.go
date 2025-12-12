@@ -1,6 +1,6 @@
 package main
 
-const asmTemplate = `package main
+const avoTemplate = `package main
 
 import (
 	. "github.com/mmcloughlin/avo/build"
