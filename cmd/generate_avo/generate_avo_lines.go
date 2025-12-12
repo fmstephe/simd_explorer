@@ -10,21 +10,29 @@ import (
 func generateParameterLoads(parameters []*number.Parameter) string {
 	loadsStr := ""
 	for _, param := range parameters {
-		loadsStr += generateParamForLoad(param)
+		loadsStr += paramForLoad(param)
 	}
 	return loadsStr
 }
 
-func generateRegisterLoads(parameters []*number.Parameter) (loadsStr, writeReturn string) {
+func generateRegisterLoads(parameters []*number.Parameter) (loadsStr string) {
 	for _, param := range parameters {
 		if param.Name() == "ret" {
-			loadsStr += generateReturnRegister(param)
-			writeReturn = generateStoreToReturn(param)
+			loadsStr += returnRegister(param)
 		} else {
-			loadsStr += generateParamIntoRegister(param)
+			loadsStr += paramIntoRegister(param)
 		}
 	}
 	return loadsStr, writeReturn
+}
+
+func generateReturnStore(parameters []*number.Parameter) (returnStore string) {
+	for _, param := range parameters {
+		if param.Name() == "ret" {
+			returnStore = storeToReturn(param)
+		}
+	}
+	return returnStore
 }
 
 func generateInputsList(parameters []*number.Parameter) string {
@@ -37,7 +45,7 @@ func generateInputsList(parameters []*number.Parameter) string {
 			continue
 		}
 
-		listStr += generateParamForList(param)
+		listStr += paramForList(param)
 	}
 	return listStr
 }
@@ -51,7 +59,7 @@ func generateRetList(parameters []*number.Parameter) string {
 			continue
 		}
 
-		listStr += generateParamForList(param)
+		listStr += paramForList(param)
 	}
 	return listStr
 }
@@ -65,7 +73,7 @@ func generateVZeroUpper(parameters []*number.Parameter) string {
 	return ""
 }
 
-func generateParamForList(param *number.Parameter) string {
+func paramForList(param *number.Parameter) string {
 	paramType := param.GoType()
 	switch {
 	case strings.Contains(paramType, "uint"):
@@ -79,7 +87,7 @@ func generateParamForList(param *number.Parameter) string {
 	}
 }
 
-func generateParamForLoad(param *number.Parameter) string {
+func paramForLoad(param *number.Parameter) string {
 	// e.g. vals1 := Load(Param("vals1"), GP64())
 
 	if param.IsPointer() {
@@ -100,12 +108,12 @@ func generateParamForLoad(param *number.Parameter) string {
 	}
 }
 
-func generateParamIntoRegister(param *number.Parameter) string {
+func paramIntoRegister(param *number.Parameter) string {
 	if !param.IsPointer() {
 		return ""
 	}
 
-	suffix, registerType := generateRegisterType(param)
+	suffix, registerType := findRegisterType(param)
 	regVarName := fmt.Sprintf("%s%s", param.Name(), suffix)
 
 	regLoadStr := fmt.Sprintf("Comment(\"Load %s into %s register\")\n", param.Name(), registerType)
@@ -115,7 +123,7 @@ func generateParamIntoRegister(param *number.Parameter) string {
 	return regLoadStr
 }
 
-func generateReturnRegister(param *number.Parameter) string {
+func returnRegister(param *number.Parameter) string {
 	if param.Name() != "ret" {
 		panic(fmt.Errorf("can't generate return register for param not named 'ret': %s", param.Name()))
 	}
@@ -124,14 +132,14 @@ func generateReturnRegister(param *number.Parameter) string {
 		return ""
 	}
 
-	suffix, registerType := generateRegisterType(param)
+	suffix, registerType := findRegisterType(param)
 	regVarName := fmt.Sprintf("%s%s", param.Name(), suffix)
 	regLoadStr := fmt.Sprintf("\n%s := %s()\n", regVarName, registerType)
 
 	return regLoadStr
 }
 
-func generateStoreToReturn(param *number.Parameter) string {
+func storeToReturn(param *number.Parameter) string {
 	if param.Name() != "ret" {
 		panic(fmt.Errorf("can't generate store to return for param not named 'ret': %s", param.Name()))
 	}
@@ -143,7 +151,7 @@ func generateStoreToReturn(param *number.Parameter) string {
 	// Comment("Write results into return memory address")
 	// VMOVDQU(retReg, Mem{Base: ret})
 
-	suffix, _ := generateRegisterType(param)
+	suffix, _ := findRegisterType(param)
 	regLoadStr := "Comment(\"Write results into return memory address\")\n"
 	regVarName := fmt.Sprintf("%s%s", param.Name(), suffix)
 	regLoadStr += fmt.Sprintf("VMOVDQU(%s, Mem{Base: %s})\n", regVarName, param.Name())
@@ -151,7 +159,7 @@ func generateStoreToReturn(param *number.Parameter) string {
 	return regLoadStr
 }
 
-func generateRegisterType(param *number.Parameter) (suffix, registerName string) {
+func findRegisterType(param *number.Parameter) (suffix, registerName string) {
 	switch param.TotalBitWidth() {
 	case 512:
 		return "Z", "ZMM"

@@ -67,8 +67,9 @@ func buildAvoGenerator(pkg, instruction, discriminator, args string, sizeClass i
 		fileNameSuffix = fmt.Sprintf("%s_%d", instructionLower, sizeClass)
 	}
 
-	parameters := validateArgs(args)
-	loadRegistersAvo, writeReturnAvo := generateRegisterLoads(parameters)
+	parameters := parseParameterStr(args)
+	loadRegistersAvo := generateRegisterLoads(parameters)
+	writeReturnAvo := generateReturnStore(parameters)
 
 	tValues := &templateValues{
 		// Basic Data

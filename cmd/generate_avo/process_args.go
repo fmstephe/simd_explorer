@@ -9,18 +9,18 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/ui/number"
 )
 
-func validateArgs(args string) []*number.Parameter {
+func parseParametersStr(args string) []*number.Parameter {
 	parts := strings.Split(args, ",")
 
 	parameters := []*number.Parameter{}
 	for _, part := range parts {
-		parameters = append(parameters, processArg(part))
+		parameters = append(parameters, parameterStr(part))
 	}
 
 	return parameters
 }
 
-func processArg(arg string) *number.Parameter {
+func parameterStr(arg string) *number.Parameter {
 	arg = strings.TrimSpace(arg)
 	parts := strings.Split(arg, " ")
 	if len(parts) != 2 {
