@@ -16,7 +16,7 @@ func main() {
 	{{.LoadRegistersAvo}}
 
 	Comment("Sum packed float32 values from vals1 and vals2")
-	{{.InstructionUpper}}(regX2, regX1)
+	{{.InstructionUpper}}(/* Add registers here */)
 
 
 	{{.WriteReturnAvo}}
