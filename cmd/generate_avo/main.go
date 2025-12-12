@@ -144,6 +144,7 @@ func buildGenerator(tValues *templateValues) {
 	if err != nil {
 		panic(err)
 	}
+	defer f.Close()
 
 	generatorTemplate, err := template.New("generator").Parse(asmTemplate)
 	if err != nil {
