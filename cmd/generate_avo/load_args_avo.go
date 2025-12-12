@@ -160,6 +160,6 @@ func generateRegisterType(param *number.Parameter) (suffix, registerName string)
 	case 128:
 		return "X", "XMM"
 	default:
-		return "", ""
+		panic(fmt.Errorf("expect SIMD sized parameter, found %q", param.GoType()))
 	}
 }
