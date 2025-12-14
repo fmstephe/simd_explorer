@@ -2,19 +2,19 @@
 
 #include "textflag.h"
 
-// func vpblendd128Odd(vals1 *[4]uint32, vals2 *[4]uint32, ret *[4]uint32)
+// func vpblendd128Odd(base *[4]uint32, blend *[4]uint32, ret *[4]uint32)
 // Requires: AVX, AVX2
 TEXT ·vpblendd128Odd(SB), NOSPLIT, $0-24
 	// load params
-	MOVQ vals1+0(FP), AX
-	MOVQ vals2+8(FP), CX
+	MOVQ base+0(FP), AX
+	MOVQ blend+8(FP), CX
 	MOVQ ret+16(FP), DX
 
-	// Load A and B into XMM registers
+	// Load base and blend into XMM registers
 	VMOVDQA (AX), X0
 	VMOVDQA (CX), X1
 
-	// VPBLENDD: odd lanes from B (imm=0x0A selects lanes 1 and 3 from B)
+	// VPBLENDD: odd lanes from blend (imm=0x0A selects lanes 1 and 3 from blend)
 	VPBLENDD $0x0a, X1, X0, X0
 
 	// Store result

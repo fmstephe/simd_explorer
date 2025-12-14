@@ -2,4 +2,4 @@
 
 package vpblendd
 
-func vpblendd128All(vals1 *[4]uint32, vals2 *[4]uint32, ret *[4]uint32)
+func vpblendd128All(base *[4]uint32, blend *[4]uint32, ret *[4]uint32)
