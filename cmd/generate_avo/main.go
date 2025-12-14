@@ -30,11 +30,15 @@ type templateValues struct {
 	FunctionNameCamel string
 	DemoTypeName      string
 
-	// Generated Code Lines
-	LoadArgsAvo      string
-	LoadRegistersAvo string
-	WriteReturnAvo   string
-	VZeroUpperAvo    string
+	// Generated Avo Code
+	AvoLoadArgs      string
+	AvoLoadRegisters string
+	AvoWriteReturn   string
+	AvoVZeroUpper    string
+
+	// Generated Demo Code
+	DemoFields      string
+	DemoConstructor string
 
 	// File Names
 	AssemblyFileName          string
@@ -82,11 +86,14 @@ func buildAvoGenerator(pkg, instruction, discriminator, args string, sizeClass i
 		FunctionNameCamel: fmt.Sprintf("%s%d%s", instructionTitle, sizeClass, discriminatorTitle),
 		DemoTypeName:      fmt.Sprintf("%s%d%s", instructionUpper, sizeClass, discriminatorUpper),
 
-		// Generated Code Lines
-		LoadArgsAvo:      generateParameterLoads(parameters),
-		LoadRegistersAvo: generateRegisterLoads(parameters),
-		WriteReturnAvo:   generateReturnStore(parameters),
-		VZeroUpperAvo:    generateVZeroUpper(parameters),
+		// Generated Avo Code Lines
+		AvoLoadArgs:      generateParameterLoads(parameters),
+		AvoLoadRegisters: generateRegisterLoads(parameters),
+		AvoWriteReturn:   generateReturnStore(parameters),
+		AvoVZeroUpper:    generateVZeroUpper(parameters),
+
+		// Generated Demo Code Lines
+		DemoFields: generateDemoFields(parameters),
 
 		// File Names
 		AssemblyFileName:          fmt.Sprintf("asm_%s.s", fileNameSuffix),
@@ -97,6 +104,7 @@ func buildAvoGenerator(pkg, instruction, discriminator, args string, sizeClass i
 
 	buildDirectories(tValues)
 	buildAvoFile(tValues)
+	buildDemoFile(tValues)
 }
 
 func validateFlags() {
@@ -124,6 +132,24 @@ func buildDirectories(tValues *templateValues) {
 	}
 }
 
+func buildDemoFile(tValues *templateValues) {
+	f, err := os.Create(tValues.PackageName + "/" + tValues.DemoFileName)
+	if err != nil {
+		panic(err)
+	}
+	defer f.Close()
+
+	demoTemplate, err := template.New("demoTemplate").Parse(demoTemplate)
+	if err != nil {
+		panic(err)
+	}
+
+	err = demoTemplate.Execute(f, tValues)
+	if err != nil {
+		panic(err)
+	}
+}
+
 func buildAvoFile(tValues *templateValues) {
 	f, err := os.Create(tValues.PackageName + "/_generate/" + tValues.AssemblyGeneratorFileName)
 	if err != nil {
@@ -131,12 +157,12 @@ func buildAvoFile(tValues *templateValues) {
 	}
 	defer f.Close()
 
-	generatorTemplate, err := template.New("avoTemplate").Parse(avoTemplate)
+	avoTemplate, err := template.New("avoTemplate").Parse(avoTemplate)
 	if err != nil {
 		panic(err)
 	}
 
-	err = generatorTemplate.Execute(f, tValues)
+	err = avoTemplate.Execute(f, tValues)
 	if err != nil {
 		panic(err)
 	}

@@ -7,6 +7,14 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/ui/number"
 )
 
+func generateDemoFields(parameters []*number.Parameter) string {
+	listStr := ""
+	for _, param := range parameters {
+		listStr += paramForField(param)
+	}
+	return listStr
+}
+
 func generateInputsList(parameters []*number.Parameter) string {
 	listStr := ""
 	for _, param := range parameters {
@@ -29,6 +37,10 @@ func generateRetList(parameters []*number.Parameter) string {
 		listStr += paramForList(param)
 	}
 	return listStr
+}
+
+func paramForField(param *number.Parameter) string {
+	return fmt.Sprintf("\t%s *number.Parameter\n", param.Name())
 }
 
 func paramForList(param *number.Parameter) string {

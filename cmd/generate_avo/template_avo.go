@@ -11,17 +11,17 @@ import (
 func main() {
 	TEXT("{{.FunctionName}}", NOSPLIT, "func({{.Args}})")
 	Comment("load params")
-{{.LoadArgsAvo}}
+{{.AvoLoadArgs}}
 
-{{.LoadRegistersAvo}}
+{{.AvoLoadRegisters}}
 
 	Comment("Execute the instruction being demonstrated")
 	{{.InstructionUpper}}(/* Add registers here */)
 
 
-{{.WriteReturnAvo}}
+{{.AvoWriteReturn}}
 
-{{.VZeroUpperAvo}}
+{{.AvoVZeroUpper}}
 
 	Comment("Return from function")
 	RET()
