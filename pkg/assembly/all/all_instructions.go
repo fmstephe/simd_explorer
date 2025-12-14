@@ -117,6 +117,8 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherqd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherqq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmaskmov"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmovsx"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmovzx"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvw"
@@ -791,6 +793,32 @@ func Instructions() []assembly.Instruction {
 		// vpsravd
 		vpsravd.NewVPSRAVD128(),
 		vpsravd.NewVPSRAVD256(),
+		// vpmovsx* (sign-extend)
+		vpmovsx.NewVPMOVSXBW128(),
+		vpmovsx.NewVPMOVSXBW256(),
+		vpmovsx.NewVPMOVSXBD128(),
+		vpmovsx.NewVPMOVSXBD256(),
+		vpmovsx.NewVPMOVSXBQ128(),
+		vpmovsx.NewVPMOVSXBQ256(),
+		vpmovsx.NewVPMOVSXWD128(),
+		vpmovsx.NewVPMOVSXWD256(),
+		vpmovsx.NewVPMOVSXWQ128(),
+		vpmovsx.NewVPMOVSXWQ256(),
+		vpmovsx.NewVPMOVSXDQ128(),
+		vpmovsx.NewVPMOVSXDQ256(),
+		// vpmovzx* (zero-extend)
+		vpmovzx.NewVPMOVZXBW128(),
+		vpmovzx.NewVPMOVZXBW256(),
+		vpmovzx.NewVPMOVZXBD128(),
+		vpmovzx.NewVPMOVZXBD256(),
+		vpmovzx.NewVPMOVZXBQ128(),
+		vpmovzx.NewVPMOVZXBQ256(),
+		vpmovzx.NewVPMOVZXWD128(),
+		vpmovzx.NewVPMOVZXWD256(),
+		vpmovzx.NewVPMOVZXWQ128(),
+		vpmovzx.NewVPMOVZXWQ256(),
+		vpmovzx.NewVPMOVZXDQ128(),
+		vpmovzx.NewVPMOVZXDQ256(),
 	}
 }
 
