@@ -2,12 +2,12 @@
 
 #include "textflag.h"
 
-// func vpmaddubsw128(u *[16]uint8, s *[16]uint8, ret *[8]int16)
+// func vpmaddubsw128(vals1 *[16]uint8, vals2 *[16]uint8, ret *[8]int16)
 // Requires: AVX
 TEXT ·vpmaddubsw128(SB), NOSPLIT, $0-24
 	// load params
-	MOVQ u+0(FP), AX
-	MOVQ s+8(FP), CX
+	MOVQ vals1+0(FP), AX
+	MOVQ vals2+8(FP), CX
 	MOVQ ret+16(FP), DX
 
 	// Load operands into XMM registers

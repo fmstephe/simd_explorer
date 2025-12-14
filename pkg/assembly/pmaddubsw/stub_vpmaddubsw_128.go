@@ -2,4 +2,4 @@
 
 package pmaddubsw
 
-func vpmaddubsw128(u *[16]uint8, s *[16]uint8, ret *[8]int16)
+func vpmaddubsw128(vals1 *[16]uint8, vals2 *[16]uint8, ret *[8]int16)

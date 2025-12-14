@@ -2,4 +2,4 @@
 
 package pmaddubsw
 
-func vpmaddubsw256(u *[32]uint8, s *[32]uint8, ret *[16]int16)
+func vpmaddubsw256(vals1 *[32]uint8, vals2 *[32]uint8, ret *[16]int16)
