@@ -37,8 +37,13 @@ type templateValues struct {
 	AvoVZeroUpper    string
 
 	// Generated Demo Code
-	DemoFields      string
-	DemoConstructor string
+	DemoFields       string
+	DemoConstructor  string
+	DemoInputs       string
+	DemoInitArrays   string
+	DemoFunctionArgs string
+	DemoLogLine      string
+	DemoRetToBytes   string
 
 	// File Names
 	AssemblyFileName          string
@@ -93,7 +98,13 @@ func buildAvoGenerator(pkg, instruction, discriminator, args string, sizeClass i
 		AvoVZeroUpper:    generateVZeroUpper(parameters),
 
 		// Generated Demo Code Lines
-		DemoFields: generateDemoFields(parameters),
+		DemoFields:       generateDemoFields(parameters),
+		DemoConstructor:  generateDemoConstructor(parameters),
+		DemoInputs:       generateDemoInputs(parameters),
+		DemoInitArrays:   generateDemoInitArrays(parameters),
+		DemoFunctionArgs: generateDemoFunctionArgs(parameters),
+		DemoLogLine:      generateDemoLogLine(instructionUpper, parameters),
+		DemoRetToBytes:   generateDemoRetToBytes(parameters),
 
 		// File Names
 		AssemblyFileName:          fmt.Sprintf("asm_%s.s", fileNameSuffix),
@@ -139,12 +150,12 @@ func buildDemoFile(tValues *templateValues) {
 	}
 	defer f.Close()
 
-	demoTemplate, err := template.New("demoTemplate").Parse(demoTemplate)
+	tmplt, err := template.New("demoTemplate").Parse(demoTemplate)
 	if err != nil {
 		panic(err)
 	}
 
-	err = demoTemplate.Execute(f, tValues)
+	err = tmplt.Execute(f, tValues)
 	if err != nil {
 		panic(err)
 	}
@@ -157,12 +168,12 @@ func buildAvoFile(tValues *templateValues) {
 	}
 	defer f.Close()
 
-	avoTemplate, err := template.New("avoTemplate").Parse(avoTemplate)
+	tmplt, err := template.New("avoTemplate").Parse(avoTemplate)
 	if err != nil {
 		panic(err)
 	}
 
-	err = avoTemplate.Execute(f, tValues)
+	err = tmplt.Execute(f, tValues)
 	if err != nil {
 		panic(err)
 	}

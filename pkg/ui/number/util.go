@@ -134,8 +134,21 @@ func ToUint8(bytes []byte) uint8 {
 	return bytes[0]
 }
 
+func ToUint8Slice(bytes []byte) []byte {
+	return append([]uint8{}, bytes...)
+}
+
 func ToInt8(bytes []byte) int8 {
 	return int8(bytes[0])
+}
+
+func ToInt8Slice(vals []byte) []int8 {
+	ret := []int8{}
+	for _, val := range vals {
+		ret = append(ret, int8(val))
+	}
+
+	return ret
 }
 
 func Float64ToBytes(val float64) []byte {
@@ -230,6 +243,10 @@ func Int16SliceToBytes(vals []int16) []byte {
 
 func Uint8ToBytes(val byte) []byte {
 	return []byte{val}
+}
+
+func Uint8SliceToBytes(vals []uint8) []byte {
+	return append([]byte{}, vals...)
 }
 
 func Int8ToBytes(val int8) []byte {
