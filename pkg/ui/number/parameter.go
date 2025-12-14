@@ -61,6 +61,10 @@ func (p *Parameter) GoType() string {
 	}
 }
 
+func (p *Parameter) PartType() string {
+	return p.converter.GoType()
+}
+
 func (p *Parameter) IsPointer() bool {
 	return p.converter.GetBitWidth() != p.totalBitWidth
 }
