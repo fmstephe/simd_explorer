@@ -25,6 +25,21 @@ func generateRegisterLoads(parameters []*number.Parameter) (loadsStr string) {
 	return loadsStr
 }
 
+func generateAvoInstructionArgs(parameters []*number.Parameter) (loadsStr string) {
+	argsStr := ""
+	for i, param := range parameters {
+		if param.Name() == "ret" {
+			argsStr += paramRegister(param)
+		} else {
+			argsStr += paramRegister(param)
+		}
+		if i != len(parameters)-1 {
+			argsStr += ", "
+		}
+	}
+	return argsStr
+}
+
 func generateReturnStore(parameters []*number.Parameter) (returnStore string) {
 	for _, param := range parameters {
 		if param.Name() == "ret" {
@@ -93,6 +108,11 @@ func returnRegister(param *number.Parameter) string {
 	regLoadStr := fmt.Sprintf("\n\t%s := %s()\n", regVarName, registerType)
 
 	return regLoadStr
+}
+
+func paramRegister(param *number.Parameter) string {
+	suffix, _ := findRegisterType(param)
+	return fmt.Sprintf("%s%s", param.Name(), suffix)
 }
 
 func storeToReturn(param *number.Parameter) string {

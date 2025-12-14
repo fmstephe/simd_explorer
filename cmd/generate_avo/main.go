@@ -31,10 +31,11 @@ type templateValues struct {
 	DemoTypeName      string
 
 	// Generated Avo Code
-	AvoLoadArgs      string
-	AvoLoadRegisters string
-	AvoWriteReturn   string
-	AvoVZeroUpper    string
+	AvoLoadArgs        string
+	AvoLoadRegisters   string
+	AvoInstructionArgs string
+	AvoWriteReturn     string
+	AvoVZeroUpper      string
 
 	// Generated Demo Code
 	DemoFields       string
@@ -92,10 +93,11 @@ func buildAvoGenerator(pkg, instruction, discriminator, args string, sizeClass i
 		DemoTypeName:      fmt.Sprintf("%s%d%s", instructionUpper, sizeClass, discriminatorUpper),
 
 		// Generated Avo Code Lines
-		AvoLoadArgs:      generateParameterLoads(parameters),
-		AvoLoadRegisters: generateRegisterLoads(parameters),
-		AvoWriteReturn:   generateReturnStore(parameters),
-		AvoVZeroUpper:    generateVZeroUpper(parameters),
+		AvoLoadArgs:        generateParameterLoads(parameters),
+		AvoLoadRegisters:   generateRegisterLoads(parameters),
+		AvoInstructionArgs: generateAvoInstructionArgs(parameters),
+		AvoWriteReturn:     generateReturnStore(parameters),
+		AvoVZeroUpper:      generateVZeroUpper(parameters),
 
 		// Generated Demo Code Lines
 		DemoFields:       generateDemoFields(parameters),

@@ -16,7 +16,7 @@ func main() {
 {{.AvoLoadRegisters}}
 
 	Comment("Execute the instruction being demonstrated")
-	{{.InstructionUpper}}(/* Add registers here */)
+	{{.InstructionUpper}}({{.AvoInstructionArgs}})
 
 
 {{.AvoWriteReturn}}
