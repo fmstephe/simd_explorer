@@ -15,6 +15,12 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cmpps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/cmpss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/comiss"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/cvtdq2pd"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/cvtdq2ps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/cvtpd2dq"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/cvtpd2ps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/cvtps2dq"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/cvtps2pd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/divss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/dppd"
@@ -367,6 +373,19 @@ func Instructions() []assembly.Instruction {
 		rounds.NewVROUNDSD128ONE(),
 		rounds.NewVROUNDSD128TWO(),
 		rounds.NewVROUNDSD128THREE(),
+		// converts (packed)
+		cvtps2pd.NewVCVTPS2PD128(),
+		cvtps2pd.NewVCVTPS2PD256(),
+		cvtpd2ps.NewVCVTPD2PS128(),
+		cvtpd2ps.NewVCVTPD2PS256(),
+		cvtdq2ps.NewVCVTDQ2PS128(),
+		cvtdq2ps.NewVCVTDQ2PS256(),
+		cvtps2dq.NewVCVTPS2DQ128(),
+		cvtps2dq.NewVCVTPS2DQ256(),
+		cvtpd2dq.NewVCVTPD2DQ128(),
+		cvtpd2dq.NewVCVTPD2DQ256(),
+		cvtdq2pd.NewVCVTDQ2PD128(),
+		cvtdq2pd.NewVCVTDQ2PD256(),
 		// pshufb
 		pshufb.NewVPSHUFB128(),
 		pshufb.NewVPSHUFB256(),
