@@ -14,7 +14,7 @@ TEXT ·vpackusdw128(SB), NOSPLIT, $0-24
 	VMOVDQA (AX), X0
 	VMOVDQA (CX), X1
 
-	// Pack signed dwords to signed words with saturation
+	// Pack signed dwords to unsigned words with saturation
 	VPACKUSDW X1, X0, X0
 
 	// Write results into return memory address

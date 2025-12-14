@@ -14,7 +14,7 @@ TEXT ·vpackuswb256(SB), NOSPLIT, $0-24
 	VMOVDQA (AX), Y0
 	VMOVDQA (CX), Y1
 
-	// Pack signed words to signed bytes with saturation (per 128-bit lane)
+	// Pack signed words to unsigned bytes with saturation (per 128-bit lane)
 	VPACKUSWB Y1, Y0, Y0
 
 	// Write results into return memory address
