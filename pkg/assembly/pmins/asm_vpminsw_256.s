@@ -2,7 +2,7 @@
 
 #include "textflag.h"
 
-// func vpminsw256(vals1 *[16]uint16, vals2 *[16]uint16, ret *[16]uint16)
+// func vpminsw256(vals1 *[16]int16, vals2 *[16]int16, ret *[16]int16)
 // Requires: AVX, AVX2
 TEXT ·vpminsw256(SB), NOSPLIT, $0-24
 	// load params

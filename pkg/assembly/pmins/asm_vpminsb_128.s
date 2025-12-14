@@ -2,7 +2,7 @@
 
 #include "textflag.h"
 
-// func vpminsb128(vals1 *[16]uint8, vals2 *[16]uint8, ret *[16]uint8)
+// func vpminsb128(vals1 *[16]int8, vals2 *[16]int8, ret *[16]int8)
 // Requires: AVX
 TEXT ·vpminsb128(SB), NOSPLIT, $0-24
 	// load params
