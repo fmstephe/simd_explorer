@@ -5,7 +5,7 @@ import (
 	. "github.com/mmcloughlin/avo/operand"
 )
 
-//go:generate go run asm_vpshufb_128.go -out ../asm_vpshufb_128.s -stubs ../stub_vpshufb_128.go -pkg pshuf
+//go:generate go run asm_vpshufb_128.go -out ../asm_vpshufb_128.s -stubs ../stub_vpshufb_128.go -pkg pshufb
 func main() {
 	TEXT("vpshufb128", NOSPLIT, "func(vals1 *[16]uint8, control *[16]uint8, ret *[16]uint8)")
 	Comment("load params")
