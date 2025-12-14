@@ -108,7 +108,7 @@ func paramForConstructor(param *number.Parameter) string {
 }
 
 func paramForList(param *number.Parameter) string {
-	return fmt.Sprintf("\t\t%s,\n", param.Name())
+	return fmt.Sprintf("\t\tv.%s,\n", param.Name())
 }
 
 func paramForArrayInit(param *number.Parameter) string {
