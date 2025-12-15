@@ -131,6 +131,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsravd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsrlvd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsrlvq"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vptest"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/xorps"
@@ -758,6 +759,9 @@ func Instructions() []assembly.Instruction {
 		// vtestpd
 		vtestpd.NewVTESTPD128(),
 		vtestpd.NewVTESTPD256(),
+		// vptest (integer)
+		vptest.NewVPTEST128(),
+		vptest.NewVPTEST256(),
 		// vhaddps/pd
 		vhaddps.NewVHADDPS128(),
 		vhaddps.NewVHADDPS256(),
