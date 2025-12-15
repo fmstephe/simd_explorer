@@ -10,7 +10,7 @@ Some instructions are intentionally omitted because their effects are not easily
 
 - LDMXCSR, STMXCSR
   - Load/store MXCSR (SSE control/status). Change rounding modes, exception masks, DAZ/FTZ, and flags. Just too complex to easily demonstrate.
-- MOVNTQ, MOVNTPS
+- MOVNTQ, MOVNTPS, MOVNTDQ, MOVNTDQA
   - Non‑temporal stores. Writing data to memory and hinting that the data should not be kept in the CPU cache. Subtle, hard to demonstrate.
 - MASKMOVQ
   - Streaming masked store with write‑combining behaviour; primarily performance/caching behaviour, not a data transform we can display clearly.
