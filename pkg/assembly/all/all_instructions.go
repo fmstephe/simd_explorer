@@ -99,6 +99,8 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vgatherqdp"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vhaddpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vhaddps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vhsubpd"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vhsubps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vinsertf128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vinserti128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmaskmov"
@@ -761,6 +763,11 @@ func Instructions() []assembly.Instruction {
 		vhaddps.NewVHADDPS256(),
 		vhaddpd.NewVHADDPD128(),
 		vhaddpd.NewVHADDPD256(),
+		// vhsubps/pd
+		vhsubps.NewVHSUBPS128(),
+		vhsubps.NewVHSUBPS256(),
+		vhsubpd.NewVHSUBPD128(),
+		vhsubpd.NewVHSUBPD256(),
 		// vgatherdpd
 		vgatherdpd.NewVGATHERDPD128(),
 		vgatherdpd.NewVGATHERDPD256(),
