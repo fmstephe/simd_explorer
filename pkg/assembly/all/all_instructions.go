@@ -130,6 +130,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmuldq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmulhrsw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsign"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpslldq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvw"
@@ -784,6 +785,16 @@ func Instructions() []assembly.Instruction {
 		vpermq.NewVPERMQ256ALL_ONES(),
 		vpermq.NewVPERMQ256ALL_TWOS(),
 		vpermq.NewVPERMQ256ALL_THREES(),
+		// vpslldq (shift left by byte count within 128-bit lanes; imm8 variants)
+		vpslldq.NewVPSLLDQ128ZERO(),
+		vpslldq.NewVPSLLDQ128ONE(),
+		vpslldq.NewVPSLLDQ128EIGHT(),
+		vpslldq.NewVPSLLDQ128FIFTEEN(),
+		vpslldq.NewVPSLLDQ256ZERO(),
+		vpslldq.NewVPSLLDQ256ONE(),
+		vpslldq.NewVPSLLDQ256EIGHT(),
+		vpslldq.NewVPSLLDQ256FIFTEEN(),
+		vpslldq.NewVPSLLDQ256SIXTEEN(),
 		// vtestps
 		vtestps.NewVTESTPS128(),
 		vtestps.NewVTESTPS256(),
