@@ -40,7 +40,7 @@ func (v *{{.DemoTypeName}}) Name() string {
 }
 
 func (v *{{.DemoTypeName}}) Description() string {
-	return "TODO add actual description of instruction being demoed"
+	return {{.DemoDescription}}
 }
 
 func (v *{{.DemoTypeName}}) Stub() string {

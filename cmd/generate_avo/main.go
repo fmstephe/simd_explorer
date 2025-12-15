@@ -14,6 +14,7 @@ var (
 	flagSizeClass     = flag.Int("size-class", -1, "The size class of the instruction being demonstrated. Many SIMD instructions work across a range of register sizes.")
 	flagDiscriminator = flag.String("discriminator", "", "A discriminator (can be empty) useful when to demonstrate two versions of an instruction in the same size class, e.g. 'k' ")
 	flagArgs          = flag.String("args", "", "The parameters passed into the generated assembly function")
+	flagDescription   = flag.String("description", "", "Used to set the description of each instruction demo")
 )
 
 type templateValues struct {
@@ -41,6 +42,7 @@ type templateValues struct {
 	DemoFields       string
 	DemoConstructor  string
 	DemoInputs       string
+	DemoDescription  string
 	DemoInitArrays   string
 	DemoFunctionArgs string
 	DemoLogLine      string
@@ -56,10 +58,10 @@ type templateValues struct {
 func main() {
 	flag.Parse()
 	validateFlags()
-	buildAvoGenerator(*flagPackage, *flagInstruction, *flagDiscriminator, *flagArgs, *flagSizeClass)
+	buildAvoGenerator(*flagPackage, *flagInstruction, *flagDiscriminator, *flagArgs, *flagDescription, *flagSizeClass)
 }
 
-func buildAvoGenerator(pkg, instruction, discriminator, args string, sizeClass int) {
+func buildAvoGenerator(pkg, instruction, discriminator, args, description string, sizeClass int) {
 	pkg = strings.ToLower(pkg)
 	instructionLower := strings.ToLower(instruction)
 	instructionUpper := strings.ToUpper(instruction)
@@ -103,6 +105,7 @@ func buildAvoGenerator(pkg, instruction, discriminator, args string, sizeClass i
 		DemoFields:       generateDemoFields(parameters),
 		DemoConstructor:  generateDemoConstructor(parameters),
 		DemoInputs:       generateDemoInputs(parameters),
+		DemoDescription:  fmt.Sprintf("%q", description),
 		DemoInitArrays:   generateDemoInitArrays(parameters),
 		DemoFunctionArgs: generateDemoFunctionArgs(parameters),
 		DemoLogLine:      generateDemoLogLine(instructionUpper, parameters),
