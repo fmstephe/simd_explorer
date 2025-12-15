@@ -89,6 +89,8 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/subss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/ucomiss"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/unpckhps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vaddsubpd"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vaddsubps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vbroadcast"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vbroadcasti128"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vextractf128"
@@ -819,6 +821,11 @@ func Instructions() []assembly.Instruction {
 		vpmovzx.NewVPMOVZXWQ256(),
 		vpmovzx.NewVPMOVZXDQ128(),
 		vpmovzx.NewVPMOVZXDQ256(),
+		// vaddsub*
+		vaddsubps.NewVADDSUBPS128(),
+		vaddsubps.NewVADDSUBPS256(),
+		vaddsubpd.NewVADDSUBPD128(),
+		vaddsubpd.NewVADDSUBPD256(),
 	}
 }
 
