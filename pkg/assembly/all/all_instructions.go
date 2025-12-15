@@ -139,6 +139,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vptest"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestps"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vunpcklpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/xorps"
 )
 
@@ -800,6 +801,9 @@ func Instructions() []assembly.Instruction {
 		vhsubps.NewVHSUBPS256(),
 		vhsubpd.NewVHSUBPD128(),
 		vhsubpd.NewVHSUBPD256(),
+		// vunpcklpd (unpack low doubles)
+		vunpcklpd.NewVUNPCKLPD128(),
+		vunpcklpd.NewVUNPCKLPD256(),
 		// vgatherdpd
 		vgatherdpd.NewVGATHERDPD128(),
 		vgatherdpd.NewVGATHERDPD256(),
