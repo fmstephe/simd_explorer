@@ -106,6 +106,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmaskmov"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqa"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vmovdqu"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpabs"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpblendd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastb"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpbroadcastd"
@@ -512,6 +513,9 @@ func Instructions() []assembly.Instruction {
 		// vpmulhrsw (AVX/AVX2: multiply high with round and scale, signed 16→16)
 		vpmulhrsw.NewVPMULHRSW128(),
 		vpmulhrsw.NewVPMULHRSW256(),
+		// vpabs* (absolute value)
+		vpabs.NewVPABSB128(),
+		vpabs.NewVPABSB256(),
 		// psub (AVX/AVX2 integer subs)
 		psub.NewVPSUBB128(),
 		psub.NewVPSUBB256(),
