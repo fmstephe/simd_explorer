@@ -30,14 +30,12 @@ func NewVPUNPCKLBW256() *VPUNPCKLBW256 {
 
 func (v *VPUNPCKLBW256) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		// TODO replace with actual parameters for instruction demo
 		v.vals1,
 		v.vals2,
 	}
 }
 
 func (v *VPUNPCKLBW256) Output() *number.Parameter {
-	// TODO replace with actual parameters for instruction demo
 	return v.ret
 }
 
