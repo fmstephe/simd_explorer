@@ -524,6 +524,8 @@ func Instructions() []assembly.Instruction {
 		// vpsign* (apply sign of vals2 to vals1)
 		vpsign.NewVPSIGNB128(),
 		vpsign.NewVPSIGNB256(),
+		vpsign.NewVPSIGNW128(),
+		vpsign.NewVPSIGNW256(),
 		// psub (AVX/AVX2 integer subs)
 		psub.NewVPSUBB128(),
 		psub.NewVPSUBB256(),
