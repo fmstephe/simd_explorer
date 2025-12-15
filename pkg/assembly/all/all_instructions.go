@@ -128,6 +128,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmovsx"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmovzx"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmulhrsw"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsign"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvw"
@@ -520,6 +521,9 @@ func Instructions() []assembly.Instruction {
 		vpabs.NewVPABSW256(),
 		vpabs.NewVPABSD128(),
 		vpabs.NewVPABSD256(),
+		// vpsign* (apply sign of vals2 to vals1)
+		vpsign.NewVPSIGNB128(),
+		vpsign.NewVPSIGNB256(),
 		// psub (AVX/AVX2 integer subs)
 		psub.NewVPSUBB128(),
 		psub.NewVPSUBB256(),
