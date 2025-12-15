@@ -122,6 +122,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherdq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherqd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherqq"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmaddwd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmaskmov"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmovsx"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmovzx"
@@ -501,6 +502,9 @@ func Instructions() []assembly.Instruction {
 		// pmaddhw (AVX/AVX2: pairwise multiply words and add to 32-bit)
 		pmaddhw.NewVPMADDHW128(),
 		pmaddhw.NewVPMADDHW256(),
+		// vpmaddwd (AVX/AVX2: multiply adjacent signed words and add into dwords)
+		vpmaddwd.NewVPMADDWD128(),
+		vpmaddwd.NewVPMADDWD256(),
 		// pmulhw (AVX/AVX2 signed high multiply words)
 		pmulhw.NewVPMULHW128(),
 		pmulhw.NewVPMULHW256(),
