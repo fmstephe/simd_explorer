@@ -41,7 +41,7 @@ func (v *VPMOVZXBW128) Name() string {
 }
 
 func (v *VPMOVZXBW128) Description() string {
-	return "TODO add actual description of instruction being demoed"
+	return "Zero-extend packed 8-bit integers to 16-bit integers."
 }
 
 func (v *VPMOVZXBW128) Stub() string {

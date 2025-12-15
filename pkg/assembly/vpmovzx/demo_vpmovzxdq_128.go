@@ -41,7 +41,7 @@ func (v *VPMOVZXDQ128) Name() string {
 }
 
 func (v *VPMOVZXDQ128) Description() string {
-	return "TODO add actual description of instruction being demoed"
+	return "Zero-extend packed 32-bit integers to 64-bit integers."
 }
 
 func (v *VPMOVZXDQ128) Stub() string {

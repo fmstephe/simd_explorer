@@ -41,7 +41,7 @@ func (v *VPMOVSXBD128) Name() string {
 }
 
 func (v *VPMOVSXBD128) Description() string {
-	return "TODO add actual description of instruction being demoed"
+	return "Sign-extend packed 8-bit integers to 32-bit integers."
 }
 
 func (v *VPMOVSXBD128) Stub() string {
