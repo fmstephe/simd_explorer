@@ -137,6 +137,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsrlvd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsrlvq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vptest"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vshufpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestpd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vtestps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vunpckhpd"
@@ -802,6 +803,15 @@ func Instructions() []assembly.Instruction {
 		vhsubps.NewVHSUBPS256(),
 		vhsubpd.NewVHSUBPD128(),
 		vhsubpd.NewVHSUBPD256(),
+		// vshufpd (shuffle pairs of doubles; imm8 variants)
+		vshufpd.NewVSHUFPD128LOWA_LOWB(),
+		vshufpd.NewVSHUFPD128LOWA_HIGHB(),
+		vshufpd.NewVSHUFPD128HIGHA_LOWB(),
+		vshufpd.NewVSHUFPD128HIGHA_HIGHB(),
+		vshufpd.NewVSHUFPD256LOWA_LOWB(),
+		vshufpd.NewVSHUFPD256LOWA_HIGHB(),
+		vshufpd.NewVSHUFPD256HIGHA_LOWB(),
+		vshufpd.NewVSHUFPD256HIGHA_HIGHB(),
 		// vunpckhpd (unpack high doubles)
 		vunpckhpd.NewVUNPCKHPD128(),
 		vunpckhpd.NewVUNPCKHPD256(),
