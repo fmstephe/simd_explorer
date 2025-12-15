@@ -119,6 +119,8 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermilps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermps"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpermq"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpslldq"
+	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsrldq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherdd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherdq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpgatherqd"
@@ -130,7 +132,6 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmuldq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpmulhrsw"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsign"
-	"github.com/fmstephe/simd_explorer/pkg/assembly/vpslldq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvd"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvq"
 	"github.com/fmstephe/simd_explorer/pkg/assembly/vpsllvw"
@@ -795,6 +796,16 @@ func Instructions() []assembly.Instruction {
 		vpslldq.NewVPSLLDQ256EIGHT(),
 		vpslldq.NewVPSLLDQ256FIFTEEN(),
 		vpslldq.NewVPSLLDQ256SIXTEEN(),
+		// vpsrldq (shift right by byte count within 128-bit lanes; imm8 variants)
+		vpsrldq.NewVPSRLDQ128ZERO(),
+		vpsrldq.NewVPSRLDQ128ONE(),
+		vpsrldq.NewVPSRLDQ128EIGHT(),
+		vpsrldq.NewVPSRLDQ128FIFTEEN(),
+		vpsrldq.NewVPSRLDQ256ZERO(),
+		vpsrldq.NewVPSRLDQ256ONE(),
+		vpsrldq.NewVPSRLDQ256EIGHT(),
+		vpsrldq.NewVPSRLDQ256FIFTEEN(),
+		vpsrldq.NewVPSRLDQ256SIXTEEN(),
 		// vtestps
 		vtestps.NewVTESTPS128(),
 		vtestps.NewVTESTPS256(),
