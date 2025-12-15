@@ -516,6 +516,8 @@ func Instructions() []assembly.Instruction {
 		// vpabs* (absolute value)
 		vpabs.NewVPABSB128(),
 		vpabs.NewVPABSB256(),
+		vpabs.NewVPABSW128(),
+		vpabs.NewVPABSW256(),
 		// psub (AVX/AVX2 integer subs)
 		psub.NewVPSUBB128(),
 		psub.NewVPSUBB256(),
