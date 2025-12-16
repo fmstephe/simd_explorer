@@ -17,8 +17,8 @@ func NewStackApp() *StackApp {
 		idx:   -1,
 		stack: []tview.Primitive{},
 	}
-	// Enable mouse capture
-	a.app.EnableMouse(true)
+	// Disable mouse capture
+	a.app.EnableMouse(false)
 	// 'q' or ESC always quits the application
 	a.app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
 		switch event.Key() {
