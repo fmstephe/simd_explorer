@@ -1,0 +1,15 @@
+#Dev Notes
+
+This is where I put down my thoughts on the development process used to build this tool. This project was new for me in many ways and my approach changed multiple times during development.
+
+I don't have any really clear thoughts on the challenges of building a TUI app. I am primarily a backend developer and I expect that an experienced front-end dev would see some sub optimal choices made here. Overall I am reasonably comfortable with how the UI code is structured. The UI code required no AI assistance, and was coded the old fashioned way. This was particularly important to me, because one of the goals of this project was to learn about TUI development.
+
+The real challenge for this project was the sheer number of instructions to be covered. This task seemed to fit very neatly into AI usage.
+
+The first approach was to build a templating tool which builds the outline of each instruction demo. We provide the name of the instruction and the registers size (128 or 256), and it generates a number of files with correct names and correctly configured go:generate comments. The contents of each file has correct type/method/function names, but the implementations are placeholders only. I would generate the skeleton files and then ask an AI to complete the implementation. This was good - the implementations were very repetitive, mostly involving setting up correctly named parameters and fields with consistent names and types.
+
+This first approach is ok, but incredibly slow and requires quite a lot of back and forth with the AI. I wrote a whole README describing exactly how variables should be named and how registers should be ordered so the AI would generate consistent code. I then needed to review the generated implementation. The review was necessary, the AI was very good at filling in implementations but would sometimes just go off the rails and write some really weird code. So I needed to review every line of the implementation. Repeatedly reviewing this incredibly repetitive code was remarkably fatiguing, and extraordinarily boring. We were making progress, but I was mentally burning out and coming to hate the prospect of adding more instructions.
+
+Although the style guide README was written to guide an AI I quite liked having the document as it clarified to _me_ what consistent style looked like. I'm not sure if the level of detail included in this document would work for human programmers, but it _could_ likely be used productively by an AI code review tool.
+
+The second approach was to build a much more complete code-generation tool. This tool takes the same arguments as the previous tool but also takes the Go parameter list for the assembly function (and the description for the demo) and is able to build a complete implementation. It fails occasionally when parameters to the demoed instruction need to be reordered, or when immediate values are required, but typically no changes are needed after initial code generation. This tool is effectively instant and requires far less back and forth. This was a much better approach and it would have been better to have adopted it earlier.
