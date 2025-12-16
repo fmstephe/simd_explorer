@@ -49,14 +49,16 @@ func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) 
 
 	gridRight.AddItem(output.GetBox(), 0, 0, 1, 1, 0, 0, false)
 
-	grid := tview.NewGrid()
-	grid.AddItem(gridLeft, 0, 0, 1, 1, 0, 0, true)
-	grid.AddItem(gridRight, 0, 1, 1, 1, 0, 0, false)
+	gridOuter := tview.NewGrid()
+	gridOuter.SetBorder(true)
+	gridOuter.SetTitle(instruction.Name())
+	gridOuter.AddItem(gridLeft, 0, 0, 1, 1, 0, 0, true)
+	gridOuter.AddItem(gridRight, 0, 1, 1, 1, 0, 0, false)
 
 	// Fill out the fields for the UIRegister
 	uiInst.inputUIParameters = inputs
 	uiInst.outputUIParameter = output
-	uiInst.box = grid
+	uiInst.box = gridOuter
 
 	// Setup the tab focus cycling (is there a better way to approach
 	// this?)
