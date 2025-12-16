@@ -68,12 +68,6 @@ func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackAp
 			list.SetCurrentItem(listIdx + 1)
 			// Short-circuit default handling of the down/tab keys
 			return nil
-		case tcell.KeyLeft, tcell.KeyRight:
-			// Disable left/right text input naviation
-			// Users are likely looking at the instruction list
-			// while typing, so only very simple input/delete
-			// interactions are supported
-			return nil
 		}
 		return event
 	})
