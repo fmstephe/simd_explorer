@@ -172,5 +172,14 @@ func calcPartsPerLine(parameter *number.Parameter) int {
 	// allow the title to display correctly
 	partWidth = max(partWidth, 10)
 	perLine := half / partWidth
-	return min(perLine, 8)
+	return min(roundDownToPowerOfTwo(perLine), 8)
+}
+
+func roundDownToPowerOfTwo(val int) int {
+	for i := range 64 {
+		val |= val >> i
+	}
+	val++
+	val = val >> 1
+	return val
 }
