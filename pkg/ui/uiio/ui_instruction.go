@@ -35,25 +35,21 @@ func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) 
 
 	output := NewUIParameterOutputs(app, instruction.Output(), uiInst)
 
-	gridLeft := tview.NewGrid()
-	gridLeft.SetBorder(true)
-	gridLeft.SetTitle("Inputs")
+	gridInputs := tview.NewGrid()
 
-	gridRight := tview.NewGrid()
-	gridRight.SetBorder(true)
-	gridRight.SetTitle("Output")
+	gridOutputs := tview.NewGrid()
 
 	for i, input := range inputs {
-		gridLeft.AddItem(input.GetBox(), i, 0, 1, 1, 0, 0, true)
+		gridInputs.AddItem(input.GetBox(), i, 0, 1, 1, 0, 0, true)
 	}
 
-	gridRight.AddItem(output.GetBox(), 0, 0, 1, 1, 0, 0, false)
+	gridOutputs.AddItem(output.GetBox(), 0, 0, 1, 1, 0, 0, false)
 
 	gridOuter := tview.NewGrid()
 	gridOuter.SetBorder(true)
 	gridOuter.SetTitle(instruction.Name())
-	gridOuter.AddItem(gridLeft, 0, 0, 1, 1, 0, 0, true)
-	gridOuter.AddItem(gridRight, 0, 1, 1, 1, 0, 0, false)
+	gridOuter.AddItem(gridInputs, 0, 0, 1, 1, 0, 0, true)
+	gridOuter.AddItem(gridOutputs, 0, 1, 1, 1, 0, 0, false)
 
 	// Fill out the fields for the UIRegister
 	uiInst.inputUIParameters = inputs
