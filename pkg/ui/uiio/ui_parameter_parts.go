@@ -103,16 +103,21 @@ func (in *UIParameterParts) GetBox() *tview.Grid {
 	return in.box
 }
 
-func (in *UIParameterParts) SetDefaults(start byte) (end byte) {
-	end = start
-	for _, part := range in.allParts {
+func (in *UIParameterParts) SetValues(vals []int64) {
+	if len(vals) != len(in.allParts) {
+		panic(fmt.Errorf("Mismatch between number of values %d and parts %d", len(vals), len(in.allParts)))
+	}
+
+	for i, part := range in.allParts {
 		// This is a bit of a hack to set default values for all inputs
 		// We restrict it to string representation of a single byte value, as this is our smallest representable value.
 		// TODO let's see how this works in practice.
-		part.setText(strconv.FormatInt(int64(end), in.parameter.Base()))
-		end++
+		part.setText(strconv.FormatInt(vals[i], in.parameter.Base()))
 	}
-	return end
+}
+
+func (in *UIParameterParts) Parts() int {
+	return len(in.allParts)
 }
 
 func (in *UIParameterParts) syncToParameter() {
