@@ -15,6 +15,7 @@ type CommandSearch struct {
 	list  *tview.List
 	input *tview.InputField
 	flex  *tview.Flex
+	cache map[string]*uiio.UIInstruction
 }
 
 func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackApp) *CommandSearch {
@@ -29,10 +30,11 @@ func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackAp
 	list.SetTitle("Choose An Instruction")
 	list.ShowSecondaryText(true)
 
+	cache := map[string]*uiio.UIInstruction{}
 	// Build list of instructions
 	for _, name := range instNames {
 		inst := instMap[name]
-		list.AddItem(name, inst.Description(), 0, buildInstructionSelectedFunc(app, inst))
+		list.AddItem(name, inst.Description(), 0, buildInstructionSelectedFunc(app, inst, cache))
 	}
 
 	// When a new list item is selected, update the assembly view to
@@ -79,7 +81,7 @@ func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackAp
 		list.Clear()
 		for _, name := range found {
 			inst := instMap[name]
-			list.AddItem(name, inst.Description(), 0, buildInstructionSelectedFunc(app, inst))
+			list.AddItem(name, inst.Description(), 0, buildInstructionSelectedFunc(app, inst, cache))
 		}
 	})
 
@@ -93,6 +95,7 @@ func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackAp
 		list:  list,
 		input: input,
 		flex:  flex,
+		cache: cache,
 	}
 }
 
@@ -115,13 +118,22 @@ func buildInstructionMap(instructions []assembly.Instruction) (instMap map[strin
 	return instMap, instNames
 }
 
-func buildInstructionSelectedFunc(app *stackapp.StackApp, inst assembly.Instruction) func() {
+func buildInstructionSelectedFunc(app *stackapp.StackApp, inst assembly.Instruction, cache map[string]*uiio.UIInstruction) func() {
 	return func() {
 		log.Printf("Chosen %s", inst.Name())
-		if inst.Supported() {
-			// If the instruction is supported, display the ui for it
-			uiInst := uiio.NewUIInstruction(app, inst)
-			app.Push(uiInst.GetPrimitive())
+		if !inst.Supported() {
+			// If the instruction is not supported, do nothing
+			return
 		}
+
+		uiInst, ok := cache[inst.Name()]
+		if !ok {
+			// If the ui-instruction is not in the cache, create it
+			// and cache it
+			uiInst = uiio.NewUIInstruction(app, inst)
+			cache[inst.Name()] = uiInst
+		}
+
+		app.Push(uiInst.GetPrimitive())
 	}
 }
