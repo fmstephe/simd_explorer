@@ -22,19 +22,19 @@ type UIParameterParts struct {
 	box      *tview.Grid
 
 	// Callback when the data in this set of parts is changed
-	uiParameters *UIInstruction
-	parameter    *number.Parameter
+	inputsChanged func()
+	parameter     *number.Parameter
 }
 
-func NewUIParameterInputs(app *stackapp.StackApp, parameter *number.Parameter, uiRegister *UIInstruction) *UIParameterParts {
-	return NewUIParameterParts(app, parameter, &inputPartBuilder{}, uiRegister)
+func NewUIParameterInputs(app *stackapp.StackApp, parameter *number.Parameter, inputsChanged func()) *UIParameterParts {
+	return NewUIParameterParts(app, parameter, &inputPartBuilder{}, inputsChanged)
 }
 
-func NewUIParameterOutputs(app *stackapp.StackApp, parameter *number.Parameter, uiRegister *UIInstruction) *UIParameterParts {
-	return NewUIParameterParts(app, parameter, &textViewPartBuilder{}, uiRegister)
+func NewUIParameterOutputs(app *stackapp.StackApp, parameter *number.Parameter) *UIParameterParts {
+	return NewUIParameterParts(app, parameter, &textViewPartBuilder{}, func() {})
 }
 
-func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, partsBuilder uiPartBuilder, uiParameters *UIInstruction) *UIParameterParts {
+func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, partsBuilder uiPartBuilder, inputsChanged func()) *UIParameterParts {
 	grid := tview.NewGrid()
 	// We always have a maximum of 8 columns per row
 	grid.SetRows(3, 3, 3, 3, 3, 3, 3, 3)
@@ -45,12 +45,11 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 		id:   uuid.New(),
 		kind: partsBuilder.kind(),
 
-		app:      app,
-		allParts: make([]uiParameterPart, parameter.Parts()),
-		box:      grid,
-
-		uiParameters: uiParameters,
-		parameter:    parameter,
+		app:           app,
+		allParts:      make([]uiParameterPart, parameter.Parts()),
+		box:           grid,
+		inputsChanged: inputsChanged,
+		parameter:     parameter,
 	}
 
 	parts := parameter.Parts()
@@ -92,7 +91,7 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 				part.setBackgroundColor(tview.Styles.ContrastBackgroundColor)
 			}
 			// Notify the uiParameters that some input data has changed
-			uiParameters.inputsChanged()
+			inputsChanged()
 		})
 	}
 
