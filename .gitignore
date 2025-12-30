@@ -1,3 +1,4 @@
 simdexplorer
 out
 *.swp
+.vscode/
