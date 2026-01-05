@@ -25,8 +25,8 @@ func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) 
 	// We allocate the struct early to get the inputsChanged callback function
 	uiInst := &UIInstruction{}
 
-	inputs, selectable := buildInputs(app, instruction, uiInst.inputsChanged)
-	output := NewUIParameterOutputs(app, instruction.Output())
+	inputs, selectable := buildInputs(instruction, uiInst.inputsChanged)
+	output := NewUIParameterOutputs(instruction.Output())
 
 	uiGrid := buildUIGrid(instruction, inputs, output)
 
@@ -149,9 +149,9 @@ func (r *UIInstruction) cycleFocus(move int) {
 	r.app.SetFocus(r.selectable[idx])
 }
 
-func buildInputs(app *stackapp.StackApp, instruction assembly.Instruction, inputsChanged func()) (inputs []*UIParameterParts, selectable []tview.Primitive) {
+func buildInputs(instruction assembly.Instruction, inputsChanged func()) (inputs []*UIParameterParts, selectable []tview.Primitive) {
 	for _, param := range instruction.Inputs() {
-		input := NewUIParameterInputs(app, param, inputsChanged)
+		input := NewUIParameterInputs(param, inputsChanged)
 		inputs = append(inputs, input)
 		selectable = append(selectable, input.selectablePrimitives()...)
 	}

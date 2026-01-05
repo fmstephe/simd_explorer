@@ -6,7 +6,6 @@ import (
 	"strconv"
 
 	"github.com/fmstephe/simd_explorer/pkg/ui/number"
-	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/gdamore/tcell/v2"
 	"github.com/google/uuid"
 	"github.com/rivo/tview"
@@ -17,7 +16,6 @@ type UIParameterParts struct {
 	// Indicates if this is input or output for logging
 	kind string
 
-	app      *stackapp.StackApp
 	allParts []uiParameterPart
 	box      *tview.Grid
 
@@ -26,15 +24,15 @@ type UIParameterParts struct {
 	parameter     *number.Parameter
 }
 
-func NewUIParameterInputs(app *stackapp.StackApp, parameter *number.Parameter, inputsChanged func()) *UIParameterParts {
-	return NewUIParameterParts(app, parameter, &inputPartBuilder{}, inputsChanged)
+func NewUIParameterInputs(parameter *number.Parameter, inputsChanged func()) *UIParameterParts {
+	return NewUIParameterParts(parameter, &inputPartBuilder{}, inputsChanged)
 }
 
-func NewUIParameterOutputs(app *stackapp.StackApp, parameter *number.Parameter) *UIParameterParts {
-	return NewUIParameterParts(app, parameter, &textViewPartBuilder{}, func() {})
+func NewUIParameterOutputs(parameter *number.Parameter) *UIParameterParts {
+	return NewUIParameterParts(parameter, &textViewPartBuilder{}, func() {})
 }
 
-func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, partsBuilder uiPartBuilder, inputsChanged func()) *UIParameterParts {
+func NewUIParameterParts(parameter *number.Parameter, partsBuilder uiPartBuilder, inputsChanged func()) *UIParameterParts {
 	grid := tview.NewGrid()
 	// We always have a maximum of 8 columns per row
 	grid.SetRows(3, 3, 3, 3, 3, 3, 3, 3)
@@ -45,7 +43,6 @@ func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, pa
 		id:   uuid.New(),
 		kind: partsBuilder.kind(),
 
-		app:           app,
 		allParts:      make([]uiParameterPart, parameter.Parts()),
 		box:           grid,
 		inputsChanged: inputsChanged,
