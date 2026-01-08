@@ -21,13 +21,13 @@ func NewStackApp() *StackApp {
 	a.app.EnableMouse(false)
 	// 'q' or ESC always quits the application
 	a.app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
+		// This feels awkward here because we configure F-key behaviour in other places
+		// I'll leave this as-is for now, but we should rethink this.
 		switch event.Key() {
 		case tcell.KeyESC:
 			a.app.Stop()
 		case tcell.KeyF1:
 			a.Pop()
-		case tcell.KeyF2:
-			a.Recover()
 		}
 		return event
 	})
@@ -58,6 +58,8 @@ func (a *StackApp) Pop() {
 	a.setRoot()
 }
 
+// NB: Currently this functionality is unused. We now cache instruction-demo UI states so just returning to a demo you had previously worked in will restore the previous UI state.
+// We can leave the method, but note that it is not used.
 func (a *StackApp) Recover() {
 	// This method is a noop for an unused StackApp
 	if a.idx == -1 {

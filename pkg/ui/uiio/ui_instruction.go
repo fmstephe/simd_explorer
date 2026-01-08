@@ -14,7 +14,7 @@ type UIInstruction struct {
 	inputUIParameters []*UIParameterParts
 	outputUIParameter *UIParameterParts
 	box               *tview.Grid
-	source            *tview.Box
+	source            *tview.Grid
 
 	focus      int
 	selectable []tview.Primitive
@@ -29,11 +29,7 @@ func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) 
 	output := NewUIParameterOutputs(instruction.Output())
 
 	uiGrid := buildUIGrid(instruction, inputs, output)
-
-	assemblyView := tview.NewTextView()
-	assemblyView.SetBorder(true)
-	assemblyView.SetTitle("Go Assembly")
-	assemblyView.SetText(instruction.Assembly())
+	sourceGrid := buildSourceGrid(instruction)
 
 	// Fill in the struct fields
 	*uiInst = UIInstruction{
@@ -41,7 +37,7 @@ func NewUIInstruction(app *stackapp.StackApp, instruction assembly.Instruction) 
 		inputUIParameters: inputs,
 		outputUIParameter: output,
 		box:               uiGrid,
-		source:            assemblyView.Box,
+		source:            sourceGrid,
 
 		focus:      0,
 		selectable: selectable,
@@ -120,18 +116,16 @@ func (r *UIInstruction) initInputCapture() {
 		case tcell.KeyBacktab:
 			r.cycleFocus(-1)
 			// TODO add arrow keys to this
-		}
-
-		// Handle character keys
-		switch event.Rune() {
-		case rune('z'), rune('Z'):
+		// case tcell.KeyF1:
+		// KeyF1 behaviour is currently managed in stackapp package
+		case tcell.KeyF2:
+			r.app.Push(r.source)
+		case tcell.KeyF3:
 			r.setInputsZero()
-		case rune('u'), rune('U'):
+		case tcell.KeyF4:
 			r.setInputDefaults()
-		case rune('r'), rune('R'):
+		case tcell.KeyF5:
 			r.setInputDefaultsReverse()
-		case rune('s'), rune('S'):
-			// TODO display assembly source code here
 		}
 
 		// Allow the event to propagate
@@ -160,6 +154,8 @@ func buildInputs(instruction assembly.Instruction, inputsChanged func()) (inputs
 }
 
 func buildUIGrid(instruction assembly.Instruction, inputs []*UIParameterParts, output *UIParameterParts) *tview.Grid {
+	gridButtons := buildInstructionButtons()
+
 	gridInputs := tview.NewGrid()
 	for i, input := range inputs {
 		gridInputs.AddItem(input.GetBox(), i, 0, 1, 1, 0, 0, true)
@@ -172,31 +168,60 @@ func buildUIGrid(instruction assembly.Instruction, inputs []*UIParameterParts, o
 	gridInputOutput.AddItem(gridInputs, 0, 0, 1, 1, 0, 0, true)
 	gridInputOutput.AddItem(gridOutput, 0, 1, 1, 1, 0, 0, false)
 
-	gridButtons := buildDefaultButtons()
+	gridOuter := tview.NewGrid()
+	gridOuter.SetBorder(true)
+	gridOuter.SetTitle(instruction.Name())
+	gridOuter.SetRows(3, 0)
+
+	gridOuter.AddItem(gridButtons, 0, 0, 1, 1, 0, 0, false)
+	gridOuter.AddItem(gridInputOutput, 1, 0, 1, 1, 0, 0, true)
+
+	return gridOuter
+}
+
+func buildSourceGrid(instruction assembly.Instruction) *tview.Grid {
+	gridButtons := buildSourceButtons()
+
+	assemblyView := tview.NewTextView()
+	assemblyView.SetBorder(true)
+	assemblyView.SetTitle("Go Assembly")
+	assemblyView.SetText(instruction.Assembly())
 
 	gridOuter := tview.NewGrid()
 	gridOuter.SetBorder(true)
 	gridOuter.SetTitle(instruction.Name())
-	gridOuter.SetRows(8, 0)
+	gridOuter.SetRows(3, 0)
 
-	gridOuter.AddItem(gridInputOutput, 1, 0, 1, 1, 0, 0, true)
 	gridOuter.AddItem(gridButtons, 0, 0, 1, 1, 0, 0, false)
+	gridOuter.AddItem(assemblyView, 1, 0, 1, 1, 0, 0, true)
 
 	return gridOuter
 }
 
 // NB: These buttons don't actually do anything right now - they just display the keyboard shortcuts for the default value setting functions. They really should either become real buttons (fix the mouse interaction problem) or we should display these shortcuts some other way.
-func buildDefaultButtons() *tview.Grid {
-	buttonClear := tview.NewButton(tview.Escape(`[Z]ero`))
-	buttonFill := tview.NewButton(tview.Escape(`A[u]tofill`))
-	buttonFillRev := tview.NewButton(tview.Escape(`Autofill [R]everse`))
-	buttonSource := tview.NewButton(tview.Escape(`[S]how Source`))
+func buildInstructionButtons() *tview.Grid {
+	return buildButtonPanel(false)
+}
+
+// NB: These buttons don't actually do anything right now - they just display the keyboard shortcuts for the default value setting functions. They really should either become real buttons (fix the mouse interaction problem) or we should display these shortcuts some other way.
+func buildSourceButtons() *tview.Grid {
+	return buildButtonPanel(true)
+}
+
+// NB: These buttons don't actually do anything right now - they just display the keyboard shortcuts for the default value setting functions. They really should either become real buttons (fix the mouse interaction problem) or we should display these shortcuts some other way.
+func buildButtonPanel(onlyBack bool) *tview.Grid {
+	buttonBack := tview.NewButton(tview.Escape(`[F1] Back`))
+	buttonSource := tview.NewButton(tview.Escape(`[F2] Show Source`)).SetDisabled(onlyBack)
+	buttonZero := tview.NewButton(tview.Escape(`[F3] Zero`)).SetDisabled(onlyBack)
+	buttonFill := tview.NewButton(tview.Escape(`[F4] Autofill`)).SetDisabled(onlyBack)
+	buttonFillRev := tview.NewButton(tview.Escape(`[F5] Autofill Reverse`)).SetDisabled(onlyBack)
 
 	gridButtons := tview.NewGrid()
-	gridButtons.AddItem(buttonClear, 0, 0, 1, 1, 0, 0, false)
-	gridButtons.AddItem(buttonFill, 0, 1, 1, 1, 0, 0, false)
-	gridButtons.AddItem(buttonFillRev, 0, 2, 1, 1, 0, 0, false)
-	gridButtons.AddItem(buttonSource, 0, 3, 1, 1, 0, 0, false)
+	gridButtons.AddItem(buttonBack, 0, 0, 1, 1, 0, 0, false)
+	gridButtons.AddItem(buttonSource, 0, 1, 1, 1, 0, 0, false)
+	gridButtons.AddItem(buttonZero, 0, 2, 1, 1, 0, 0, false)
+	gridButtons.AddItem(buttonFill, 0, 3, 1, 1, 0, 0, false)
+	gridButtons.AddItem(buttonFillRev, 0, 4, 1, 1, 0, 0, false)
 
 	return gridButtons
 }
