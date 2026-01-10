@@ -168,11 +168,11 @@ func Instructions() []assembly.Instruction {
 		// vbroadcasti128
 		vbroadcasti128.NewVBROADCASTI128256(),
 		// vinserti128
-		&vinserti128.VINSERTI128256ZERO{},
-		&vinserti128.VINSERTI128256ONE{},
+		vinserti128.NewVINSERTI128256ZERO(),
+		vinserti128.NewVINSERTI128256ONE(),
 		// vextracti128
-		&vextracti128.VEXTRACTI128256ZERO{},
-		&vextracti128.VEXTRACTI128256ONE{},
+		vextracti128.NewVEXTRACTI128256ZERO(),
+		vextracti128.NewVEXTRACTI128256ONE(),
 		// vmovdqu
 		vmovdqu.NewVMOVDQU128(),
 		vmovdqu.NewVMOVDQU256(),
