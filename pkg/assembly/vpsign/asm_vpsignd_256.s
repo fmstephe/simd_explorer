@@ -17,7 +17,7 @@ TEXT ·vpsignd256(SB), NOSPLIT, $0-24
 	VMOVDQU (CX), Y1
 
 	// Execute the instruction being demonstrated
-	VPSIGND Y0, Y1, Y0
+	VPSIGND Y1, Y0, Y0
 
 	// Write results into return memory address
 	VMOVDQU Y0, (DX)
