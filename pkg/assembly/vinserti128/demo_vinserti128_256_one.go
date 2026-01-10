@@ -56,16 +56,19 @@ func (v *VINSERTI128256ONE) Assembly() string {
 }
 
 func (v *VINSERTI128256ONE) Run() {
-	var vals128 [4]uint32
+	vals128 := [4]uint32{}
 	copy(vals128[:], number.ToUint32Slice(v.vals128.FlatData()))
-	var vals256 [8]uint32
+	vals256 := [8]uint32{}
 	copy(vals256[:], number.ToUint32Slice(v.vals256.FlatData()))
-	var ret [8]uint32
-	vinserti128256One(&vals128, &vals256, &ret)
-	log.Printf("VINSERTI128256 one vals128 %v vals256 %v output %v", vals128, vals256, ret)
-	out := number.Uint32SliceToBytes(ret[:])
-	v.ret.SetData(out)
+	ret := [8]uint32{}
+	copy(ret[:], number.ToUint32Slice(v.ret.FlatData()))
 
+	vinserti128256One(&vals128, &vals256, &ret)
+
+	log.Printf("VINSERTI128256 vals128 %v vals256 %v ret %v", vals128, vals256, ret)
+
+	retBytes := number.Uint32SliceToBytes(ret[:])
+	v.ret.SetData(retBytes)
 }
 
 func (v *VINSERTI128256ONE) Supported() bool {

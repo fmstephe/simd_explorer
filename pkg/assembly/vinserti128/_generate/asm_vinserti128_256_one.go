@@ -13,18 +13,25 @@ func main() {
 	vals256 := Load(Param("vals256"), GP64())
 	ret := Load(Param("ret"), GP64())
 
+	Comment("Load vals128 into XMM register")
+	vals128X := XMM()
+	VMOVDQU(Mem{Base: vals128}, vals128X)
 	Comment("Load vals256 into YMM register")
-	regY := YMM()
-	VMOVDQU(Mem{Base: vals256}, regY)
+	vals256Y := YMM()
+	VMOVDQU(Mem{Base: vals256}, vals256Y)
 
-	Comment("Insert 128-bit block into upper 128-bit lane (1) of YMM; lower lane preserved from vals256")
-	VINSERTI128(U8(0x01), Mem{Base: vals128}, regY, regY)
+	retY := YMM()
 
-	Comment("Write contents of YMM register into memory region")
-	VMOVDQU(regY, Mem{Base: ret})
+	Comment("Execute the instruction being demonstrated")
+	VINSERTI128(U8(0x01), vals128X, vals256Y, retY)
 
-	Comment("YMM/ZMM processing complete, clear upper half of YMM registers")
+	Comment("Write results into return memory address")
+	VMOVDQU(retY, Mem{Base: ret})
+
+	Comment("Clear upper halves after YMM usage")
 	VZEROUPPER()
+
+	Comment("Return from function")
 	RET()
 
 	// generate!

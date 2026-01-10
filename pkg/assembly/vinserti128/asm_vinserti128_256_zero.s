@@ -10,15 +10,20 @@ TEXT ·vinserti128256Zero(SB), NOSPLIT, $0-24
 	MOVQ vals256+8(FP), CX
 	MOVQ ret+16(FP), DX
 
+	// Load vals128 into XMM register
+	VMOVDQU (AX), X0
+
 	// Load vals256 into YMM register
-	VMOVDQU (CX), Y0
+	VMOVDQU (CX), Y1
 
-	// Insert 128-bit block into lower 128-bit lane (0) of YMM; upper lane preserved from vals256
-	VINSERTI128 $0x00, (AX), Y0, Y0
+	// Execute the instruction being demonstrated
+	VINSERTI128 $0x00, X0, Y1, Y0
 
-	// Write contents of YMM register into memory region
+	// Write results into return memory address
 	VMOVDQU Y0, (DX)
 
-	// YMM/ZMM processing complete, clear upper half of YMM registers
+	// Clear upper halves after YMM usage
 	VZEROUPPER
+
+	// Return from function
 	RET
