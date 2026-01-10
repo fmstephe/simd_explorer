@@ -57,17 +57,18 @@ func (v *VPSHUFB256) Assembly() string {
 
 func (v *VPSHUFB256) Run() {
 	vals1 := [32]uint8{}
-	copy(vals1[:], v.vals1.FlatData())
+	copy(vals1[:], number.ToUint8Slice(v.vals1.FlatData()))
 	control := [32]uint8{}
-	copy(control[:], v.control.FlatData())
-
+	copy(control[:], number.ToUint8Slice(v.control.FlatData()))
 	ret := [32]uint8{}
+	copy(ret[:], number.ToUint8Slice(v.ret.FlatData()))
 
 	vpshufb256(&vals1, &control, &ret)
 
 	log.Printf("VPSHUFB256 vals1 %v control %v ret %v", vals1, control, ret)
 
-	v.ret.SetData(ret[:])
+	retBytes := number.Uint8SliceToBytes(ret[:])
+	v.ret.SetData(retBytes)
 }
 
 func (v *VPSHUFB256) Supported() bool {

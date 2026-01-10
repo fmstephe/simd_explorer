@@ -10,15 +10,17 @@ TEXT ·vpshufb128(SB), NOSPLIT, $0-24
 	MOVQ control+8(FP), CX
 	MOVQ ret+16(FP), DX
 
-	// Load operands into XMM registers
-	VMOVDQA (AX), X0
-	VMOVDQA (CX), X1
+	// Load vals1 into XMM register
+	VMOVDQU (AX), X0
 
-	// Shuffle bytes in regData according to regControl
+	// Load control into XMM register
+	VMOVDQU (CX), X1
+
+	// Execute the instruction being demonstrated
 	VPSHUFB X1, X0, X0
 
 	// Write results into return memory address
-	VMOVDQA X0, (DX)
+	VMOVDQU X0, (DX)
 
 	// Return from function
 	RET

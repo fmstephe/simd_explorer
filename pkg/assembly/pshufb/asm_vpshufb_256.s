@@ -10,15 +10,20 @@ TEXT ·vpshufb256(SB), NOSPLIT, $0-24
 	MOVQ control+8(FP), CX
 	MOVQ ret+16(FP), DX
 
-	// Load operands into YMM registers (per-lane operation)
-	VMOVDQA (AX), Y0
-	VMOVDQA (CX), Y1
+	// Load vals1 into YMM register
+	VMOVDQU (AX), Y0
 
-	// Shuffle bytes in regData according to regControl (per lane)
+	// Load control into YMM register
+	VMOVDQU (CX), Y1
+
+	// Execute the instruction being demonstrated
 	VPSHUFB Y1, Y0, Y0
 
 	// Write results into return memory address
-	VMOVDQA Y0, (DX)
+	VMOVDQU Y0, (DX)
+
+	// Clear upper halves after YMM usage
+	VZEROUPPER
 
 	// Return from function
 	RET

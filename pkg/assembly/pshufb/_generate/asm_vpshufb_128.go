@@ -13,17 +13,20 @@ func main() {
 	control := Load(Param("control"), GP64())
 	ret := Load(Param("ret"), GP64())
 
-	Comment("Load operands into XMM registers")
-	regData := XMM()
-	VMOVDQA(Mem{Base: vals1}, regData)
-	regControl := XMM()
-	VMOVDQA(Mem{Base: control}, regControl)
+	Comment("Load vals1 into XMM register")
+	vals1X := XMM()
+	VMOVDQU(Mem{Base: vals1}, vals1X)
+	Comment("Load control into XMM register")
+	controlX := XMM()
+	VMOVDQU(Mem{Base: control}, controlX)
 
-	Comment("Shuffle bytes in regData according to regControl")
-	VPSHUFB(regControl, regData, regData)
+	retX := XMM()
+
+	Comment("Execute the instruction being demonstrated")
+	VPSHUFB(controlX, vals1X, retX)
 
 	Comment("Write results into return memory address")
-	VMOVDQA(regData, Mem{Base: ret})
+	VMOVDQU(retX, Mem{Base: ret})
 
 	Comment("Return from function")
 	RET()

@@ -13,17 +13,23 @@ func main() {
 	control := Load(Param("control"), GP64())
 	ret := Load(Param("ret"), GP64())
 
-	Comment("Load operands into YMM registers (per-lane operation)")
-	regData := YMM()
-	VMOVDQA(Mem{Base: vals1}, regData)
-	regControl := YMM()
-	VMOVDQA(Mem{Base: control}, regControl)
+	Comment("Load vals1 into YMM register")
+	vals1Y := YMM()
+	VMOVDQU(Mem{Base: vals1}, vals1Y)
+	Comment("Load control into YMM register")
+	controlY := YMM()
+	VMOVDQU(Mem{Base: control}, controlY)
 
-	Comment("Shuffle bytes in regData according to regControl (per lane)")
-	VPSHUFB(regControl, regData, regData)
+	retY := YMM()
+
+	Comment("Execute the instruction being demonstrated")
+	VPSHUFB(controlY, vals1Y, retY)
 
 	Comment("Write results into return memory address")
-	VMOVDQA(regData, Mem{Base: ret})
+	VMOVDQU(retY, Mem{Base: ret})
+
+	Comment("Clear upper halves after YMM usage")
+	VZEROUPPER()
 
 	Comment("Return from function")
 	RET()
