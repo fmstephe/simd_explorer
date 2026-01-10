@@ -45,7 +45,7 @@ type templateValues struct {
 	DemoFileName              string
 }
 
-func GenerateDemoFiles(pkg, instruction, discriminator, args, description string, sizeClass int) {
+func GenerateDemoFiles(pkg, instruction, discriminator, args, description string, sizeClass int, avoArgs string) {
 	pkg = strings.ToLower(pkg)
 	instructionLower := strings.ToLower(instruction)
 	instructionUpper := strings.ToUpper(instruction)
@@ -81,7 +81,7 @@ func GenerateDemoFiles(pkg, instruction, discriminator, args, description string
 		// Generated Avo Code Lines
 		AvoLoadArgs:        generateParameterLoads(parameters),
 		AvoLoadRegisters:   generateRegisterLoads(parameters),
-		AvoInstructionArgs: generateAvoInstructionArgs(parameters),
+		AvoInstructionArgs: generateAvoInstructionArgs(parameters, avoArgs),
 		AvoWriteReturn:     generateReturnStore(parameters),
 		AvoVZeroUpper:      generateVZeroUpper(parameters),
 
@@ -92,7 +92,7 @@ func GenerateDemoFiles(pkg, instruction, discriminator, args, description string
 		DemoDescription:  fmt.Sprintf("%q", description),
 		DemoInitArrays:   generateDemoInitArrays(parameters),
 		DemoFunctionArgs: generateDemoFunctionArgs(parameters),
-		DemoLogLine:      generateDemoLogLine(instructionUpper, parameters),
+		DemoLogLine:      generateDemoLogLine(instructionUpper, sizeClass, parameters),
 		DemoRetToBytes:   generateDemoRetToBytes(parameters),
 
 		// File Names

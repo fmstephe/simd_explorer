@@ -59,8 +59,8 @@ func generateDemoFunctionArgs(parameters []*number.Parameter) string {
 	return argsStr
 }
 
-func generateDemoLogLine(instructionName string, parameters []*number.Parameter) string {
-	logBody := fmt.Sprintf("%s ", instructionName)
+func generateDemoLogLine(instructionName string, sizeClass int, parameters []*number.Parameter) string {
+	logBody := fmt.Sprintf("%s%d ", instructionName, sizeClass)
 	for i, param := range parameters {
 		if i == len(parameters)-1 {
 			logBody += fmt.Sprintf("%s %%v", param.Name())

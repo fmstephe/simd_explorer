@@ -25,7 +25,12 @@ func generateRegisterLoads(parameters []*number.Parameter) (loadsStr string) {
 	return loadsStr
 }
 
-func generateAvoInstructionArgs(parameters []*number.Parameter) (loadsStr string) {
+func generateAvoInstructionArgs(parameters []*number.Parameter, preparedArgs string) (loadsStr string) {
+	// If the avo instruction args are already available, just use that
+	if preparedArgs != "" {
+		return preparedArgs
+	}
+
 	argsStr := ""
 	for i, param := range parameters {
 		if param.Name() == "ret" {
