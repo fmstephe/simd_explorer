@@ -72,25 +72,25 @@ func (v *VMOVHPS64) Output() *number.Parameter {
 
 ## Register Usage Conventions
 
-Most SIMD instructions take two registers and perform some operation on them, storing the result in another register. We typically name these registers regX1, regX2 (for XMM-sized registers, regY1... etc. for wider registers). We prefer to store the results in the first of these two registers where possible. For example
+Most SIMD instructions take two registers and perform some operation on them, storing the result in another register. We typically name these registers $(arg1)X, $(arg2)X, where X indicates a 128 bit regiseter, use Y and Z to name wider registers. We prefer to store the results in an explicitly named retX/Y/Z register. For example
 
-MULPS(regX2, regX1)
+MULPS(vals2X, vals1X)
 
-is preferred because this will store the result in regX1. Similarly
+is preferred for pre-AVX instructions which do not allow for an explicit destination registe. Where possible we prefer to store the result in the first argument, vals1X. Similarly
 
-VMULPS(regX2, regX1, regX1)
+VMULPS(vals2X, vals1X, retX)
 
-is preferred for storing the results in regX1.
+is preferred for storing the results in the explicitly named retX.
 
-Please note that we have preserved the register order from MULPS here, choosing regX2, regX1, even though the order here does not determine which register the output is directed to. This is preferred in order to make all assembly functions as identical as possible, with the only differences being meaningful differences between the instructions demoed. Accidental differences are deliberately minimised.
+Please note that we have preserved the register order from MULPS here, choosing vals2X, vals1X, even though the order here does not determine which register the output is directed to. This is preferred in order to make all assembly functions as identical as possible, with the only differences being meaningful differences between the instructions demoed. Accidental differences are deliberately minimised.
 
-Some instructions have dramatically different behaviour with different argument orderings. In these cases we prefer to arrange register arguments so that the arithmetic expression when written down reads like x1 * x2 (where * is some arithmetic operator). This ordering is preferred even if the results must be stored in the x2 register. For example
+Some instructions have dramatically different behaviour with different argument orderings. In these cases we prefer to arrange register arguments so that the arithmetic expression when written down reads like x1 * x2 (where * is some arithmetic operator). This ordering is preferred even if the results must be stored in the vasl2X register. For example
 
-SUBPS(regX2, regX1)
+SUBPS(vals2X, vals1X)
 
 which performs x1 = x1 - x2 is preferred here, and matches both our preferred output register and order of operands. Obviously
 
-VSUBPS(regX2, regX1, regX1)
+VSUBPS(vals2, vals1X, retX)
 
 is preferred when the output register can be specified independently.
 
