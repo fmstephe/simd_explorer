@@ -39,18 +39,18 @@ func regenerateDemo(demoFile string) {
 
 	directory, instruction, sizeClass, discriminator := extractInfoFromDemoFileName(demoFile)
 	println(directory, instruction, sizeClass, discriminator)
-	pkg, description := processDemoFile(demoFile)
-	println(pkg, description)
-	stubArgs := processStubFile(stubFile)
+	description := extractDescriptionFromDemoFile(demoFile)
+	println("\"" + description + "\"")
+	stubArgs := extractArgsFromStubFile(stubFile)
 	println(stubArgs)
-	avoArgs := processAvoFile(avoFile, instruction)
-	println(avoArgs)
-	renamedAvoArgs := renameAvoArgs(avoArgs, sizeClass)
+	avoArgNames := extractArgsFromAvoFile(avoFile, instruction)
+	println(avoArgNames)
+	renamedAvoArgs := renameAvoArgs(avoArgNames, sizeClass)
 
 	generate.GenerateDemoFiles(directory, instruction, discriminator, stubArgs, description, sizeClass, renamedAvoArgs)
 }
 
-func processDemoFile(demoFile string) (pkg, description string) {
+func extractDescriptionFromDemoFile(demoFile string) (description string) {
 	fset := token.NewFileSet()
 
 	demoF, err := parser.ParseFile(fset, demoFile, nil, 0)
@@ -61,10 +61,10 @@ func processDemoFile(demoFile string) (pkg, description string) {
 	dg := &DemoGrabber{fset: fset}
 	ast.Walk(dg, demoF)
 
-	return dg.pkg, dg.description
+	return dg.description
 }
 
-func processStubFile(stubFile string) (args string) {
+func extractArgsFromStubFile(stubFile string) (args string) {
 	fset := token.NewFileSet()
 
 	stubF, err := parser.ParseFile(fset, stubFile, nil, 0)
@@ -78,7 +78,7 @@ func processStubFile(stubFile string) (args string) {
 	return ag.args
 }
 
-func processAvoFile(avoFile, instruction string) (args string) {
+func extractArgsFromAvoFile(avoFile, instruction string) (argNames []string) {
 	fset := token.NewFileSet()
 
 	avoF, err := parser.ParseFile(fset, avoFile, nil, 0)
@@ -92,16 +92,12 @@ func processAvoFile(avoFile, instruction string) (args string) {
 	}
 	ast.Walk(ag, avoF)
 
-	return ag.args
+	return ag.argNames
 }
 
 type DemoGrabber struct {
-	fset          *token.FileSet
-	description   string
-	pkg           string
-	instruction   string
-	sizeClass     int
-	discriminator string
+	fset        *token.FileSet
+	description string
 }
 
 func (g *DemoGrabber) Visit(node ast.Node) ast.Visitor {
@@ -113,14 +109,6 @@ func (g *DemoGrabber) Visit(node ast.Node) ast.Visitor {
 				if ret, ok := stmt.(*ast.ReturnStmt); ok {
 					g.description = getValFromReturn(ret, g.fset)
 				}
-			}
-		}
-	case *ast.GenDecl:
-		if node.Tok == token.TYPE && len(node.Specs) == 1 {
-			// We specifically expect a single type declaration per demo
-			// So we assume this is the one we are looking for
-			if typeSpec, ok := node.Specs[0].(*ast.TypeSpec); ok {
-				g.instruction, g.sizeClass, g.discriminator = extractInfoFromTypeName(typeSpec.Name.Name)
 			}
 		}
 	}
@@ -146,7 +134,7 @@ func getValFromReturn(ret *ast.ReturnStmt, fset *token.FileSet) string {
 		panic(fmt.Errorf("Need a String literal return value, found %s", exp.Kind))
 	}
 
-	return strings.TrimSuffix(strings.TrimPrefix(exp.Value, `"`), `"`)
+	return strings.TrimSpace(strings.TrimSuffix(strings.TrimPrefix(exp.Value, `"`), `"`))
 }
 
 type ArgsGrabber struct {
@@ -168,7 +156,7 @@ func (g *ArgsGrabber) Visit(node ast.Node) ast.Visitor {
 type AvoGrabber struct {
 	fset        *token.FileSet
 	instruction string
-	args        string
+	argNames    []string
 }
 
 func (g *AvoGrabber) Visit(node ast.Node) ast.Visitor {
@@ -177,12 +165,23 @@ func (g *AvoGrabber) Visit(node ast.Node) ast.Visitor {
 		switch call := node.Fun.(type) {
 		case *ast.Ident:
 			if strings.ToLower(call.Name) == strings.ToLower(g.instruction) {
-				g.args = formatArgs(node, g.fset)
+				g.argNames = extractFunctionCallArgNames(node.Args)
 			}
 		}
 	}
 
 	return g
+}
+
+func extractFunctionCallArgNames(args []ast.Expr) []string {
+	argNames := []string{}
+	for _, arg := range args {
+		switch arg := arg.(type) {
+		case *ast.Ident:
+			argNames = append(argNames, arg.Name)
+		}
+	}
+	return argNames
 }
 
 // Captures args from both a functiona call and a function declaration
@@ -198,25 +197,6 @@ func formatArgs(funcDecl ast.Node, fset *token.FileSet) string {
 		panic(fmt.Errorf("Regex failed to capture function args for: %q", buff.String()))
 	}
 	return matches[1]
-}
-
-var instructionCaptureTypeName = regexp.MustCompile(`([A-Z]+)(\d\d\d)(.*)`)
-
-func extractInfoFromTypeName(typeName string) (instruction string, sizeClass int, discriminator string) {
-	matches := instructionCaptureTypeName.FindStringSubmatch(typeName)
-	if len(matches) != 4 {
-		panic(fmt.Errorf("Regex failed to capture instruction for: %q %d", typeName, len(matches)))
-	}
-	instruction = matches[1]
-
-	sizeClass, err := strconv.Atoi(matches[2])
-	if err != nil {
-		panic(err)
-	}
-
-	discriminator = matches[3]
-
-	return instruction, sizeClass, discriminator
 }
 
 var instructionCaptureDemoFileName = regexp.MustCompile(`^demo_([^_]+)_(\d+)(?:_(.+))?\.go$`)

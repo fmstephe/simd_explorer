@@ -5,12 +5,11 @@ import (
 	"strings"
 )
 
-func renameAvoArgs(args string, sizeClass int) string {
-	parts := strings.Split(args, ", ")
+func renameAvoArgs(args []string, sizeClass int) string {
 	renamedParts := []string{}
-	for i, part := range parts {
-		if i < len(parts)-1 {
-			renamedParts = append(renamedParts, renameArg(part, sizeClass))
+	for i, arg := range args {
+		if i < len(args)-1 {
+			renamedParts = append(renamedParts, renameArg(arg, sizeClass))
 		} else {
 			// Replace last arg with retX/Y/Z arg
 			renamedParts = append(renamedParts, returnArg(sizeClass))
