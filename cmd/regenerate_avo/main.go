@@ -9,6 +9,7 @@ import (
 	"go/printer"
 	"go/token"
 	"os"
+	"path"
 	"path/filepath"
 	"regexp"
 	"sort"
@@ -33,8 +34,8 @@ func main() {
 }
 
 func regenerateDemo(demoFile string) {
-	stubFile := strings.Replace(demoFile, "demo", "stub", 1)
-	avoFile := strings.Replace(demoFile, "demo", "_generate/asm", 1)
+	stubFile := switchFromDemoFile(demoFile, "stub")
+	avoFile := switchFromDemoFile(demoFile, "_generate/asm")
 	println(demoFile, stubFile, avoFile)
 
 	directory, instruction, sizeClass, discriminator := extractInfoFromDemoFileName(demoFile)
@@ -264,4 +265,12 @@ func getDemoPaths(demoPath string) []string {
 
 	sort.Strings(paths)
 	return paths
+}
+
+func switchFromDemoFile(demoPath, sub string) string {
+	base := path.Base(demoPath)
+	dirPath := path.Dir(demoPath)
+
+	subFile := strings.Replace(base, "demo", sub, 1)
+	return filepath.Join(dirPath, subFile)
 }
