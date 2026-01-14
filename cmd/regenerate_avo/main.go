@@ -164,7 +164,7 @@ func (v *AvoVisitor) Visit(node ast.Node) ast.Visitor {
 	case *ast.CallExpr:
 		switch call := node.Fun.(type) {
 		case *ast.Ident:
-			if strings.ToLower(call.Name) == strings.ToLower(v.instruction) {
+			if strings.EqualFold(call.Name, v.instruction) {
 				v.argNames = extractFunctionCallArgNames(node.Args)
 			}
 		}
