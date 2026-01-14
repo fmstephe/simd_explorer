@@ -32,6 +32,7 @@ type templateValues struct {
 	DemoFields       string
 	DemoConstructor  string
 	DemoInputs       string
+	DemoName         string
 	DemoDescription  string
 	DemoInitArrays   string
 	DemoFunctionArgs string
@@ -57,10 +58,13 @@ func GenerateDemoFiles(pkg, instruction, discriminator, args, description string
 	discriminatorUpper := strings.ToUpper(discriminator)
 	// File names without discriminator unless needed
 	var fileNameSuffix string
+	var demoName string
 	if discriminatorLower != "" {
 		fileNameSuffix = fmt.Sprintf("%s_%d_%s", instructionLower, sizeClass, discriminatorLower)
+		demoName = fmt.Sprintf("%s (%d bit) %s", instructionUpper, sizeClass, discriminatorLower)
 	} else {
 		fileNameSuffix = fmt.Sprintf("%s_%d", instructionLower, sizeClass)
+		demoName = fmt.Sprintf("%s (%d bit)", instructionUpper, sizeClass)
 	}
 
 	parameters := parseAllParams(args)
@@ -89,6 +93,7 @@ func GenerateDemoFiles(pkg, instruction, discriminator, args, description string
 		DemoFields:       generateDemoFields(parameters),
 		DemoConstructor:  generateDemoConstructor(parameters),
 		DemoInputs:       generateDemoInputs(parameters),
+		DemoName:         demoName,
 		DemoDescription:  fmt.Sprintf("%q", description),
 		DemoInitArrays:   generateDemoInitArrays(parameters),
 		DemoFunctionArgs: generateDemoFunctionArgs(parameters),

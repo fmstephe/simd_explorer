@@ -36,7 +36,7 @@ func (v *{{.DemoTypeName}}) Output() *number.Parameter {
 }
 
 func (v *{{.DemoTypeName}}) Name() string {
-	return "{{.InstructionUpper}} ({{.SizeClass}} bit) {{.Discriminator}}"
+	return "{{.DemoName}}"
 }
 
 func (v *{{.DemoTypeName}}) Description() string {
