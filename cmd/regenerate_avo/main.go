@@ -58,13 +58,13 @@ func extractDescriptionFromDemoFile(demoFile string) (description string) {
 		panic(err)
 	}
 
-	dg := &DemoGrabber{fset: fset}
-	ast.Walk(dg, demoF)
+	v := &DemoVisitor{fset: fset}
+	ast.Walk(v, demoF)
 
-	return dg.description
+	return v.description
 }
 
-func extractArgsFromStubFile(stubFile string) (args string) {
+func extractArgsFromStubFile(stubFile string) string {
 	fset := token.NewFileSet()
 
 	stubF, err := parser.ParseFile(fset, stubFile, nil, 0)
@@ -72,10 +72,10 @@ func extractArgsFromStubFile(stubFile string) (args string) {
 		panic(err)
 	}
 
-	ag := &ArgsGrabber{fset: fset}
-	ast.Walk(ag, stubF)
+	v := &StubVisitor{fset: fset}
+	ast.Walk(v, stubF)
 
-	return ag.args
+	return v.args
 }
 
 func extractArgsFromAvoFile(avoFile, instruction string) (argNames []string) {
@@ -86,34 +86,34 @@ func extractArgsFromAvoFile(avoFile, instruction string) (argNames []string) {
 		panic(err)
 	}
 
-	ag := &AvoGrabber{
+	v := &AvoVisitor{
 		fset:        fset,
 		instruction: instruction,
 	}
-	ast.Walk(ag, avoF)
+	ast.Walk(v, avoF)
 
-	return ag.argNames
+	return v.argNames
 }
 
-type DemoGrabber struct {
+type DemoVisitor struct {
 	fset        *token.FileSet
 	description string
 }
 
-func (g *DemoGrabber) Visit(node ast.Node) ast.Visitor {
+func (v *DemoVisitor) Visit(node ast.Node) ast.Visitor {
 	switch node := node.(type) {
 	case *ast.FuncDecl:
 		if node.Name.Name == "Description" {
 			statements := node.Body.List
 			for _, stmt := range statements {
 				if ret, ok := stmt.(*ast.ReturnStmt); ok {
-					g.description = getValFromReturn(ret, g.fset)
+					v.description = getValFromReturn(ret, v.fset)
 				}
 			}
 		}
 	}
 
-	return g
+	return v
 }
 
 func getValFromReturn(ret *ast.ReturnStmt, fset *token.FileSet) string {
@@ -137,40 +137,40 @@ func getValFromReturn(ret *ast.ReturnStmt, fset *token.FileSet) string {
 	return strings.TrimSpace(strings.TrimSuffix(strings.TrimPrefix(exp.Value, `"`), `"`))
 }
 
-type ArgsGrabber struct {
+type StubVisitor struct {
 	fset *token.FileSet
 	args string
 }
 
 // NB: We expect the file being processed to have a single function
 // If this assumption stops working we will have to make this visitor fussier
-func (g *ArgsGrabber) Visit(node ast.Node) ast.Visitor {
+func (v *StubVisitor) Visit(node ast.Node) ast.Visitor {
 	switch node := node.(type) {
 	case *ast.FuncDecl:
-		g.args = formatArgs(node, g.fset)
+		v.args = formatArgs(node, v.fset)
 	}
 
-	return g
+	return v
 }
 
-type AvoGrabber struct {
+type AvoVisitor struct {
 	fset        *token.FileSet
 	instruction string
 	argNames    []string
 }
 
-func (g *AvoGrabber) Visit(node ast.Node) ast.Visitor {
+func (v *AvoVisitor) Visit(node ast.Node) ast.Visitor {
 	switch node := node.(type) {
 	case *ast.CallExpr:
 		switch call := node.Fun.(type) {
 		case *ast.Ident:
-			if strings.ToLower(call.Name) == strings.ToLower(g.instruction) {
-				g.argNames = extractFunctionCallArgNames(node.Args)
+			if strings.ToLower(call.Name) == strings.ToLower(v.instruction) {
+				v.argNames = extractFunctionCallArgNames(node.Args)
 			}
 		}
 	}
 
-	return g
+	return v
 }
 
 func extractFunctionCallArgNames(args []ast.Expr) []string {
