@@ -15,20 +15,20 @@ var assemblyVpbroadcastb128 string
 var stubVpbroadcastb128 string
 
 type VPBROADCASTB128 struct {
-	scalar *number.Parameter
-	ret    *number.Parameter
+	b   *number.Parameter
+	ret *number.Parameter
 }
 
 func NewVPBROADCASTB128() *VPBROADCASTB128 {
 	return &VPBROADCASTB128{
-		scalar: number.NewNamedUintParameter("scalar", 8, 8, 10),
-		ret:    number.NewNamedUintParameter("ret", 128, 64, 10),
+		b:   number.NewNamedUintParameter("b", 8, 8, 10),
+		ret: number.NewNamedUintParameter("ret", 128, 8, 10),
 	}
 }
 
 func (v *VPBROADCASTB128) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		v.scalar,
+		v.b,
 	}
 }
 
@@ -37,7 +37,7 @@ func (v *VPBROADCASTB128) Output() *number.Parameter {
 }
 
 func (v *VPBROADCASTB128) Name() string {
-	return "VPBROADCASTB XMM (128 bit)"
+	return "VPBROADCASTB (128 bit)"
 }
 
 func (v *VPBROADCASTB128) Description() string {
@@ -53,17 +53,16 @@ func (v *VPBROADCASTB128) Assembly() string {
 }
 
 func (v *VPBROADCASTB128) Run() {
-	ret := [16]byte{}
-	b := number.ToUint8(v.scalar.FlatData())
+	b := number.ToUint8(v.b.FlatData())
+	ret := [16]uint8{}
+	copy(ret[:], number.ToUint8Slice(v.ret.FlatData()))
 
 	vpbroadcastb128(b, &ret)
 
-	out := ret[:]
-
 	log.Printf("VPBROADCASTB128 b %v ret %v", b, ret)
 
-	v.ret.SetData(out)
-
+	retBytes := number.Uint8SliceToBytes(ret[:])
+	v.ret.SetData(retBytes)
 }
 
 func (v *VPBROADCASTB128) Supported() bool {

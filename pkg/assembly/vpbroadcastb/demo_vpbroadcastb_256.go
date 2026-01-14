@@ -15,21 +15,20 @@ var assemblyVpbroadcastb256 string
 var stubVpbroadcastb256 string
 
 type VPBROADCASTB256 struct {
-	scalar *number.Parameter
-	ret    *number.Parameter
+	b   *number.Parameter
+	ret *number.Parameter
 }
 
 func NewVPBROADCASTB256() *VPBROADCASTB256 {
-	v := &VPBROADCASTB256{
-		scalar: number.NewNamedUintParameter("scalar", 8, 8, 10),
-		ret:    number.NewNamedUintParameter("ret", 256, 64, 10),
+	return &VPBROADCASTB256{
+		b:   number.NewNamedUintParameter("b", 8, 8, 10),
+		ret: number.NewNamedUintParameter("ret", 256, 8, 10),
 	}
-	return v
 }
 
 func (v *VPBROADCASTB256) Inputs() []*number.Parameter {
 	return []*number.Parameter{
-		v.scalar,
+		v.b,
 	}
 }
 
@@ -38,7 +37,7 @@ func (v *VPBROADCASTB256) Output() *number.Parameter {
 }
 
 func (v *VPBROADCASTB256) Name() string {
-	return "VPBROADCASTB YMM (256 bit)"
+	return "VPBROADCASTB (256 bit)"
 }
 
 func (v *VPBROADCASTB256) Description() string {
@@ -54,13 +53,16 @@ func (v *VPBROADCASTB256) Assembly() string {
 }
 
 func (v *VPBROADCASTB256) Run() {
-	ret := [32]byte{}
-	b := number.ToUint8(v.scalar.FlatData())
-	vpbroadcastb256(b, &ret)
-	out := ret[:]
-	log.Printf("VPBROADCASTB256 b %v ret %v", b, ret)
-	v.ret.SetData(out)
+	b := number.ToUint8(v.b.FlatData())
+	ret := [32]uint8{}
+	copy(ret[:], number.ToUint8Slice(v.ret.FlatData()))
 
+	vpbroadcastb256(b, &ret)
+
+	log.Printf("VPBROADCASTB256 b %v ret %v", b, ret)
+
+	retBytes := number.Uint8SliceToBytes(ret[:])
+	v.ret.SetData(retBytes)
 }
 
 func (v *VPBROADCASTB256) Supported() bool {

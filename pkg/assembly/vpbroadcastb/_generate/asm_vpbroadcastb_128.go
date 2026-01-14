@@ -8,24 +8,25 @@ import (
 //go:generate go run asm_vpbroadcastb_128.go -out ../asm_vpbroadcastb_128.s -stubs ../stub_vpbroadcastb_128.go -pkg vpbroadcastb
 func main() {
 	TEXT("vpbroadcastb128", NOSPLIT, "func(b byte, ret *[16]byte)")
-	// generate!
-
-	Comment("load params")
+	Comment("load b into a 64 bit register, required for load into XMM register")
 	b := Load(Param("b"), GP64())
 	ret := Load(Param("ret"), GP64())
 
-	Comment("Need to move b into an XMM register to work with VPBROADCASTB instruction")
-	regXB := XMM()
-	MOVQ(b, regXB)
+	Comment("Load b into XMM register, required for broadcast")
+	bX := XMM()
+	MOVQ(b, bX)
 
-	Comment("Broadcast b into XMM register")
-	regX := XMM()
-	VPBROADCASTB(regXB, regX)
+	retX := XMM()
 
-	Comment("Write contents of XMM register into memory region")
-	VMOVDQU(regX, Mem{Base: ret})
+	Comment("Execute the instruction being demonstrated")
+	VPBROADCASTB(bX, retX)
 
+	Comment("Write results into return memory address")
+	VMOVDQU(retX, Mem{Base: ret})
+
+	Comment("Return from function")
 	RET()
 
+	// generate!
 	Generate()
 }

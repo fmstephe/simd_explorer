@@ -5,16 +5,18 @@
 // func vpbroadcastb128(b byte, ret *[16]byte)
 // Requires: AVX, AVX2, SSE2
 TEXT ·vpbroadcastb128(SB), NOSPLIT, $0-16
-	// load params
+	// load b into a 64 bit register, required for load into XMM register
 	MOVBQZX b+0(FP), AX
 	MOVQ    ret+8(FP), CX
 
-	// Need to move b into an XMM register to work with VPBROADCASTB instruction
+	// Load b into XMM register, required for broadcast
 	MOVQ AX, X0
 
-	// Broadcast b into XMM register
+	// Execute the instruction being demonstrated
 	VPBROADCASTB X0, X0
 
-	// Write contents of XMM register into memory region
+	// Write results into return memory address
 	VMOVDQU X0, (CX)
+
+	// Return from function
 	RET

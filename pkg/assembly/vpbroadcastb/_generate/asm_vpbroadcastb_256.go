@@ -9,23 +9,26 @@ import (
 func main() {
 	TEXT("vpbroadcastb256", NOSPLIT, "func(b byte, ret *[32]byte)")
 
-	Comment("load params")
+	Comment("load b into 64 bit register, required for load in XMM register")
 	b := Load(Param("b"), GP64())
 	ret := Load(Param("ret"), GP64())
 
 	Comment("Need to move b into an XMM register to work with VPBROADCASTB instruction")
-	regXB := XMM()
-	MOVQ(b, regXB)
+	bX := XMM()
+	MOVQ(b, bX)
 
-	Comment("Broadcast b into YMM register")
-	regY := YMM()
-	VPBROADCASTB(regXB, regY)
+	retY := YMM()
 
-	Comment("Write contents of YMM register into memory region")
-	VMOVDQU(regY, Mem{Base: ret})
+	Comment("Execute the instruction being demonstrated")
+	VPBROADCASTB(bX, retY)
 
-	Comment("Call VZEROUPPER to avoid performance problems after AVX work")
+	Comment("Write results into return memory address")
+	VMOVDQU(retY, Mem{Base: ret})
+
+	Comment("Clear upper halves after YMM usage")
 	VZEROUPPER()
+
+	Comment("Return from function")
 	RET()
 
 	// generate!
