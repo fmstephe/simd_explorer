@@ -70,7 +70,7 @@ func buildParameter(fieldName string, arrSize int, typeName string) *number.Para
 	case "uint8":
 		return number.NewNamedUintParameter(fieldName, 8*arrSize, 8, base)
 	case "byte":
-		panic(fmt.Errorf("byte is not an accepted type, use uint8 instead"))
+		return number.NewNamedUintParameter(fieldName, 8*arrSize, 8, base)
 	case "int16":
 		return number.NewNamedIntParameter(fieldName, 16*arrSize, 16, base)
 	case "uint16":
