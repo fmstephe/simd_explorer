@@ -38,20 +38,20 @@ func regenerateDemo(demoFile string) {
 	avoFile := switchFromDemoFile(demoFile, "_generate/asm")
 	println(demoFile, stubFile, avoFile)
 
-	directory, instruction, sizeClass, discriminator := extractInfoFromDemoFileName(demoFile)
-	println(directory, instruction, sizeClass, discriminator)
-	description := extractDescriptionFromDemoFile(demoFile)
-	println("\"" + description + "\"")
+	instruction, sizeClass, discriminator := extractInfoFromDemoFileName(demoFile)
+	println(instruction, sizeClass, discriminator)
+	pkg, description := extractPkgDescriptionFromDemoFile(demoFile)
+	println(pkg, description)
 	stubArgs := extractArgsFromStubFile(stubFile)
 	println(stubArgs)
 	avoArgNames := extractArgsFromAvoFile(avoFile, instruction)
 	println(avoArgNames)
 	renamedAvoArgs := renameAvoArgs(avoArgNames, sizeClass)
 
-	generate.GenerateDemoFiles(directory, instruction, discriminator, stubArgs, description, sizeClass, renamedAvoArgs)
+	generate.GenerateDemoFiles(pkg, instruction, discriminator, stubArgs, description, sizeClass, renamedAvoArgs)
 }
 
-func extractDescriptionFromDemoFile(demoFile string) (description string) {
+func extractPkgDescriptionFromDemoFile(demoFile string) (pkg, description string) {
 	fset := token.NewFileSet()
 
 	demoF, err := parser.ParseFile(fset, demoFile, nil, 0)
@@ -62,7 +62,7 @@ func extractDescriptionFromDemoFile(demoFile string) (description string) {
 	v := &DemoVisitor{fset: fset}
 	ast.Walk(v, demoF)
 
-	return v.description
+	return v.pkg, v.description
 }
 
 func extractArgsFromStubFile(stubFile string) string {
@@ -98,11 +98,14 @@ func extractArgsFromAvoFile(avoFile, instruction string) (argNames []string) {
 
 type DemoVisitor struct {
 	fset        *token.FileSet
+	pkg         string
 	description string
 }
 
 func (v *DemoVisitor) Visit(node ast.Node) ast.Visitor {
 	switch node := node.(type) {
+	case *ast.Package:
+		v.pkg = node.Name
 	case *ast.FuncDecl:
 		if node.Name.Name == "Description" {
 			statements := node.Body.List
@@ -185,7 +188,7 @@ func extractFunctionCallArgNames(args []ast.Expr) []string {
 	return argNames
 }
 
-// Captures args from both a functiona call and a function declaration
+// Captures args from both a function call and a function declaration
 var argsCapture = regexp.MustCompile(`(?:func )?\w+\((.*)\)`)
 
 // This feels like a bit of a hack - but we can't directly print _just_ the args using printer.Fprint(...)
