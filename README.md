@@ -2,6 +2,12 @@
 
 ## To Run
 
+Without cloning the repository run
+```
+go run github.com/fmstephe/simd_explorer/cmd/simdexplorer@latest
+```
+
+If you have the source locally run
 ```
 go run cmd/simd_explorer/main.go
 ```
@@ -23,6 +29,10 @@ Instruction demo inputs are prefilled by default. You can use F-keys to quickly 
     * F3 Zeros every input
     * F4 Autofills every input with an incrementing value (default)
     * F5 Autofills every input with a decrementing value - F4 but reversed
+
+# Supported Architectures
+
+Right now only AMD64 CPUs are supported. The ARM64 NEON instructions are not currently available in Go assembly and the feature detection doesn't appear to work when running emulated AMD64 on M-series macs (which is a shame). The project currently fails to build for ARM64 targets. I would like to have this tool work natively and emulated on OSX, and that may come in the future.
 
 ## Skipped Instructions (and rationale)
 
