@@ -88,8 +88,8 @@ func NewCommandSearch(instructions []assembly.Instruction, app *stackapp.StackAp
 	flex := tview.NewFlex()
 	flex.SetDirection(tview.FlexRow)
 
-	flex.AddItem(list, 0, 2, false)
 	flex.AddItem(input, 3, 1, true)
+	flex.AddItem(list, 0, 2, false)
 	flex.AddItem(assemblyView, 0, 3, false)
 	return &CommandSearch{
 		list:  list,
