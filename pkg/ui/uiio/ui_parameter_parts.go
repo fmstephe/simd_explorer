@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/fmstephe/simd_explorer/pkg/ui/number"
+	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/gdamore/tcell/v2"
 	"github.com/google/uuid"
 	"github.com/rivo/tview"
@@ -24,15 +25,15 @@ type UIParameterParts struct {
 	parameter     *number.Parameter
 }
 
-func NewUIParameterInputs(parameter *number.Parameter, inputsChanged func()) *UIParameterParts {
-	return NewUIParameterParts(parameter, &inputPartBuilder{}, inputsChanged)
+func NewUIParameterInputs(app *stackapp.StackApp, parameter *number.Parameter, inputsChanged func()) *UIParameterParts {
+	return NewUIParameterParts(app, parameter, &inputPartBuilder{}, inputsChanged)
 }
 
-func NewUIParameterOutputs(parameter *number.Parameter) *UIParameterParts {
-	return NewUIParameterParts(parameter, &textViewPartBuilder{}, func() {})
+func NewUIParameterOutputs(app *stackapp.StackApp, parameter *number.Parameter) *UIParameterParts {
+	return NewUIParameterParts(app, parameter, &textViewPartBuilder{}, func() {})
 }
 
-func NewUIParameterParts(parameter *number.Parameter, partsBuilder uiPartBuilder, inputsChanged func()) *UIParameterParts {
+func NewUIParameterParts(app *stackapp.StackApp, parameter *number.Parameter, partsBuilder uiPartBuilder, inputsChanged func()) *UIParameterParts {
 	grid := tview.NewGrid()
 	// We always have a maximum of 8 columns per row
 	grid.SetRows(3, 3, 3, 3, 3, 3, 3, 3)
@@ -51,7 +52,7 @@ func NewUIParameterParts(parameter *number.Parameter, partsBuilder uiPartBuilder
 
 	parts := parameter.Parts()
 	partBitWidth := parameter.PartBitWidth()
-	partsPerLine := calcPartsPerLine(parameter)
+	partsPerLine := calcPartsPerLine(app, parameter)
 
 	for i := range parts {
 		part := partsBuilder.build()
@@ -155,16 +156,8 @@ func (in *UIParameterParts) describe() string {
 	return fmt.Sprintf("%q-%d-%d--%s", in.id.String()[:6], in.parameter.PartBitWidth(), in.parameter.TotalBitWidth(), in.kind)
 }
 
-func calcPartsPerLine(parameter *number.Parameter) int {
-	screen, err := tcell.NewScreen()
-	if err != nil {
-		panic(err)
-	}
-	if err := screen.Init(); err != nil {
-		panic(err)
-	}
-	defer screen.Fini()
-	width, _ := screen.Size()
+func calcPartsPerLine(app *stackapp.StackApp, parameter *number.Parameter) int {
+	width, _ := app.Size()
 	// We subtract 4 here to heuristically account for the input/output borders
 	half := (width - 4) / 2
 	// NB: The +2 heuristally allows for a border
