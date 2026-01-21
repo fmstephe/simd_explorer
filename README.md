@@ -7,9 +7,19 @@ Without cloning the repository run
 go run github.com/fmstephe/simd_explorer/cmd/simdexplorer@latest
 ```
 
+OSX (tahoe or later)
+```
+ROSETTA_ADVERTISE_AVX=1 GOARCH=amd64 go run github.com/fmstephe/simd_explorer/cmd/simdexplorer@latest
+```
+
 If you have the source locally run
 ```
 go run cmd/simd_explorer/main.go
+```
+
+OSX (tahoe or later)
+```
+ROSETTA_ADVERTISE_AVX=1 GOARCH=amd64 go run cmd/simdexplorer/main.go
 ```
 
 ## User guide
@@ -62,6 +72,10 @@ The demos in the project mostly work well - but a large number of them have only
 The assembly functions used _do_ effectively demonstrate how these SIMD instructions work. But they don't demonstrate how to write a good assembly function in Go. Parameters are mostly passed in as pointers to arrays, this is fine, but the return value is also passed in as a pointer argument, this is unusual. These choices were made to make it easier to generate code for the assembly functions, but likely isn't a very good approach for real world assembly functions. Another note of caution is that we use VMOVDQU/A to load parameters into registers (and also to write return values back to memory) this may not be the most performant approach to doing this.
 
 When I started this project I was trying to teach myself SIMD programming in Go. I found it difficult and very time consuming to identify useful instructions and then to understand their behaviour using the Intel (and Felix Cloutier's website) documentation. So I made this tool to help with this. When I began I genuinely there would be roughly 30-40 instructions to do, and then I would get back to actually using them. I'm not sure how many instructions are here, but there are over 600 demos bundled into this tool (instructions with immediate values get multiple demos of the same instruction and different immediate values). This was a much larger undertaking than I had expected and the biggest challenge ended up being code generation and code style management. But it was fun :)
+
+# Thanks
+
+Egon Elbre (https://github.com/egonelbre)
 
 # TODO
 
