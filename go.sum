@@ -1,3 +1,5 @@
+github.com/fmstephe/simd_explorer v0.0.1 h1:uzYhIPer3pEYNwm+AwB05hOy834g7eaX0dDtKBuf6mE=
+github.com/fmstephe/simd_explorer v0.0.1/go.mod h1:7TI5p0UERlWeVCoym1iPsWFuFe/69mMsTloZeKihf9Y=
 github.com/fmstephe/tview v0.0.1 h1:qBXf392Joj0ZN8cFtI40M49TKeFCftLGD1wi5+ftoDU=
 github.com/fmstephe/tview v0.0.1/go.mod h1:d/DLFo0/1uiA0cAJ6221XOFNNQhYIuHIRMvRqx6sA7Y=
 github.com/gdamore/encoding v1.0.1 h1:YzKZckdBL6jVt2Gc+5p82qhrGiqMdG/eNs6Wy0u3Uhw=
@@ -16,6 +18,8 @@ github.com/mattn/go-runewidth v0.0.16 h1:E5ScNMtiwvlvB5paMFdw9p4kSQzbXFikJ5SQO6T
 github.com/mattn/go-runewidth v0.0.16/go.mod h1:Jdepj2loyihRzMpdS35Xk/zdY8IAYHsh153qUoGf23w=
 github.com/mmcloughlin/avo v0.6.0 h1:QH6FU8SKoTLaVs80GA8TJuLNkUYl4VokHKlPhVDg4YY=
 github.com/mmcloughlin/avo v0.6.0/go.mod h1:8CoAGaCSYXtCPR+8y18Y9aB/kxb8JSS6FRI7mSkvD+8=
+github.com/rivo/tview v0.42.1-0.20250827200143-f9502cf99cec h1:2GKsJo8Owcd4DkuRMyg/24e2Pg/hY+ugI3me0mnuc6I=
+github.com/rivo/tview v0.42.1-0.20250827200143-f9502cf99cec/go.mod h1:cSfIYfhpSGCjp3r/ECJb+GKS7cGJnqV8vfjQPwoXyfY=
 github.com/rivo/uniseg v0.2.0/go.mod h1:J6wj4VEh+S6ZtnVlnTBMWIodfgj8LQOQFoIToxlJtxc=
 github.com/rivo/uniseg v0.4.3/go.mod h1:FN3SvrM+Zdj16jyLfmOkMNblXMcoc8DfTHruCPUcx88=
 github.com/rivo/uniseg v0.4.7 h1:WUdvkW8uEhrYfLC4ZzdpI2ztxP1I582+49Oc5Mq64VQ=

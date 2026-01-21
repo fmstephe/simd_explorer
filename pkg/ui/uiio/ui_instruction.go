@@ -6,7 +6,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/gdamore/tcell/v2"
-	"github.com/rivo/tview"
+	"github.com/fmstephe/tview"
 )
 
 type UIInstruction struct {

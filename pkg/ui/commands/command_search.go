@@ -8,7 +8,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/ui/uiio"
 	"github.com/gdamore/tcell/v2"
 	"github.com/lithammer/fuzzysearch/fuzzy"
-	"github.com/rivo/tview"
+	"github.com/fmstephe/tview"
 )
 
 type CommandSearch struct {

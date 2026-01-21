@@ -2,7 +2,7 @@ package uiio
 
 import (
 	"github.com/gdamore/tcell/v2"
-	"github.com/rivo/tview"
+	"github.com/fmstephe/tview"
 )
 
 type uiParameterPart interface {

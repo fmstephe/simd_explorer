@@ -9,7 +9,7 @@ import (
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
 	"github.com/gdamore/tcell/v2"
 	"github.com/google/uuid"
-	"github.com/rivo/tview"
+	"github.com/fmstephe/tview"
 )
 
 type UIParameterParts struct {
