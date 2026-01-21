@@ -14,13 +14,14 @@ var (
 	flagSizeClass     = flag.Int("size-class", -1, "The size class of the instruction being demonstrated. Many SIMD instructions work across a range of register sizes.")
 	flagDiscriminator = flag.String("discriminator", "", "A discriminator (can be empty) useful when to demonstrate two versions of an instruction in the same size class, e.g. 'k' ")
 	flagArgs          = flag.String("args", "", "The parameters passed into the generated assembly function")
+	flagAvoArgs       = flag.String("avo-args", "", "If set the args used in the instruction command will be the value of this flag. Can be used to set immediate values")
 	flagDescription   = flag.String("description", "", "Used to set the description of each instruction demo")
 )
 
 func main() {
 	flag.Parse()
 	validateFlags()
-	generate.GenerateDemoFiles(*flagPackage, *flagInstruction, *flagDiscriminator, *flagArgs, *flagDescription, *flagSizeClass)
+	generate.GenerateDemoFiles(*flagPackage, *flagInstruction, *flagDiscriminator, *flagArgs, *flagDescription, *flagSizeClass, *flagAvoArgs)
 }
 
 func validateFlags() {
