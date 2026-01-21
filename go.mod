@@ -1,4 +1,4 @@
-module github.com/fmstephe/simd_explorerv0.0.2
+module github.com/fmstephe/simd_explorer
 
 go 1.24.3
 
