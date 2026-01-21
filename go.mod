@@ -28,3 +28,5 @@ tool (
 	github.com/mmcloughlin/avo/build
 	github.com/mmcloughlin/avo/operand
 )
+
+replace github.com/rivo/tview => github.com/fmstephe/tview v0.0.1

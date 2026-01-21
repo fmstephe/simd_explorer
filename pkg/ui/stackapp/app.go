@@ -35,6 +35,10 @@ func NewStackApp() *StackApp {
 	return a
 }
 
+func (a *StackApp) Size() (width, height int) {
+	return a.app.Size()
+}
+
 func (a *StackApp) Push(p tview.Primitive) {
 	a.clearRecover()
 	a.stack = append(a.stack, p)
