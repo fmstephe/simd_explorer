@@ -1,8 +1,8 @@
 package stackapp
 
 import (
-	"github.com/gdamore/tcell/v2"
 	"github.com/fmstephe/tview"
+	"github.com/gdamore/tcell/v2"
 )
 
 type StackApp struct {
@@ -21,12 +21,10 @@ func NewStackApp() *StackApp {
 	a.app.EnableMouse(false)
 	// 'q' or ESC always quits the application
 	a.app.SetInputCapture(func(event *tcell.EventKey) *tcell.EventKey {
-		// This feels awkward here because we configure F-key behaviour in other places
-		// I'll leave this as-is for now, but we should rethink this.
 		switch event.Key() {
 		case tcell.KeyESC:
-			a.app.Stop()
-		case tcell.KeyF1:
+			// When the user presses the Esc key, we navigate back
+			// to the previous ui screen
 			a.Pop()
 		}
 		return event

@@ -5,8 +5,8 @@ import (
 
 	"github.com/fmstephe/simd_explorer/pkg/assembly"
 	"github.com/fmstephe/simd_explorer/pkg/ui/stackapp"
-	"github.com/gdamore/tcell/v2"
 	"github.com/fmstephe/tview"
+	"github.com/gdamore/tcell/v2"
 )
 
 type UIInstruction struct {
@@ -115,16 +115,19 @@ func (r *UIInstruction) initInputCapture() {
 			r.cycleFocus(1)
 		case tcell.KeyBacktab:
 			r.cycleFocus(-1)
+			// case tcell.KeyEsc:
+			// Esc (navigate back) behaviour is currently managed in stackapp package
 			// TODO add arrow keys to this
-		// case tcell.KeyF1:
-		// KeyF1 behaviour is currently managed in stackapp package
-		case tcell.KeyF2:
+		}
+
+		switch event.Rune() {
+		case rune('s'), rune('S'):
 			r.app.Push(r.source)
-		case tcell.KeyF3:
+		case rune('z'), rune('Z'):
 			r.setInputsZero()
-		case tcell.KeyF4:
+		case rune('x'), rune('X'):
 			r.setInputDefaults()
-		case tcell.KeyF5:
+		case rune('w'), rune('W'):
 			r.setInputDefaultsReverse()
 		}
 
@@ -210,11 +213,11 @@ func buildSourceButtons() *tview.Grid {
 
 // NB: These buttons don't actually do anything right now - they just display the keyboard shortcuts for the default value setting functions. They really should either become real buttons (fix the mouse interaction problem) or we should display these shortcuts some other way.
 func buildButtonPanel(onlyBack bool) *tview.Grid {
-	buttonBack := tview.NewButton(tview.Escape(`[F1] Back`))
-	buttonSource := tview.NewButton(tview.Escape(`[F2] Show Source`)).SetDisabled(onlyBack)
-	buttonZero := tview.NewButton(tview.Escape(`[F3] Zero`)).SetDisabled(onlyBack)
-	buttonFill := tview.NewButton(tview.Escape(`[F4] Autofill`)).SetDisabled(onlyBack)
-	buttonFillRev := tview.NewButton(tview.Escape(`[F5] Autofill Reverse`)).SetDisabled(onlyBack)
+	buttonBack := tview.NewButton(tview.Escape(`[Esc] Back`))
+	buttonSource := tview.NewButton(tview.Escape(`[S] Show Source`)).SetDisabled(onlyBack)
+	buttonZero := tview.NewButton(tview.Escape(`[Z] Zero`)).SetDisabled(onlyBack)
+	buttonFill := tview.NewButton(tview.Escape(`[X] Autofill`)).SetDisabled(onlyBack)
+	buttonFillRev := tview.NewButton(tview.Escape(`[W] Autofill Reverse`)).SetDisabled(onlyBack)
 
 	gridButtons := tview.NewGrid()
 	gridButtons.AddItem(buttonBack, 0, 0, 1, 1, 0, 0, false)

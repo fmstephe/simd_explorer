@@ -30,15 +30,13 @@ Type the name of the instruction you are trying to find and the instruction list
 
 The registers for any instruction are named parameters to an assembly function which will execute that instruction. The UI builds inputs and outputs so you can change what is in the registers being fed into the demonstrated instruction. All ui inputs/outputs are in either base 2, 10, 16 for integers, or decimal for floating point. The representation is determined by their function in the instruction.
 
-When you open an instruction demo you can return to the instruction list by hitting F1.
+Instruction demo inputs are prefilled by default. You can use keyboard shortcuts to quickly change the values set (avoiding having to manually edit each field). A full list of keyboard shortcuts is:
 
-When viewing an instruction demo you can view the assembly code being run by the demo by hitting F2 (F1 will return you to the demo screen).
-
-Instruction demo inputs are prefilled by default. You can use F-keys to quickly change the values set (avoiding having to manually edit each field)
-
-    * F3 Zeros every input
-    * F4 Autofills every input with an incrementing value (default)
-    * F5 Autofills every input with a decrementing value - F4 but reversed
+	* Esc  Navigate to previous screen
+	* S|s  Show assembly function source 
+	* Z|z  Set all inputs to zero
+	* X|x  Set all inputs to default
+	* W|w  Set all inputs to default, but in reverse order
 
 # Supported Architectures
 
@@ -84,3 +82,5 @@ Revisit the way we manage arguments to assembly functions. We may want to use le
 We should also revisit how we deal with ZF,CF etc. flags. Right now we combine them into a single integer value - and the result is really hard to interpret.
 
 I am dissatisfied with the current fuzzy filtering of the lists. Find another library for this (avoid the temptation to build your own).
+
+Mouse interaction is currently disabled. There is a problem in the code which was preventing mouse integration from working, we should fix this bug and re-enable mouse interaction.
