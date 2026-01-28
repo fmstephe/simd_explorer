@@ -205,7 +205,7 @@ func formatArgs(funcDecl ast.Node, fset *token.FileSet) string {
 
 var instructionCaptureDemoFileName = regexp.MustCompile(`^demo_([^_]+)_(\d+)(?:_(.+))?\.go$`)
 
-func extractInfoFromDemoFileName(filePath string) (directory, instruction string, sizeClass int, discriminator string) {
+func extractInfoFromDemoFileName(filePath string) (instruction string, sizeClass int, discriminator string) {
 	dir := filepath.Dir(filePath)
 	if dir == "." {
 		dir = ""
@@ -215,7 +215,6 @@ func extractInfoFromDemoFileName(filePath string) (directory, instruction string
 	if len(matches) != 4 {
 		panic(fmt.Errorf("Regex failed to capture info for: %q %d", filePath, len(matches)))
 	}
-	directory = dir
 
 	instruction = matches[1]
 
@@ -226,7 +225,7 @@ func extractInfoFromDemoFileName(filePath string) (directory, instruction string
 
 	discriminator = matches[3]
 
-	return directory, instruction, sizeClass, discriminator
+	return instruction, sizeClass, discriminator
 }
 
 func getDemoPaths(demoPath string) []string {
